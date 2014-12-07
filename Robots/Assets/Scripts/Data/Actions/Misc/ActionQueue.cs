@@ -50,10 +50,18 @@ public class ActionQueue
 
 		if (time < queue.Count)
 		{
-			//queue[time].Run();
+			EntityActionResult res = queue[time].Run();
 
-			if (timeOverride < 0) this.cursor++;
+			if (res != EntityActionResult.Repeat)
+			{
+				if (timeOverride < 0) this.cursor++;
+			}
 		}
+	}
+
+	public void SetCursor(int time)
+	{
+		this.cursor = Mathf.Clamp(time, 0, queue.Count);
 	}
 
 	public string Serialize()

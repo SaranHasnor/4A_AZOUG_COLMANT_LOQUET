@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Serializable data
-public abstract class EntityAction
+public enum EntityActionResult
 {
+	Success,		// Action executed succesfully
+	Failure,		// Action failed to execute
+	Repeat,			// Action should be repeated
+	Error			// An error occured while trying to execute the action
+}
+
+public abstract class EntityAction
+{ // Generic action, subclasses should only be action categories, which should in turn be subclassed for actual actions
 	protected RunnableEntity _owner;
 
 	public RunnableEntity owner
@@ -24,8 +31,20 @@ public abstract class EntityAction
 		return null;
 	}
 
-	public abstract void Run();
+	protected abstract EntityActionResult _Run();
 
-	// Actually, see if we can find a class that implements serialization methods
-	//public abstract void Serialize();
+	public EntityActionResult Run()
+	{
+		try
+		{
+			return this._Run();
+		}
+		catch (ActionException e)
+		{
+			Debug.LogException(e);
+			return EntityActionResult.Error;
+		}
+	}
+
+	public override abstract string ToString(); // I never thought I'd have to do this
 }
