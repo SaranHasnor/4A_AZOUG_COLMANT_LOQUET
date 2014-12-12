@@ -26,7 +26,7 @@ public abstract class EntityAction
 		this._owner = owner;
 	}
 
-	public static EntityAction loadFromString(string s)
+	public static EntityAction LoadFromString(string s)
 	{
 		return null;
 	}

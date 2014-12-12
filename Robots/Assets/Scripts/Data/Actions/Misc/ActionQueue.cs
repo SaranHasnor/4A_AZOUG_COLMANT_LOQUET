@@ -13,6 +13,12 @@ public class ActionQueue
 		this.cursor = 0;
 	}
 
+	public ActionQueue(string data)
+	{
+		this.queue = new List<EntityAction>();
+		this.cursor = 0;
+	}
+
 	public void SetAction(EntityAction action, int timeOverride = -1)
 	{
 		int time = (timeOverride < 0) ? this.cursor : timeOverride;
@@ -64,7 +70,7 @@ public class ActionQueue
 		this.cursor = Mathf.Clamp(time, 0, queue.Count);
 	}
 
-	public string Serialize()
+	public string Save()
 	{ // Serialize all the actions we're holding and put them together
 		return null;
 	}
