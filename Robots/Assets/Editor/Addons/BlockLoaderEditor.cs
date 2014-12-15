@@ -23,8 +23,8 @@ public class BlockLoaderEditor : Editor
 
 			EditorGUILayout.BeginHorizontal();
 
-			string name = EditorGUILayout.TextField(existed ? library.blocks[count].Key : "");
-			GameObject prefab = (GameObject)EditorGUILayout.ObjectField(existed ? library.blocks[count].Value : null, typeof(GameObject), false);
+			string name = EditorGUILayout.TextField(existed ? library.blockList[count].Key : "");
+			GameObject prefab = (GameObject)EditorGUILayout.ObjectField(existed ? library.blockList[count].Value : null, typeof(GameObject), false);
 			
 			EditorGUILayout.EndHorizontal();
 
@@ -40,6 +40,6 @@ public class BlockLoaderEditor : Editor
 			}
 		}
 
-		library.blocks = temp;
+		library.blockList = temp;
 	}
 }
