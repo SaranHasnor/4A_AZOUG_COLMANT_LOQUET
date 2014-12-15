@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public delegate EntityActionResult BlockInteract(ActionOnBlock action);
+public delegate EntityActionResult BlockInteract(ActionOnBlock action, string[] args=null);
 
-public class BlockScript : MonoBehaviour // RunnableEntity?
+public class BlockScript : MapEntity
 {
     [SerializeField]
     private GameObject _logic;
@@ -22,11 +22,11 @@ public class BlockScript : MonoBehaviour // RunnableEntity?
         }
     }
 
-    public EntityActionResult Interact(ActionOnBlock action) {
+    public EntityActionResult Interact(ActionOnBlock action, string[] args=null) {
         var result = EntityActionResult.Error;
         if (OnBlockInteract != null)
-            result = OnBlockInteract(action);
-
+            result = args==null?OnBlockInteract(action):OnBlockInteract(action, args);
+        float.
         return result;
     }
 }

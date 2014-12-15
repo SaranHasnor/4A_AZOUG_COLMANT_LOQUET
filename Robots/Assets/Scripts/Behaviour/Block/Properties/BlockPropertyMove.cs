@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class BlockPropertyMove : BlockProperty {
-    protected override EntityActionResult _Interact(ActionOnBlock action) {
+    protected override EntityActionResult _Interact(ActionOnBlock action, string[] args = null) {
         EntityActionResult result;
 
         if (action != ActionOnBlock.Move) {

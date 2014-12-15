@@ -10,11 +10,11 @@ public enum ActionOnBlock : int {
 /// </summary>
 public abstract class BlockProperty : MonoBehaviour {
 
-    protected abstract EntityActionResult _Interact(ActionOnBlock action);
+    protected abstract EntityActionResult _Interact(ActionOnBlock action, string[] args = null);
 
-    private EntityActionResult Interact(ActionOnBlock action) {
+    private EntityActionResult Interact(ActionOnBlock action, string[] args = null) {
         try {
-            return this._Interact(action);
+            return this._Interact(action, args);
         } catch (ActionException e) {
             Debug.LogException(e);
             return EntityActionResult.Error;
