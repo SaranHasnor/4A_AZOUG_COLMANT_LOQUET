@@ -1,13 +1,8 @@
 ﻿using UnityEngine;
 
-public delegate EntityActionResult BlockInteract(ActionOnBlock action, string[] args=null);
-
-public class BlockScript : MapEntity
-{
+public class BlockScript : MapEntity {
     [SerializeField]
     private GameObject _logic;
-
-    public event BlockInteract OnBlockInteract;
 
     private BlockProperty[] _properties;
 
@@ -17,16 +12,18 @@ public class BlockScript : MapEntity
 
     void Start() {
         _properties = _logic.GetComponents<BlockProperty>();
-        foreach (var property in _properties) {
-            property.AddListener(this);
-        }
     }
 
-    public EntityActionResult Interact(ActionOnBlock action, string[] args=null) {
+    public EntityActionResult Interact(ActionOnBlock action, string[] args = null) {
         var result = EntityActionResult.Error;
-        if (OnBlockInteract != null)
-            result = args==null?OnBlockInteract(action):OnBlockInteract(action, args);
-        float.
+        foreach (var property in _properties) {
+            var tmp = property.Interact(action, args);
+            if (tmp != EntityActionResult.Error) {
+                result = tmp;
+                break;
+            }
+        }
+
         return result;
     }
 }

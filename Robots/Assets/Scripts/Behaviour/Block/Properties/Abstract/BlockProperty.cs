@@ -12,20 +12,12 @@ public abstract class BlockProperty : MonoBehaviour {
 
     protected abstract EntityActionResult _Interact(ActionOnBlock action, string[] args = null);
 
-    private EntityActionResult Interact(ActionOnBlock action, string[] args = null) {
+    public EntityActionResult Interact(ActionOnBlock action, string[] args = null) {
         try {
             return this._Interact(action, args);
         } catch (ActionException e) {
             Debug.LogException(e);
             return EntityActionResult.Error;
         }
-    }
-
-    public void AddListener(BlockScript actuator) {
-        actuator.OnBlockInteract += this.Interact;
-    }
-
-    public void RemoveListener(BlockScript actuator) {
-        actuator.OnBlockInteract -= this.Interact;
     }
 }
