@@ -50,7 +50,7 @@ public class ActionQueue
 
 	}
 
-	public void Run(int timeOverride = -1)
+	public EntityActionResult Run(int timeOverride = -1)
 	{
 		int time = (timeOverride < 0) ? this.cursor : timeOverride;
 
@@ -62,12 +62,23 @@ public class ActionQueue
 			{
 				if (timeOverride < 0) this.cursor++;
 			}
+
+			return res;
 		}
+
+		return EntityActionResult.Success; // Ran out of actions, don't bother the boss with useless messages
 	}
 
-	public void SetCursor(int time)
+	public void SetCursor(int time, bool relative = false)
 	{
-		this.cursor = Mathf.Clamp(time, 0, queue.Count);
+		this.cursor = Mathf.Clamp(relative?cursor+time:time, 0, queue.Count);
+	}
+
+	public EntityAction GetAction(int timeOverride = -1)
+	{
+		int time = (timeOverride < 0) ? this.cursor : timeOverride;
+
+		return queue[time];
 	}
 
 	public string Save()

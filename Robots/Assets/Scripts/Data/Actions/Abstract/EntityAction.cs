@@ -6,6 +6,7 @@ public enum EntityActionResult
 	Success,		// Action executed succesfully
 	Failure,		// Action failed to execute
 	Repeat,			// Action should be repeated
+	Pending,		// Action works over a duration and will return later (seems unnatural, keeping it just in case)
 	Error			// An error occured while trying to execute the action
 }
 

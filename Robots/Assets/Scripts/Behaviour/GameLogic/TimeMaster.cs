@@ -2,49 +2,90 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum ActionRunMode
+{
+	Paused,			// Actions are paused
+	Simulation,		// Playing the player's current actions
+	Replay,			// Actions already validated and uneditable
+	Action			// Synchronized playback between clients
+}
+
 public class TimeMaster : MonoBehaviour
 {
-	private List<RunnableEntity> entities;
-
-	//private List<RunnableEntity> pendingEntities;
+	private List<RunnableEntity> _entities;
+	private List<RunnableEntity> _pendingEntities;
+	private float _lastRunTime;
+	private ActionRunMode _runMode;
 
 	void Start()
 	{
 		GameData.timeMaster = this;
 
-		this.entities = new List<RunnableEntity>();
-
-		//this.pendingEntities = new List<RunnableEntity>();
+		_entities = new List<RunnableEntity>();
+		_pendingEntities = new List<RunnableEntity>();
+		_runMode = ActionRunMode.Paused;
 	}
 
 	public void RegisterEntity(RunnableEntity entity)
 	{
-		if (this.entities.Contains(entity))
+		if (_entities.Contains(entity))
 		{
 			Debug.LogWarning("Entity " + entity.name + " tried to register twice");
 			return;
 		}
 
-		this.entities.Add(entity);
+		_entities.Add(entity);
 	}
 
 	private void RunActions()
 	{
-		/*foreach (RunnableEntity entity in this.entities)
+		foreach (RunnableEntity entity in _entities)
 		{
-			
-		}*/
+			EntityActionResult res = entity.RunNextAction();
 
-		throw new System.NotImplementedException();
+			if (res == EntityActionResult.Pending)
+			{
+				_pendingEntities.Add(entity);
+			}
+		}
+
+		_lastRunTime = Time.time;
 	}
 
 	void Update()
 	{ // While simulation or execution is running, run one action every second
+		if (_runMode == ActionRunMode.Simulation)
+		{
+			if (Time.time - _lastRunTime >= 1.0f)
+			{
+				if (_pendingEntities.Count == 0)
+				{
+					RunActions();
+				}
+				else if (Time.time - _lastRunTime >= 3.0f)
+				{ // Failsafe
+					List<RunnableEntity> pendingEntities = new List<RunnableEntity>(_pendingEntities);
+					foreach (RunnableEntity entity in pendingEntities)
+					{
+						Debug.LogError(entity.name + " is stuck");
 
+						entity.StopCurrentAction();
+						EntityCompletedAction(entity, entity.ActionAtTime(), EntityActionResult.Error);
+						entity.MoveToTime(1, true);
+					}
+				}
+			}
+		}
 	}
 
 	public void EntityCompletedAction(RunnableEntity entity, EntityAction action, EntityActionResult result)
 	{ // Callback for entities performing actions over a duration
-		throw new System.NotImplementedException();
+		if (!_pendingEntities.Contains(entity))
+		{
+			Debug.LogWarning("Got unexpected action callback from entity " + entity.name);
+			return;
+		}
+
+		_pendingEntities.Remove(entity);
 	}
 }
