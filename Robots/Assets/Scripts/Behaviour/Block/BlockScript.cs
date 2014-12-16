@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
+public delegate void BlockInteract(ActionOnBlock action, string[] args = null);
+
 public class BlockScript : MapEntity {
     [SerializeField]
     private GameObject _logic;
 
     private BlockProperty[] _properties;
+    public event BlockInteract OnBlockInteract;
 
     // Should have a list of properties that can be attached to it
     // The only argument for making this a runnable entity is to update their state each turn
@@ -12,18 +15,13 @@ public class BlockScript : MapEntity {
 
     void Start() {
         _properties = _logic.GetComponents<BlockProperty>();
+        foreach (var property in _properties) {
+            property.AddListener(this);
+        }
     }
 
-    public EntityActionResult Interact(ActionOnBlock action, string[] args = null) {
-        var result = EntityActionResult.Error;
-        foreach (var property in _properties) {
-            var tmp = property.Interact(action, args);
-            if (tmp != EntityActionResult.Error) {
-                result = tmp;
-                break;
-            }
-        }
-
-        return result;
+    public void Interact(ActionOnBlock action, string[] args = null) {
+        if (OnBlockInteract != null)
+            OnBlockInteract(action, args);
     }
 }

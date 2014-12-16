@@ -1,16 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class BlockPropertyMove : BlockProperty {
-    protected override EntityActionResult _Interact(ActionOnBlock action, string[] args = null) {
-        EntityActionResult result;
-
+﻿public class BlockPropertyMove : BlockProperty {
+    protected override void _Interact(ActionOnBlock action, string[] args = null) {
         if (action != ActionOnBlock.Move) {
-            result = EntityActionResult.Failure;
-        } else {
-            result = EntityActionResult.Success;
+            // TODO : Completer algo property Move
         }
-
-        return result;
     }
 }

@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 
 public enum ActionOnBlock : int {
-    Move = 0
+    Move = 0,
+    Destroy,
+    Gravitate,
+    Resize,
+    Rotate,
+    Solid,
+    Stick
 };
 
 /// <summary>
@@ -10,14 +16,21 @@ public enum ActionOnBlock : int {
 /// </summary>
 public abstract class BlockProperty : MonoBehaviour {
 
-    protected abstract EntityActionResult _Interact(ActionOnBlock action, string[] args = null);
+    protected abstract void _Interact(ActionOnBlock action, string[] args = null);
 
-    public EntityActionResult Interact(ActionOnBlock action, string[] args = null) {
+    private void Interact(ActionOnBlock action, string[] args = null) {
         try {
-            return this._Interact(action, args);
+            _Interact(action, args);
         } catch (ActionException e) {
             Debug.LogException(e);
-            return EntityActionResult.Error;
         }
+    }
+
+    public void AddListener(BlockScript actuator) {
+        actuator.OnBlockInteract += Interact;
+    }
+
+    public void RemoveListener(BlockScript actuator) {
+        actuator.OnBlockInteract -= Interact;
     }
 }
