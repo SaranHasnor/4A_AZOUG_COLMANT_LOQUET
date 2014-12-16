@@ -5,24 +5,42 @@ using System.Collections.Generic;
 public class Map
 {
     private List<List<List<MapEntity>>> entities;
+    private int limit = 32;
     public Map()
     {
-        entities = new List<List<List<MapEntity>>>(32);
+        entities = new List<List<List<MapEntity>>>(limit);
         for (var i = 0; i < entities.Capacity; ++i)
         {
-            entities[i] = new List<List<MapEntity>>(32);
+            entities.Add(new List<List<MapEntity>>(limit));
             for (var j = 0; j < entities.Capacity; ++j)
             {
-                entities[i][j] = new List<MapEntity>(32);
+                entities[i].Add(new List<MapEntity>(limit));
             }
         }
     }
     private const float size = 5f;
 
-    public void AddEntity(GameObject go, Vector3 pos)
+    public int SetEntity(GameObject go, Vector3 pos)
     {
         var index = GetIndex(pos);
-        entities[index.x][index.y][index.z] = go.GetComponent<MapEntity>();
+        if (IsOnLimit(index) == 0)
+        {
+            entities[index.x][index.y][index.z] = go.GetComponent<MapEntity>();
+            return 0;
+        }
+        else
+            return -1;
+    }
+    public int SetEntity(MapEntity me, Vector3 pos)
+    {
+        var index = GetIndex(pos);
+        if (IsOnLimit(index) == 0)
+        {
+            entities[index.x][index.y][index.z] = me;
+            return 0;
+        }
+        else
+            return -1;
     }
     public MapEntity GetEntity(Vector3 pos)
     {
@@ -50,42 +68,15 @@ public class Map
     }
     public List<MapEntity> GetNeighbours(Vector3 pos)
     {
-        Vector3i index = GetIndex(pos);
-        var me = new List<MapEntity>{ null, null, null, null, null, null };
-        uint j = 0;
-        for(var i = 0 ; i < entities.Count || j < 5 ; i++)
+        var me = new List<MapEntity>(6)
         {
-            if(IsOnBlock(pos - new Vector3(pos.x - size, pos.y, pos.z))) //left
-            {
-                me[0] = entities[index.x][index.y][index.z];
-                ++j;
-            }
-            else if(IsOnBlock(pos - new Vector3(pos.x + size, pos.y, pos.z))) //right
-            {
-                me[1] = entities[index.x][index.y][index.z];
-                ++j;
-            }
-            else if(IsOnBlock(pos - new Vector3(pos.x, pos.y + size, pos.z))) //up
-            {
-                me[2] = entities[index.x][index.y][index.z];
-                ++j;
-            }
-            else if(IsOnBlock(pos - new Vector3(pos.x, pos.y - size, pos.z))) //down
-            {
-                me[3] = entities[index.x][index.y][index.z];
-                ++j;
-            }
-            else if(IsOnBlock(pos - new Vector3(pos.x, pos.y, pos.z + size))) //face
-            {
-                me[4] = entities[index.x][index.y][index.z];
-                ++j;
-            }
-            else if(IsOnBlock(pos - new Vector3(pos.x, pos.y, pos.z - size))) //back
-            {
-                me[5] = entities[index.x][index.y][index.z];
-                ++j;
-            }
-        }
+             GetNear(pos, Vector3i.left)
+            ,GetNear(pos, Vector3i.right)
+            ,GetNear(pos, Vector3i.up)
+            ,GetNear(pos, Vector3i.down)
+            ,GetNear(pos, Vector3i.forward)
+            ,GetNear(pos, Vector3i.back)
+        };
         return me;
     }
     public MapEntity GetNear(Vector3 pos, Vector3i dir)
@@ -101,21 +92,33 @@ public class Map
         }
         
     }
-    public bool IsOnBlock(Vector3 pos)
-    {
-        Vector3i index = GetIndex(pos);
-        var curBlock = entities[index.x][index.y][index.z].gameObject.transform;
-        return curBlock.position == pos;
-    }
     public void DeleteEntity(Vector3 pos)
     {
         var index = GetIndex(pos);
+
         entities[index.x][index.y].Remove(entities[index.x][index.y][index.z]); //delete l'object a l'exterieur ?!
     }
     public Vector3i GetIndex(Vector3 pos)
     {
         return new Vector3i( (int) (pos.x / size),(int) (pos.y / size), (int) (pos.z / size) );
     }
+    public int IsOnLimit(Vector3i index)
+    {
+        if (index.x > limit || index.y > limit || index.z > limit)
+            return -1;
+        else
+            return 0;
+    }
 
- 
+    public int MoveEntity(MapEntity me, Vector3 pos) //TODO : gerer que des pos?
+    {
+        if (IsOnLimit(GetIndex(pos)) == 0)
+        {
+            DeleteEntity(me.tr.position);
+            SetEntity(me.go, pos);
+            return 0;
+        }
+        else
+            return -1;
+    }
 }

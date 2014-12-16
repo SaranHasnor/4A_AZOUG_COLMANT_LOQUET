@@ -5,7 +5,7 @@ using System.IO;
 public class MapLoader : MonoBehaviour {
 
     [SerializeField]
-    public GameObject BlockPrefab;
+    public GameObject blockPrefab;
     // Builds the attached map
     void Start() {
         // Read the file as one string.
@@ -26,7 +26,7 @@ public class MapLoader : MonoBehaviour {
                         go.transform.position = pos;
                         go.SetActive(Boolean.Parse(s[2])); //sert a rien :(
                         go.name = s[0]; //a voir
-                        GameData.currentState.map.AddEntity(GameData.blockLibrary.blocks[s[0]], pos);
+                        GameData.currentState.map.SetEntity(GameData.blockLibrary.blocks[s[0]], pos);
                     }
                     sr.Close();
                 }
