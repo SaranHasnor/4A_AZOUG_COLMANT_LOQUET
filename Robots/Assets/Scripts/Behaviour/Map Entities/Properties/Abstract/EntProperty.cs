@@ -3,7 +3,7 @@
 public enum ActionOnBlock : int {
     Move = 0,
     Destroy,
-    Gravitate,
+    Fall,
     Resize,
     Rotate,
     Solid,
@@ -14,7 +14,7 @@ public enum ActionOnBlock : int {
 ///     <c>BlocProperty</c> is abstract class.
 ///     Subclasses of this class can implement a variety of event functions, so this class is merely a "marker" for subclasses
 /// </summary>
-public abstract class BlockProperty : MonoBehaviour {
+public abstract class EntProperty : MonoBehaviour {
 
     protected abstract void _Interact(ActionOnBlock action, params Object[] args);
 

@@ -9,6 +9,8 @@ public class PlayerCameraScript : MonoBehaviour
 	[SerializeField]
 	private float _magicNumber = 0.9f;
 
+	private Vector3 _anchorPoint = Vector3.zero;
+
 	private float _desiredCameraDistance = 10.0f;
 
 	// The two following angles describe the angle created by the camera and the origin
@@ -18,7 +20,7 @@ public class PlayerCameraScript : MonoBehaviour
 	void Update()
 	{
 		Quaternion desiredAngle = Quaternion.Euler(-_desiredCameraVertAngle, -_desiredCameraHorzAngle, 0.0f);
-		Quaternion currentAngle = Quaternion.LookRotation(this.transform.position - Vector3.zero);
+		Quaternion currentAngle = Quaternion.LookRotation(this.transform.position - _anchorPoint);
 
 		float diff = Quaternion.Angle(currentAngle, desiredAngle);
 		float maxDelta = Mathf.Clamp(diff * _magicNumber, 3.0f, _maxCameraAngularSpeed) * Time.deltaTime;
@@ -27,12 +29,9 @@ public class PlayerCameraScript : MonoBehaviour
 		Vector3 desiredPosition = targetAngle * Vector3.forward * _desiredCameraDistance;
 
 		this.transform.position = desiredPosition;
-		this.transform.LookAt(Vector3.zero); // Temporary
+		this.transform.LookAt(_anchorPoint); // I was going to recode it but I guess this works
 
 		UpdateInput();
-
-		//Debug.Log(_desiredCameraHorzAngle);
-		//Debug.Log(_desiredCameraVertAngle);
 	}
 
 	private void UpdateInput()

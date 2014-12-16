@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BlockPropertyMove : BlockProperty {
+public class EntPropertyPushable : EntProperty {
     [SerializeField]
     public int StrongOfPush = 1;
 
