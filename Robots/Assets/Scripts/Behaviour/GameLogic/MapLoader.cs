@@ -26,7 +26,7 @@ public class MapLoader : MonoBehaviour {
                         go.transform.position = pos;
                         go.SetActive(Boolean.Parse(s[2])); //sert a rien :(
                         go.name = s[0]; //a voir
-                        _map.AddBlock(GameData.blockLibrary.blocks[s[0]], pos);
+                        _map.AddEntity(GameData.blockLibrary.blocks[s[0]], pos);
                     }
                     sr.Close();
                 }

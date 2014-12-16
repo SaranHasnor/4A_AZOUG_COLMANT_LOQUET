@@ -1,10 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-
-public class Vector3i
+﻿public class Vector3i
 {
     public Vector3i(int _x, int _y, int _z)
     {
@@ -15,6 +9,7 @@ public class Vector3i
     public int x;
     public int y;
     public int z;
+
     public static Vector3i back 
     {
         get
@@ -22,7 +17,6 @@ public class Vector3i
             return new Vector3i(0, 0, -1);
         }
     }
-
     public static Vector3i forward
     {
         get
