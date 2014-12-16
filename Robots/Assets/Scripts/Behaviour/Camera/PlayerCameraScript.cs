@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCameraScript : MonoBehaviour
 { // Manages the position of the camera and the player's camera-related input
 	[SerializeField]
-	private float _maxCameraAngularSpeed = 45.0f;
+	private float _maxCameraAngularSpeed = 90.0f;
 
 	[SerializeField]
 	private float _magicNumber = 0.9f;
@@ -21,7 +21,7 @@ public class PlayerCameraScript : MonoBehaviour
 		Quaternion currentAngle = Quaternion.LookRotation(this.transform.position - Vector3.zero);
 
 		float diff = Quaternion.Angle(currentAngle, desiredAngle);
-		float maxDelta = Mathf.Clamp(diff * _magicNumber, 1.0f, _maxCameraAngularSpeed) * Time.deltaTime;
+		float maxDelta = Mathf.Clamp(diff * _magicNumber, 3.0f, _maxCameraAngularSpeed) * Time.deltaTime;
 		Quaternion targetAngle = Quaternion.RotateTowards(currentAngle, desiredAngle, maxDelta);
 
 		Vector3 desiredPosition = targetAngle * Vector3.forward * _desiredCameraDistance;

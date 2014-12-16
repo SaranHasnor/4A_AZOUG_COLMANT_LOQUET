@@ -13,9 +13,9 @@ public class GameState
 		}
 	}
 
-	public GameState(Map map)
+	public GameState()
 	{
-		_map = map;
+		_map = new Map();
 	}
 
 	public static GameState Parse(string text)

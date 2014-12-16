@@ -3,7 +3,7 @@ using UnityEngine;
 using System.IO;
 
 public class MapLoader : MonoBehaviour {
-    private Map _map;
+
     [SerializeField]
     public GameObject BlockPrefab;
     // Builds the attached map
@@ -26,7 +26,7 @@ public class MapLoader : MonoBehaviour {
                         go.transform.position = pos;
                         go.SetActive(Boolean.Parse(s[2])); //sert a rien :(
                         go.name = s[0]; //a voir
-                        _map.AddEntity(GameData.blockLibrary.blocks[s[0]], pos);
+                        GameData.currentState.map.AddEntity(GameData.blockLibrary.blocks[s[0]], pos);
                     }
                     sr.Close();
                 }
