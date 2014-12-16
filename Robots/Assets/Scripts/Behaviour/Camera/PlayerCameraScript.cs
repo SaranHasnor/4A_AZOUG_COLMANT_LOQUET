@@ -9,7 +9,7 @@ public class PlayerCameraScript : MonoBehaviour
 	[SerializeField]
 	private float _magicNumber = 0.9f;
 
-	private float _desiredCameraDistance = 50.0f;
+	private float _desiredCameraDistance = 10.0f;
 
 	// The two following angles describe the angle created by the camera and the origin
 	private float _desiredCameraHorzAngle = 45.0f;
@@ -17,7 +17,7 @@ public class PlayerCameraScript : MonoBehaviour
 
 	void Update()
 	{
-		Quaternion desiredAngle = Quaternion.Euler(_desiredCameraVertAngle, _desiredCameraHorzAngle, 0.0f);
+		Quaternion desiredAngle = Quaternion.Euler(-_desiredCameraVertAngle, -_desiredCameraHorzAngle, 0.0f);
 		Quaternion currentAngle = Quaternion.LookRotation(this.transform.position - Vector3.zero);
 
 		float diff = Quaternion.Angle(currentAngle, desiredAngle);
@@ -30,23 +30,26 @@ public class PlayerCameraScript : MonoBehaviour
 		this.transform.LookAt(Vector3.zero); // Temporary
 
 		UpdateInput();
+
+		//Debug.Log(_desiredCameraHorzAngle);
+		//Debug.Log(_desiredCameraVertAngle);
 	}
 
 	private void UpdateInput()
 	{ // Raw input for now
-		if (Input.GetKeyDown(KeyCode.LeftArrow))
+		if (Input.GetKey(KeyCode.LeftArrow))
 		{
 			_desiredCameraHorzAngle -= 2.5f;
 		}
-		if (Input.GetKeyDown(KeyCode.RightArrow))
+		if (Input.GetKey(KeyCode.RightArrow))
 		{
 			_desiredCameraHorzAngle += 2.5f;
 		}
-		if (Input.GetKeyDown(KeyCode.DownArrow))
+		if (Input.GetKey(KeyCode.DownArrow))
 		{
 			_desiredCameraVertAngle -= 2.5f;
 		}
-		if (Input.GetKeyDown(KeyCode.UpArrow))
+		if (Input.GetKey(KeyCode.UpArrow))
 		{
 			_desiredCameraVertAngle += 2.5f;
 		}

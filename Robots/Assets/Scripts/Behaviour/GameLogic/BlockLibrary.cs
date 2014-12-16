@@ -20,9 +20,12 @@ public class BlockLibrary : MonoBehaviour
 		GameData.blockLibrary = this;
 
 		_blocks = new Dictionary<string, GameObject>();
-		foreach (KeyValuePair<string, GameObject> pair in this.blockList)
+		if (this.blockList != null)
 		{
-			_blocks.Add(pair.Key, pair.Value);
+			foreach (KeyValuePair<string, GameObject> pair in this.blockList)
+			{
+				_blocks.Add(pair.Key, pair.Value);
+			}
 		}
 	}
 }
