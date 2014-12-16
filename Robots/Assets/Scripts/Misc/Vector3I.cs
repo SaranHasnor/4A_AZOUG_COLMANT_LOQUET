@@ -19,7 +19,7 @@ public class Vector3i
     {
         get
         {
-            return new Vector3i(0, 0, 1);
+            return new Vector3i(0, 0, -1);
         }
     }
 
@@ -34,7 +34,7 @@ public class Vector3i
     {
         get
         {
-            return new Vector3i(0, 1, 0);
+            return new Vector3i(0, -1, 0);
         }
     }
     public static Vector3i up
@@ -48,7 +48,7 @@ public class Vector3i
     {
         get
         {
-            return new Vector3i(1, 0, 0);
+            return new Vector3i(-1, 0, 0);
         }
     }
     public static Vector3i right
