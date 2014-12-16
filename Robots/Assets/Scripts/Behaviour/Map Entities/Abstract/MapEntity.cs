@@ -44,7 +44,7 @@ public abstract class MapEntity : MonoBehaviour
 	protected virtual void Initialize()
 	{
 		_properties = _logic.GetComponents<EntProperty>();
-		foreach (var property in _properties)
+		foreach(var property in _properties)
 		{
 			property.AddListener(this);
 		}
@@ -55,7 +55,7 @@ public abstract class MapEntity : MonoBehaviour
 
 	public void Interact(EntityEvent action, params Object[] args)
 	{
-		if (OnEntityInteraction != null)
+		if(OnEntityInteraction != null)
 			OnEntityInteraction(action, args);
 	}
 

@@ -9,10 +9,10 @@ public class Map
 	public Map()
 	{
 		entities = new List<List<List<MapEntity>>>(limit);
-		for (var i = 0; i < entities.Capacity; ++i)
+		for(var i = 0 ; i < entities.Capacity ; ++i)
 		{
 			entities.Add(new List<List<MapEntity>>(limit));
-			for (var j = 0; j < entities.Capacity; ++j)
+			for(var j = 0 ; j < entities.Capacity ; ++j)
 			{
 				entities[i].Add(new List<MapEntity>(limit));
 			}
@@ -23,7 +23,7 @@ public class Map
 	public int SetEntity(GameObject go, Vector3 pos)
 	{
 		var index = GetIndex(pos);
-		if (IsOnLimit(index) == 0)
+		if(IsOnLimit(index) == 0)
 		{
 			entities[index.x][index.y][index.z] = go.GetComponent<MapEntity>();
 			return 0;
@@ -34,7 +34,7 @@ public class Map
 	public int SetEntity(MapEntity me, Vector3 pos)
 	{
 		var index = GetIndex(pos);
-		if (IsOnLimit(index) == 0)
+		if(IsOnLimit(index) == 0)
 		{
 			entities[index.x][index.y][index.z] = me;
 			return 0;
@@ -49,7 +49,7 @@ public class Map
 		{
 			return entities[index.x][index.y][index.z];
 		}
-		catch (Exception)
+		catch(Exception)
 		{
 			return null;
 		}
@@ -61,7 +61,7 @@ public class Map
 		{
 			return entities[index.x][index.y][index.z];
 		}
-		catch (Exception)
+		catch(Exception)
 		{
 			return null;
 		}
@@ -86,7 +86,7 @@ public class Map
 		{
 			return entities[index.x][index.y][index.z];
 		}
-		catch (Exception)
+		catch(Exception)
 		{
 			return null;
 		}
@@ -95,8 +95,7 @@ public class Map
 	public void DeleteEntity(Vector3 pos)
 	{
 		var index = GetIndex(pos);
-
-		entities[index.x][index.y].Remove(entities[index.x][index.y][index.z]); //delete l'object a l'exterieur ?!
+		entities[index.x][index.y][index.z] = null; //delete l'object a l'exterieur ?!
 	}
 	public Vector3i GetIndex(Vector3 pos)
 	{
@@ -104,15 +103,15 @@ public class Map
 	}
 	public int IsOnLimit(Vector3i index)
 	{
-		if (index.x > limit || index.y > limit || index.z > limit)
+		if(index.x > limit || index.y > limit || index.z > limit)
 			return -1;
 		else
 			return 0;
 	}
 
-	public int MoveEntity(MapEntity me, Vector3 pos) //TODO : gerer que des pos?
+	public int MoveEntity(MapEntity me, Vector3 pos)
 	{
-		if (IsOnLimit(GetIndex(pos)) == 0)
+		if(IsOnLimit(GetIndex(pos)) == 0 && GetEntity(pos) == null)
 		{
 			DeleteEntity(me.tr.position);
 			SetEntity(me.gameObject, pos);

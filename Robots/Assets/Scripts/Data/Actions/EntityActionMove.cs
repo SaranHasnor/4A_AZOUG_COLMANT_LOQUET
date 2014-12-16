@@ -10,7 +10,8 @@ public class EntityActionMove : EntityTargetedAction
 	}
 
 	protected override EntityActionResult _Run()
-	{ // TODO: Call the map and make it move us if possible
-		throw new System.NotImplementedException();
+	{
+		// TODO: Call the map and make it move us if possible
+		return owner.Move(_targetPosition) != -1 ? EntityActionResult.Success : EntityActionResult.Failure;
 	}
 }
