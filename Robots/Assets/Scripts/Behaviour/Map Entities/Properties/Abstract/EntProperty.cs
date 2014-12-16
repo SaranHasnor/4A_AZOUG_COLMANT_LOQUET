@@ -7,7 +7,11 @@ public enum EntityEvent : int {
     Resize,
     Rotate,
     Solid,
-    Stick
+    Stick,
+    Spawn,
+    Exit,
+    Teleport,
+    Turn
 };
 
 /// <summary>
