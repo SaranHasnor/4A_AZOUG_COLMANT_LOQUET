@@ -16,16 +16,16 @@ public enum ActionOnBlock : int {
 /// </summary>
 public abstract class BlockProperty : MonoBehaviour {
 
-    protected abstract void _Interact(ActionOnBlock action, string[] args = null);
+    protected abstract void _Interact(ActionOnBlock action, params Object[] args);
 
-    private void Interact(ActionOnBlock action, string[] args = null) {
+    private void Interact(ActionOnBlock action, params Object[] args) {
         try {
             _Interact(action, args);
         } catch (ActionException e) {
             Debug.LogException(e);
         }
     }
-
+    
     public void AddListener(BlockScript actuator) {
         actuator.OnBlockInteract += Interact;
     }

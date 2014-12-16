@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public delegate void BlockInteract(ActionOnBlock action, string[] args = null);
+public delegate void BlockInteract(ActionOnBlock action, params Object[] args);
 
 public class BlockScript : MapEntity {
     [SerializeField]
@@ -20,7 +20,7 @@ public class BlockScript : MapEntity {
         }
     }
 
-    public void Interact(ActionOnBlock action, string[] args = null) {
+    public void Interact(ActionOnBlock action, params Object[] args) {
         if (OnBlockInteract != null)
             OnBlockInteract(action, args);
     }
