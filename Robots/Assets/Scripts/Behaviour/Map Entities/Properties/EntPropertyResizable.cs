@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public class EntPropertyResizable : EntProperty {
-    protected override void _Interact(ActionOnBlock action, params Object[] args) {
-        if (action == ActionOnBlock.Resize) {
+    protected override void _Interact(EntityEvent action, params Object[] args) {
+        if (action == EntityEvent.Resize) {
             // TODO : Completer algo property Resize
         }
     }

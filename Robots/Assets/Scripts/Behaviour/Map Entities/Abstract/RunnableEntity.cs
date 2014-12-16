@@ -5,8 +5,10 @@ public abstract class RunnableEntity : MapEntity
 { // Describes an entity that should be run by the TimeMaster every turn
 	protected ActionQueue _queue;
 
-	protected void Initialize()
+	protected override void Initialize()
 	{
+		base.Initialize();
+
 		this._queue = new ActionQueue();
 
 		// Notify the Time Master of our existence so he can manage our action queue

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum ActionOnBlock : int {
+public enum EntityEvent : int {
     Move = 0,
     Destroy,
     Fall,
@@ -16,21 +16,21 @@ public enum ActionOnBlock : int {
 /// </summary>
 public abstract class EntProperty : MonoBehaviour {
 
-    protected abstract void _Interact(ActionOnBlock action, params Object[] args);
+    protected abstract void _Interact(EntityEvent actionType, params Object[] args);
 
-    private void Interact(ActionOnBlock action, params Object[] args) {
+    private void Interact(EntityEvent actionType, params Object[] args) {
         try {
-            _Interact(action, args);
-        } catch (ActionException e) {
+            _Interact(actionType, args);
+        } catch (System.Exception e) {
             Debug.LogException(e);
         }
     }
     
-    public void AddListener(BlockScript actuator) {
-        actuator.OnBlockInteract += Interact;
+    public void AddListener(MapEntity actuator) {
+        actuator.OnEntityInteraction += Interact;
     }
 
-    public void RemoveListener(BlockScript actuator) {
-        actuator.OnBlockInteract -= Interact;
+    public void RemoveListener(MapEntity actuator) {
+        actuator.OnEntityInteraction -= Interact;
     }
 }

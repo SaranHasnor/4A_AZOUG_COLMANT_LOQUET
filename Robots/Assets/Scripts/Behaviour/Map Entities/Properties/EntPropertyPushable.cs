@@ -4,8 +4,8 @@ public class EntPropertyPushable : EntProperty {
     [SerializeField]
     public int StrongOfPush = 1;
 
-    protected override void _Interact(ActionOnBlock action, params Object[] args) {
-        if (action == ActionOnBlock.Move) {
+    protected override void _Interact(EntityEvent action, params Object[] args) {
+        if (action == EntityEvent.Move) {
             var posEntityPusher = GameData.currentState.map.GetEntity((MapEntity)args[0]).transform.position;
             var posEntityPush = gameObject.transform.position;
 
@@ -28,7 +28,7 @@ public class EntPropertyPushable : EntProperty {
                 GameData.currentState.map.GetEntity(posEntityPush)
                     .Move(new Vector3(posEntityPush.x, posEntityPush.y, posEntityPush.z + tmp));
             } else {
-                Debug.Log("Error in BlockPropertyMove : Can't push");
+				Debug.Log("Error in EntPropertyPushable : Can't push");
             }
 
         }

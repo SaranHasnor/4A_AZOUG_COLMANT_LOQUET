@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public class EntPropertyImmaterial : EntProperty {
-    protected override void _Interact(ActionOnBlock action, params Object[] args) {
-        if (action == ActionOnBlock.Solid) {
+    protected override void _Interact(EntityEvent action, params Object[] args) {
+        if (action == EntityEvent.Solid) {
             // TODO : Completer algo property Solid
         }
     }
