@@ -30,12 +30,12 @@ public abstract class MapEntity : MonoBehaviour
 		}
 	}
 
-	private int _index;
-	public int index
+	private int _id;
+	public int id
 	{
 		get
 		{
-			return _index;
+			return _id;
 		}
 	}
 
@@ -49,7 +49,7 @@ public abstract class MapEntity : MonoBehaviour
 			property.AddListener(this);
 		}
 
-		_index = _count++;
+		_id = _count++;
 		player = -1;
 	}
 
