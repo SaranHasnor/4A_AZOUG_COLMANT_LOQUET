@@ -5,7 +5,7 @@ public class BlockPropertyMove : BlockProperty {
     public int StrongOfPush = 1;
 
     protected override void _Interact(ActionOnBlock action, params Object[] args) {
-        if (action != ActionOnBlock.Move) {
+        if (action == ActionOnBlock.Move) {
             var posEntityPusher = GameData.currentState.map.GetEntity((MapEntity)args[0]).transform.position;
             var posEntityPush = gameObject.transform.position;
 
