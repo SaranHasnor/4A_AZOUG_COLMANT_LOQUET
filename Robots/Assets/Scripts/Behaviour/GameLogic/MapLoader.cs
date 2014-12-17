@@ -1,46 +1,60 @@
 ﻿using System;
 using UnityEngine;
 using System.IO;
+using System.Xml;
 
 public class MapLoader : MonoBehaviour
 {
 
 	[SerializeField]
 	public GameObject blockPrefab;
-	// Builds the attached map
+
 	void Start()
 	{
-		// Read the file as one string.
-		//maybe add a field "type of block" in the file
-		const string filePath = @"..\..\..\map.csv";
+		ParseXML();
+	}
+
+	public void ParseXML()
+	{
+		const string filePath = @"..\..\..\templateformat.xml";
 		if(!File.Exists(filePath))
 			Debug.LogError("Error : filePath not correct");
-		else
+		var doc = new XmlDocument();
+		doc.Load(filePath);
+		var nodes = doc.DocumentElement.SelectNodes("/gamestate/map");
+		if(nodes != null)
 		{
-			try
+			foreach(XmlNode node in nodes)
 			{
-				using(var sr = new StreamReader(filePath))
+				var width	= node.Attributes["width"].Value;
+				var height	= node.Attributes["height"].Value;
+				var depth	= node.Attributes["depth"].Value;
+				for(var i = 0 ; i < node.ChildNodes.Count ; ++i)
 				{
-					string line;
-					while((line = sr.ReadLine()) != null)
+					if (node.ChildNodes[i].Name == "block")
 					{
-						var s = line.Split(';');
-						var go = GameData.blockLibrary.blocks[s[0]];
-						var pos = new Vector3(float.Parse(s[1][1].ToString()),
-												float.Parse(s[1][3].ToString()),
-												float.Parse(s[1][5].ToString()));
-						go.transform.position = pos;
-						go.SetActive(Boolean.Parse(s[2])); //sert a rien :(
-						go.name = s[0]; //a voir
-						GameData.currentState.map.SetEntity(GameData.blockLibrary.blocks[s[0]], pos);
+						BlockScript.createFromXMLNode(node.ChildNodes[i]);
 					}
-					sr.Close();
+					if(node.ChildNodes[i].Name == "robot")
+					{
+						RobotScript.createFromXMLNode(node.ChildNodes[i]);
+					}
 				}
 			}
-			catch(Exception e)
+		}
+
+		nodes = doc.DocumentElement.SelectNodes("/gamestate/actions/");
+		if(nodes != null)
+		{
+			foreach(XmlNode node in nodes)
 			{
-				Debug.LogError("The file could not be read:");
-				Debug.LogError(e.Message);
+				for(var i = 0 ; i < node.ChildNodes.Count ; ++i)
+				{
+					if(node.ChildNodes[i].Name == "queue")
+					{
+						ActionQueue.createFromXMLNode(node.ChildNodes[i]);
+					}
+				}
 			}
 		}
 	}

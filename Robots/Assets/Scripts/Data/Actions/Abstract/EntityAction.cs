@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml;
 
 public enum EntityActionResult
 {
@@ -27,8 +28,24 @@ public abstract class EntityAction
 		this._owner = owner;
 	}
 
-	public static EntityAction LoadFromString(string s)
+	public static EntityAction createFromXMLNode(XmlNode node)
 	{
+		/*owner.gameObject = */
+		//Instantiate(GameData.blockLibrary.blocks[node.ChildNodes[0].Attributes["type"].Value]);
+		//owner.id = node.ChildNodes[0].Attributes != null ? node.ChildNodes[0].Attributes["id"].Value : null;
+
+		if(node.ChildNodes[0].Attributes["class"] != null)
+		{
+			var actionClass = node.ChildNodes[0].Attributes["class"].Value;
+		}
+		if(node.ChildNodes[0].Attributes["position"] != null)
+		{
+			var actionPosition = node.ChildNodes[0].Attributes["position"].Value;
+		}
+		if(node.ChildNodes[0].Attributes["target"] != null)
+		{
+			var actionTarget = node.ChildNodes[0].Attributes["target"].Value;
+		}
 		return null;
 	}
 

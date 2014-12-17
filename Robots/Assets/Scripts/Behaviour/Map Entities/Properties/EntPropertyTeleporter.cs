@@ -11,11 +11,10 @@ public class EntPropertyTeleporter : EntProperty {
 
     protected override void _Interact(EntityEvent action, MapEntity entity) {
 		if (action == EntityEvent.Teleport || action == EntityEvent.CollisionEnter) {
-			// TODO : Add teleporte function
-			//if (_sinceLastTeleport >= _frequencyTeleport && GameData.currentState.map.GetEntity(entity).Teleporte(_target.gameObject.transform.position) == 0)
-			//	_sinceLastTeleport = 0;
-			//else
-			//	++_sinceLastTeleport;
+			if(_sinceLastTeleport >= _frequencyTeleport && GameData.currentState.map.GetEntity(entity).Teleport(_target.gameObject.transform.position) == 0)
+				_sinceLastTeleport = 0;
+			else
+				++_sinceLastTeleport;
         }
     }
 }
