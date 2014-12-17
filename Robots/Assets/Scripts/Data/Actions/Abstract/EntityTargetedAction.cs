@@ -3,9 +3,9 @@ using System.Collections;
 
 public abstract class EntityTargetedAction : EntityAction
 { // Action of an entity on an empty cell
-	protected Vector3 _targetPosition;
+	protected Vector3i _targetPosition;
 
-	public EntityTargetedAction(RunnableEntity owner, Vector3 targetPosition)
+	public EntityTargetedAction(RunnableEntity owner, Vector3i targetPosition)
 		: base(owner)
 	{
 		_targetPosition = targetPosition;

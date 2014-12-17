@@ -28,25 +28,37 @@ public abstract class EntityAction
 		this._owner = owner;
 	}
 
-	public static EntityAction createFromXMLNode(XmlNode node)
+	public static EntityAction CreateFromXmlNode(XmlNode node, MapEntity owner)
 	{
-		/*owner.gameObject = */
-		//Instantiate(GameData.blockLibrary.blocks[node.ChildNodes[0].Attributes["type"].Value]);
-		//owner.id = node.ChildNodes[0].Attributes != null ? node.ChildNodes[0].Attributes["id"].Value : null;
+		string classString = node.Attributes["class"] != null ? node.Attributes["class"].Value : null;
+		string positionString = node.Attributes["position"] != null ? node.Attributes["position"].Value : null;
+		string targetID = node.Attributes["target"] != null ? node.Attributes["class"].Value : null;
 
-		if(node.ChildNodes[0].Attributes["class"] != null)
+		// Dirty way for now
+		try
 		{
-			var actionClass = node.ChildNodes[0].Attributes["class"].Value;
+			System.Type actualType = System.Type.GetType(classString);
+
+			if (actualType.BaseType == typeof(EntityInteraction))
+			{
+				return (EntityAction)actualType.GetConstructor(new System.Type[] {typeof(MapEntity), typeof(MapEntity)}).Invoke(new object[] {owner, MapEntity.entities[targetID]});
+			}
+			else if (actualType.BaseType == typeof(EntityTargetedAction))
+			{
+				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(MapEntity), typeof(Vector3i) }).Invoke(new object[] { owner, Vector3i.forward /* FIXME */ });
+			}
+			else if (actualType.BaseType == typeof(EntityStateChange))
+			{
+				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(MapEntity) }).Invoke(new object[] { owner });
+			}
+
+			return null;
 		}
-		if(node.ChildNodes[0].Attributes["position"] != null)
+		catch (System.Exception e)
 		{
-			var actionPosition = node.ChildNodes[0].Attributes["position"].Value;
+			Debug.LogException(e);
+			return null;
 		}
-		if(node.ChildNodes[0].Attributes["target"] != null)
-		{
-			var actionTarget = node.ChildNodes[0].Attributes["target"].Value;
-		}
-		return null;
 	}
 
 	protected abstract EntityActionResult _Run();

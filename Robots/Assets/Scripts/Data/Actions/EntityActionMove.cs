@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EntityActionMove : EntityTargetedAction
 {
-	public EntityActionMove(RunnableEntity owner, Vector3 target)
+	public EntityActionMove(RunnableEntity owner, Vector3i target)
 		: base(owner, target)
 	{
 
@@ -11,7 +11,6 @@ public class EntityActionMove : EntityTargetedAction
 
 	protected override EntityActionResult _Run()
 	{
-		// TODO: Call the map and make it move us if possible
 		return owner.Move(_targetPosition) != -1 ? EntityActionResult.Success : EntityActionResult.Failure;
 	}
 }

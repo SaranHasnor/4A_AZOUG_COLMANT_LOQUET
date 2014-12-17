@@ -105,15 +105,18 @@ public class ActionQueue
 
 	public static ActionQueue CreateFromXmlNode(XmlNode node)
 	{
-		var queueId = node.Attributes["id"].Value;
-		for(var i = 0 ; i < node.ChildNodes.Count ; ++i)
+		MapEntity owner = MapEntity.entities[node.Attributes["id"].Value];
+
+		ActionQueue result = new ActionQueue();
+		for(int i = 0 ; i < node.ChildNodes.Count ; ++i)
 		{
 			if(node.ChildNodes[i].Name == "action")
 			{
-				EntityAction.createFromXMLNode(node.ChildNodes[i]);
+				result.SetAction(EntityAction.CreateFromXmlNode(node.ChildNodes[i], owner));
 			}
 		}
-		return null;
+		result.SetCursor(0);
+		return result;
 	}
 
 }
