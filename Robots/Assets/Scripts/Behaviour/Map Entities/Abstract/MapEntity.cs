@@ -67,6 +67,11 @@ public abstract class MapEntity : MonoBehaviour
 		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
+	public int Teleport(Vector3 pos)
+	{
+		return GameData.currentState.map.TeleportEntity(this, pos);
+	}
+
 	public void Destroy()
 	{
 		GameData.currentState.map.DeleteEntity(tr.position);

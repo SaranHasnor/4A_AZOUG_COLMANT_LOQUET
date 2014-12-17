@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class ActionQueue
 {
@@ -101,4 +102,18 @@ public class ActionQueue
 	{ // Serialize all the actions we're holding and put them together
 		return null;
 	}
+
+	public static ActionQueue createFromXMLNode(XmlNode node)
+	{
+		var queueId = node.Attributes["id"].Value;
+		for(var i = 0 ; i < node.ChildNodes.Count ; ++i)
+		{
+			if(node.ChildNodes[i].Name == "action")
+			{
+				EntityAction.createFromXMLNode(node.ChildNodes[i]);
+			}
+		}
+		return null;
+	}
+
 }

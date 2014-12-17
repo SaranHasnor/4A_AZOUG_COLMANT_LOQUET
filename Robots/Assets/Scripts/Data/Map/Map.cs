@@ -109,7 +109,7 @@ public class Map
 			return 0;
 	}
 
-	public int MoveEntity(MapEntity me, Vector3 pos)
+	public int TeleportEntity(MapEntity me, Vector3 pos)
 	{
 		if(IsOnLimit(GetIndex(pos)) == 0 && GetEntity(pos) == null)
 		{
@@ -119,5 +119,52 @@ public class Map
 		}
 		else
 			return -1;
+	}
+
+	public int MoveEntity(MapEntity me, Vector3 pos)
+	{
+		var currentPos = me.tr.position;
+		if (me.tr.position.x != pos.x)
+		{
+			for (var i = me.tr.position.x; i < pos.x; i += size)
+			{
+				var nextPos = new Vector3(i, me.tr.position.y, me.tr.position.z);
+				if (IsOnLimit(GetIndex(nextPos)) == 0 && GetEntity(nextPos) == null)
+					currentPos = nextPos;
+				else
+					break;
+			}
+		}
+		else if (me.tr.position.y != pos.y)
+		{
+			for (var i = (int) me.tr.position.y; i < (int) pos.y; i += (int) size)
+			{
+				var nextPos = new Vector3(me.tr.position.x, i, me.tr.position.z);
+				if (IsOnLimit(GetIndex(nextPos)) == 0 && GetEntity(nextPos) == null)
+					currentPos = nextPos;
+				else
+					break;
+			}
+		}
+		else if (me.tr.position.z != pos.z)
+		{
+			for (var i = (int) me.tr.position.z; i < (int) pos.z; i += (int) size)
+			{
+				var nextPos = new Vector3(me.tr.position.x, me.tr.position.y, i);
+				if (IsOnLimit(GetIndex(nextPos)) == 0 && GetEntity(nextPos) == null)
+					currentPos = nextPos;
+				else
+					break;
+			}
+		}
+		if(currentPos != me.tr.position)
+		{
+			DeleteEntity(me.tr.position);
+			SetEntity(me.gameObject, currentPos);
+			return 0;
+		}
+		else
+			return -1;
+
 	}
 }
