@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public delegate void EntInteraction(EntityEvent actionType, MapEntity entity);
 
@@ -21,14 +22,15 @@ public abstract class MapEntity : MonoBehaviour
 	private EntProperty[] _properties;
 	public event EntInteraction OnEntityInteraction;
 
-	private static int _count;
-	public static int count
-	{ // Amount of MapEntities
+	private static List<MapEntity> _entities = new List<MapEntity>(); // List of all map entities
+	public static List<MapEntity> entities
+	{
 		get
 		{
-			return _count;
+			return new List<MapEntity>(_entities);
 		}
 	}
+
 
 	private int _id;
 	public int id
@@ -49,7 +51,8 @@ public abstract class MapEntity : MonoBehaviour
 			property.AddListener(this);
 		}
 
-		_id = _count++;
+		_id = _entities.Count;
+		_entities.Add(this);
 		player = -1;
 	}
 
