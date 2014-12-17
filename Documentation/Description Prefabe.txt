@@ -1,0 +1,33 @@
+Exit Block :
+ - Exit
+
+Limit Block : 
+Nothing
+
+Sand Block : 
+ - Destructible
+ - Pushable
+ - Rotatable
+ - Uses Gravity
+
+Spawner Block :
+ - Spawner
+
+Static Block :
+ - Destructible
+ - Rotatable
+
+Stone Block : 
+ - Destructible
+ - Pushable
+
+Teleporter Block :
+ - Teleporter
+
+Teleporter Target Block :
+ - Teleporter Target
+
+Undestructible Block :
+ - Pushable
+ - Rotatable
+ - Uses Gravity
