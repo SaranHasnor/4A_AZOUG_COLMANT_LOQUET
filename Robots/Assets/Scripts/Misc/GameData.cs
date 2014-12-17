@@ -6,4 +6,5 @@ public static class GameData
 	public static TimeMaster	timeMaster;
 	public static BlockLibrary	blockLibrary;
 	public static GameState		currentState;
+	public static GUIRenderer	guiRenderer;
 }

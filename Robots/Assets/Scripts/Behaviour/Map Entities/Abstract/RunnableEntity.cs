@@ -1,9 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class RunnableEntity : MapEntity
 { // Describes an entity that should be run by the TimeMaster every turn
 	protected ActionQueue _queue;
+
+	public List<EntityAction> actions
+	{
+		get
+		{
+			return _queue.actions;
+		}
+	}
 
 	protected override void Initialize()
 	{

@@ -7,6 +7,22 @@ public class ActionQueue
 	private List<EntityAction> queue;
 	private int cursor;
 
+	public int length
+	{
+		get
+		{
+			return queue.Count;
+		}
+	}
+
+	public List<EntityAction> actions
+	{
+		get
+		{
+			return new List<EntityAction>(queue);
+		}
+	}
+
 	public ActionQueue()
 	{
 		this.queue = new List<EntityAction>();

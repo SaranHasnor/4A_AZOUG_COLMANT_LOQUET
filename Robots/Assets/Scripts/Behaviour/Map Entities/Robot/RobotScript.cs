@@ -10,6 +10,6 @@ public class RobotScript : RunnableEntity
 
 	void OnMouseDown()
 	{ // Have the current player select us and update the UI
-
+		GameData.guiRenderer.SelectEntity(this);
 	}
 }

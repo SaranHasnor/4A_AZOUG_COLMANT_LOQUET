@@ -17,6 +17,15 @@ public class TimeMaster : MonoBehaviour
 	private float _lastRunTime;
 	private ActionRunMode _runMode;
 
+	private int _currentTurn;
+	public int currentTurn
+	{
+		get
+		{
+			return _currentTurn;
+		}
+	}
+
 	void Start()
 	{
 		GameData.timeMaster = this;
@@ -24,6 +33,8 @@ public class TimeMaster : MonoBehaviour
 		_entities = new List<RunnableEntity>();
 		_pendingEntities = new List<RunnableEntity>();
 		_runMode = ActionRunMode.Paused;
+
+		_currentTurn = 0;
 	}
 
 	public void RegisterEntity(RunnableEntity entity)
@@ -49,6 +60,7 @@ public class TimeMaster : MonoBehaviour
 			}
 		}
 
+		_currentTurn++;
 		_lastRunTime = Time.time;
 	}
 
