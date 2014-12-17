@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 public delegate void EntInteraction(EntityEvent actionType, MapEntity entity);
 
+public enum Team {
+	None,
+	Player1,
+	Player2
+}
+
 public abstract class MapEntity : MonoBehaviour
 { // Describes an entity that has a physical presence on the map
 
@@ -22,18 +28,18 @@ public abstract class MapEntity : MonoBehaviour
 	private EntProperty[] _properties;
 	public event EntInteraction OnEntityInteraction;
 
-	private static List<MapEntity> _entities = new List<MapEntity>(); // List of all map entities
+	private static Dictionary<string, MapEntity> _entities = new Dictionary<string, MapEntity>();
 	public static List<MapEntity> entities
 	{
 		get
 		{
-			return new List<MapEntity>(_entities);
+			return new List<MapEntity>(_entities.Values);
 		}
 	}
 
 
-	private int _id;
-	public int id
+	private string _id;
+	public string id
 	{
 		get
 		{
@@ -41,9 +47,16 @@ public abstract class MapEntity : MonoBehaviour
 		}
 	}
 
-	public int player; // Player who controls this entity, none if < 0
+	private Team _team;
+	public Team team
+	{
+		get
+		{
+			return _team;
+		}
+	}
 
-	protected virtual void Initialize()
+	protected void InitializeMapEntity(Team team = Team.None, string id = null)
 	{
 		_properties = _logic.GetComponents<EntProperty>();
 		foreach(var property in _properties)
@@ -51,9 +64,9 @@ public abstract class MapEntity : MonoBehaviour
 			property.AddListener(this);
 		}
 
-		_id = _entities.Count;
-		_entities.Add(this);
-		player = -1;
+		_id = id ?? _entities.Count.ToString();
+		_entities.Add(_id, this);
+		_team = team;
 	}
 
 	public void Interact(EntityEvent action, MapEntity entity)

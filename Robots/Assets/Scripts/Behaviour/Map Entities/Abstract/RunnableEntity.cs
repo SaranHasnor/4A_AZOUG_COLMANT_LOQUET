@@ -14,11 +14,11 @@ public abstract class RunnableEntity : MapEntity
 		}
 	}
 
-	protected override void Initialize()
+	protected void InitializeRunnableEntity(Team team = Team.None, string id = null, ActionQueue actionQueue = null)
 	{
-		base.Initialize();
+		base.InitializeMapEntity(team, id);
 
-		this._queue = new ActionQueue();
+		this._queue = actionQueue ?? new ActionQueue();
 
 		// Notify the Time Master of our existence so he can manage our action queue
 		GameData.timeMaster.RegisterEntity(this);

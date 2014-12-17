@@ -7,4 +7,5 @@ public static class GameData
 	public static BlockLibrary	blockLibrary;
 	public static GameState		currentState;
 	public static GUIRenderer	guiRenderer;
+	public static InstantiateManager instantiateManager;
 }
