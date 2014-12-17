@@ -17,8 +17,6 @@ public class BlockLibrary : MonoBehaviour
 
 	void Start()
 	{ // Load the blocks
-		GameData.blockLibrary = this;
-
 		_blocks = new Dictionary<string, GameObject>();
 		if (this.blockList != null)
 		{

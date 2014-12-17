@@ -14,9 +14,9 @@ public abstract class RunnableEntity : MapEntity
 		}
 	}
 
-	protected void InitializeRunnableEntity(Team team = Team.None, string id = null, ActionQueue actionQueue = null)
+	protected void InitializeRunnableEntity(/*Team team = Team.None, string id = null, */ActionQueue actionQueue = null)
 	{
-		base.InitializeMapEntity(team, id);
+		/*base.InitializeMapEntity(team, id);*/
 
 		this._queue = actionQueue ?? new ActionQueue();
 

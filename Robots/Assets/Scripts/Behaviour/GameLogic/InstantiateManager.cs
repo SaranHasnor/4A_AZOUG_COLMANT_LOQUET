@@ -9,6 +9,24 @@ public class InstantiateManager : MonoBehaviour
 	[SerializeField]
 	private GameObject _robotPrefab;
 
+	public GameObject robotPrefab
+	{
+		get
+		{
+			return _robotPrefab;
+		}
+	}
+
+	public GameObject BlockPrefabForType(string type)
+	{
+		if (!_blockLibrary.blocks.ContainsKey(type))
+		{
+			Debug.LogError("Tried to create unknown block type " + type);
+			return null;
+		}
+		return _blockLibrary.blocks[type];
+	}
+
 	/*public BlockScript CreateBlock(string type, Vector3i pos, int team = -1)
 	{
 		if (!_blockLibrary.blocks.ContainsKey(type))

@@ -6,11 +6,13 @@ public class RobotScript : RunnableEntity
 {
 	public static RobotScript CreateFromXmlNode(XmlNode node)
 	{
-		//GameData.instantiateManager.SpawnRobot(node.Attributes["position"], node.Attributes["
-		//id = node.ChildNodes[0].Attributes != null ? node.ChildNodes[0].Attributes["id"].Value : null;
+		GameObject robot = (GameObject)GameObject.Instantiate(GameData.instantiateManager.robotPrefab, Map.GetWorldPos(/*position*/Vector3i.forward), Quaternion.identity);
+		RobotScript script = robot.GetComponent<RobotScript>();
+		
+		script.InitializeRunnableEntity(/*action queue parsed from the XML (this can be called by another function if needed)*/);
+		script.InitializeMapEntity(/*stuff*/);
 
-		// TODO: Run InitializeRunnableEntity
-		return null;
+		return script;
 	}
 
 	void OnMouseDown()

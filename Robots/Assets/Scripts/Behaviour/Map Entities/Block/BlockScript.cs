@@ -6,14 +6,14 @@ public class BlockScript : MapEntity {
 	// The only argument for making this a runnable entity is to update their state each turn
 	// Maybe we could also have blocks take actions at specific turns, but I'd like this to be a property instead
 
-	public static MapEntity CreateFromXmlNode(XmlNode node)
+	public static BlockScript CreateFromXmlNode(XmlNode node)
 	{
-		/*this.gameObject = */
-		Instantiate(GameData.blockLibrary.blocks[node.ChildNodes[0].Attributes["type"].Value]);
-		//id = node.ChildNodes[0].Attributes != null ? node.ChildNodes[0].Attributes["id"].Value : null;
+		GameObject block = (GameObject)GameObject.Instantiate(GameData.instantiateManager.BlockPrefabForType("type in xml"), Map.GetWorldPos(/*position*/Vector3i.forward), Quaternion.identity);
+		BlockScript script = block.GetComponent<BlockScript>();
 
-		// TODO: Run InitializeRunnableEntity
-		return null;
+		script.InitializeMapEntity(/*stuff*/);
+
+		return script;
 	}
 
 	void OnCollisionEnter(Collision collision) {
