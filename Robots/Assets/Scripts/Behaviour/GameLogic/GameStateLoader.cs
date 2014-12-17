@@ -3,7 +3,7 @@ using UnityEngine;
 using System.IO;
 using System.Xml;
 
-public class MapLoader : MonoBehaviour
+public class GameStateLoader : MonoBehaviour
 {
 
 	[SerializeField]
@@ -33,11 +33,11 @@ public class MapLoader : MonoBehaviour
 				{
 					if (node.ChildNodes[i].Name == "block")
 					{
-						BlockScript.createFromXMLNode(node.ChildNodes[i]);
+						BlockScript.CreateFromXmlNode(node.ChildNodes[i]);
 					}
 					if(node.ChildNodes[i].Name == "robot")
 					{
-						RobotScript.createFromXMLNode(node.ChildNodes[i]);
+						RobotScript.CreateFromXmlNode(node.ChildNodes[i]);
 					}
 				}
 			}
@@ -52,7 +52,7 @@ public class MapLoader : MonoBehaviour
 				{
 					if(node.ChildNodes[i].Name == "queue")
 					{
-						ActionQueue.createFromXMLNode(node.ChildNodes[i]);
+						ActionQueue.CreateFromXmlNode(node.ChildNodes[i]);
 					}
 				}
 			}

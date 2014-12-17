@@ -4,28 +4,29 @@ using System.Collections.Generic;
 
 public class Map
 {
-	private List<List<List<MapEntity>>> entities;
-	private int limit = 32;
+	private List<List<List<MapEntity>>> _entities;
+	private const int _limit = 32; //TODO : from xml
+	private const float _size = 5f;
 	public Map()
 	{
-		entities = new List<List<List<MapEntity>>>(limit);
-		for(var i = 0 ; i < entities.Capacity ; ++i)
+		_entities = new List<List<List<MapEntity>>>(_limit);
+		for(var i = 0 ; i < _entities.Capacity ; ++i)
 		{
-			entities.Add(new List<List<MapEntity>>(limit));
-			for(var j = 0 ; j < entities.Capacity ; ++j)
+			_entities.Add(new List<List<MapEntity>>(_limit));
+			for(var j = 0 ; j < _entities.Capacity ; ++j)
 			{
-				entities[i].Add(new List<MapEntity>(limit));
+				_entities[i].Add(new List<MapEntity>(_limit));
 			}
 		}
 	}
-	private const float size = 5f;
+
 
 	public int SetEntity(GameObject go, Vector3 pos)
 	{
-		var index = GetIndex(pos);
+		var index = GetLocalPos(pos);
 		if(IsOnLimit(index) == 0)
 		{
-			entities[index.x][index.y][index.z] = go.GetComponent<MapEntity>();
+			_entities[index.x][index.y][index.z] = go.GetComponent<MapEntity>();
 			return 0;
 		}
 		else
@@ -33,10 +34,10 @@ public class Map
 	}
 	public int SetEntity(MapEntity me, Vector3 pos)
 	{
-		var index = GetIndex(pos);
+		var index = GetLocalPos(pos);
 		if(IsOnLimit(index) == 0)
 		{
-			entities[index.x][index.y][index.z] = me;
+			_entities[index.x][index.y][index.z] = me;
 			return 0;
 		}
 		else
@@ -44,10 +45,10 @@ public class Map
 	}
 	public MapEntity GetEntity(Vector3 pos)
 	{
-		var index = GetIndex(pos);
+		var index = GetLocalPos(pos);
 		try
 		{
-			return entities[index.x][index.y][index.z];
+			return _entities[index.x][index.y][index.z];
 		}
 		catch(Exception)
 		{
@@ -56,10 +57,10 @@ public class Map
 	}
 	public MapEntity GetEntity(MapEntity me)
 	{
-		var index = GetIndex(me.transform.position); //TODO : creer variable dans mapEntity ? 
+		var index = GetLocalPos(me.transform.position); //TODO : creer variable dans mapEntity ? 
 		try
 		{
-			return entities[index.x][index.y][index.z];
+			return _entities[index.x][index.y][index.z];
 		}
 		catch(Exception)
 		{
@@ -81,10 +82,10 @@ public class Map
 	}
 	public MapEntity GetNear(Vector3 pos, Vector3i dir)
 	{
-		Vector3i index = GetIndex(pos) + dir;
+		Vector3i index = GetLocalPos(pos) + dir;
 		try
 		{
-			return entities[index.x][index.y][index.z];
+			return _entities[index.x][index.y][index.z];
 		}
 		catch(Exception)
 		{
@@ -94,16 +95,21 @@ public class Map
 	}
 	public void DeleteEntity(Vector3 pos)
 	{
-		var index = GetIndex(pos);
-		entities[index.x][index.y][index.z] = null; //delete l'object a l'exterieur ?!
+		var index = GetLocalPos(pos);
+		_entities[index.x][index.y][index.z] = null; //delete l'object a l'exterieur ?!
 	}
-	public Vector3i GetIndex(Vector3 pos)
+	public static Vector3i GetLocalPos(Vector3 pos)
 	{
-		return new Vector3i((int)(pos.x / size), (int)(pos.y / size), (int)(pos.z / size));
+		return new Vector3i((int)(pos.x / _size), (int)(pos.y / _size), (int)(pos.z / _size));
 	}
-	public int IsOnLimit(Vector3i index)
+
+	public static Vector3 GetWorldPos(Vector3i localPos)
 	{
-		if(index.x > limit || index.y > limit || index.z > limit)
+		return new Vector3(localPos.x * _size, localPos.y * _size, localPos.z * _size);
+	}
+	public static int IsOnLimit(Vector3i index)
+	{
+		if(index.x > _limit || index.y > _limit || index.z > _limit)
 			return -1;
 		else
 			return 0;
@@ -111,7 +117,7 @@ public class Map
 
 	public int TeleportEntity(MapEntity me, Vector3 pos)
 	{
-		if(IsOnLimit(GetIndex(pos)) == 0 && GetEntity(pos) == null)
+		if(IsOnLimit(GetLocalPos(pos)) == 0 && GetEntity(pos) == null)
 		{
 			DeleteEntity(me.tr.position);
 			SetEntity(me.gameObject, pos);
@@ -126,10 +132,10 @@ public class Map
 		var currentPos = me.tr.position;
 		if (me.tr.position.x != pos.x)
 		{
-			for (var i = me.tr.position.x; i < pos.x; i += size)
+			for (var i = me.tr.position.x; i < pos.x; i += _size)
 			{
 				var nextPos = new Vector3(i, me.tr.position.y, me.tr.position.z);
-				if (IsOnLimit(GetIndex(nextPos)) == 0 && GetEntity(nextPos) == null)
+				if (IsOnLimit(GetLocalPos(nextPos)) == 0 && GetEntity(nextPos) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -137,10 +143,10 @@ public class Map
 		}
 		else if (me.tr.position.y != pos.y)
 		{
-			for (var i = (int) me.tr.position.y; i < (int) pos.y; i += (int) size)
+			for (var i = (int) me.tr.position.y; i < (int) pos.y; i += (int) _size)
 			{
 				var nextPos = new Vector3(me.tr.position.x, i, me.tr.position.z);
-				if (IsOnLimit(GetIndex(nextPos)) == 0 && GetEntity(nextPos) == null)
+				if (IsOnLimit(GetLocalPos(nextPos)) == 0 && GetEntity(nextPos) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -148,10 +154,10 @@ public class Map
 		}
 		else if (me.tr.position.z != pos.z)
 		{
-			for (var i = (int) me.tr.position.z; i < (int) pos.z; i += (int) size)
+			for (var i = (int) me.tr.position.z; i < (int) pos.z; i += (int) _size)
 			{
 				var nextPos = new Vector3(me.tr.position.x, me.tr.position.y, i);
-				if (IsOnLimit(GetIndex(nextPos)) == 0 && GetEntity(nextPos) == null)
+				if (IsOnLimit(GetLocalPos(nextPos)) == 0 && GetEntity(nextPos) == null)
 					currentPos = nextPos;
 				else
 					break;

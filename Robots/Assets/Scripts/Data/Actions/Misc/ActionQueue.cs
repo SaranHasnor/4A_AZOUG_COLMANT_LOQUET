@@ -103,7 +103,7 @@ public class ActionQueue
 		return null;
 	}
 
-	public static ActionQueue createFromXMLNode(XmlNode node)
+	public static ActionQueue CreateFromXmlNode(XmlNode node)
 	{
 		var queueId = node.Attributes["id"].Value;
 		for(var i = 0 ; i < node.ChildNodes.Count ; ++i)
