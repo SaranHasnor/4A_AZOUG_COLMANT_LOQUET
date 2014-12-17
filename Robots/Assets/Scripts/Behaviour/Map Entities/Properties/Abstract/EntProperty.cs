@@ -11,6 +11,10 @@ public enum EntityEvent : int {
     Spawn,
     Exit,
     Teleport,
+
+    CollisionEnter,
+    CollisionStay,
+    CollisionExit,
     Turn
 };
 
@@ -20,11 +24,11 @@ public enum EntityEvent : int {
 /// </summary>
 public abstract class EntProperty : MonoBehaviour {
 
-    protected abstract void _Interact(EntityEvent actionType, params Object[] args);
+    protected abstract void _Interact(EntityEvent actionType, MapEntity entity);
 
-    private void Interact(EntityEvent actionType, params Object[] args) {
+    private void Interact(EntityEvent actionType, MapEntity entity) {
         try {
-            _Interact(actionType, args);
+            _Interact(actionType, entity);
         } catch (System.Exception e) {
             Debug.LogException(e);
         }
