@@ -1,32 +1,28 @@
 ﻿using UnityEngine;
 
-public class BlockScript : MapEntity
-{
+public class BlockScript : MapEntity {
 	// The only argument for making this a runnable entity is to update their state each turn
 	// Maybe we could also have blocks take actions at specific turns, but I'd like this to be a property instead
 
-	void Start()
-	{
+	void Start() {
 		base.Initialize();
 	}
 
-    void OnCollisionEnter(Collision collision) {
-        foreach (var contact in collision.contacts) {
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
-        }
-        if (collision.relativeVelocity.magnitude > 2)
-            audio.Play();
-    }
+	void OnCollisionEnter(Collision collision) {
+		// TODO : ideally would require that properties are initialized with their related entity
+		transform.parent.GetComponent<MapEntity>().Interact(EntityEvent.CollisionEnter,
+															collision.gameObject.GetComponent<MapEntity>());
+	}
 
-    void OnCollisionStay(Collision collisionInfo) {
-        foreach (var contact in collisionInfo.contacts) {
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
-        }
-    }
-	
-    void OnCollisionExit(Collision collisionInfo) {
-        // TODO : ideally would require that properties are initialized with their related entity
-        transform.parent.GetComponent<MapEntity>().Interact(EntityEvent.CollisionExit,
+	void OnCollisionStay(Collision collisionInfo) {
+		// TODO : ideally would require that properties are initialized with their related entity
+		transform.parent.GetComponent<MapEntity>().Interact(EntityEvent.CollisionStay,
 															collisionInfo.gameObject.GetComponent<MapEntity>());
-    }
+	}
+
+	void OnCollisionExit(Collision collisionInfo) {
+		// TODO : ideally would require that properties are initialized with their related entity
+		transform.parent.GetComponent<MapEntity>().Interact(EntityEvent.CollisionExit,
+															collisionInfo.gameObject.GetComponent<MapEntity>());
+	}
 }
