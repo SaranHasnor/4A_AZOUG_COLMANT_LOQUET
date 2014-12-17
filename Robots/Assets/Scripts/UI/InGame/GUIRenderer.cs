@@ -48,16 +48,16 @@ public class GUIRenderer : MonoBehaviour
 
 		GUI.BeginGroup(rect);
 		
-		float scrollAreaWidth = Mathf.Min(itemWidth * timeline.Count, rect.width);
-		_timelineScrollPos = GUI.BeginScrollView(new Rect(0.0f, 0.0f, rect.width, rect.height), _timelineScrollPos, new Rect(0.0f, 0.0f, scrollAreaWidth, rect.height), false, true);
+		float scrollAreaWidth = Mathf.Max(itemWidth * (timeline.Count + 1), rect.width);
+		_timelineScrollPos = GUI.BeginScrollView(new Rect(0.0f, 0.0f, rect.width, rect.height), _timelineScrollPos, new Rect(0.0f, 0.0f, scrollAreaWidth, rect.height - 20.0f), true, false);
 		
 		int cursor = 0;
 		foreach (EntityAction action in timeline)
 		{
-			DrawAction(action, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height), cursor);
+			DrawAction(action, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height - 20.0f), cursor);
 			cursor++;
 		}
-		DrawAction(null, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height), cursor);
+		DrawAction(null, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height - 20.0f), cursor);
 
 		GUI.EndScrollView(false);
 
@@ -68,7 +68,11 @@ public class GUIRenderer : MonoBehaviour
 	{
 		if (GUI.Button(rect, action != null ? action.GetType().ToString() : null))
 		{
-			_selectedActionIndex = index;
+			//_selectedActionIndex = index;
+			if (action == null)
+			{ // Temporary
+				_selectedEntity.SetAction(new EntityActionMove(_selectedEntity, new Vector3(0, 0, 0)));
+			}
 		}
 	}
 

@@ -45,4 +45,9 @@ public abstract class RunnableEntity : MapEntity
 	{
 		return _queue.GetAction(time);
 	}
+
+	public void SetAction(EntityAction action, int time = -1)
+	{
+		_queue.SetAction(action, time);
+	}
 }

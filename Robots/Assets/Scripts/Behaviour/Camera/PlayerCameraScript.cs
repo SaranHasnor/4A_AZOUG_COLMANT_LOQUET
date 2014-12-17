@@ -32,7 +32,7 @@ public class PlayerCameraScript : MonoBehaviour
 		float maxDelta = Mathf.Clamp(diff * _magicNumber, 3.0f, _maxCameraAngularSpeed) * Time.deltaTime;
 		Quaternion targetAngle = Quaternion.RotateTowards(currentAngle, desiredAngle, maxDelta);
 
-		float currentCameraDistance = cameraPos.magnitude;
+		//float currentCameraDistance = cameraPos.magnitude;
 		Vector3 desiredPosition = targetAngle * Vector3.forward * _desiredCameraDistance;
 		float diff2 = Vector3.Distance(this.transform.position, desiredPosition);
 		float maxDelta2 = Mathf.Clamp(diff2 * _magicNumber, 1.0f, _maxCameraZoomSpeed) * Time.deltaTime;
