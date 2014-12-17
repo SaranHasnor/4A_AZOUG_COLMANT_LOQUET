@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public delegate void EntInteraction(EntityEvent actionType, params Object[] args);
+public delegate void EntInteraction(EntityEvent actionType, MapEntity entity);
 
 public abstract class MapEntity : MonoBehaviour
 { // Describes an entity that has a physical presence on the map
@@ -53,10 +53,10 @@ public abstract class MapEntity : MonoBehaviour
 		player = -1;
 	}
 
-	public void Interact(EntityEvent action, params Object[] args)
+	public void Interact(EntityEvent action, MapEntity entity)
 	{
 		if(OnEntityInteraction != null)
-			OnEntityInteraction(action, args);
+			OnEntityInteraction(action, entity);
 	}
 
 	public int Move(Vector3 pos)

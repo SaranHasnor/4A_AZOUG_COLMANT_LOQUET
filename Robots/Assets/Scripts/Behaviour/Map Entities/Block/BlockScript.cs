@@ -9,4 +9,24 @@ public class BlockScript : MapEntity
 	{
 		base.Initialize();
 	}
+
+    void OnCollisionEnter(Collision collision) {
+        foreach (var contact in collision.contacts) {
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
+        if (collision.relativeVelocity.magnitude > 2)
+            audio.Play();
+    }
+
+    void OnCollisionStay(Collision collisionInfo) {
+        foreach (var contact in collisionInfo.contacts) {
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
+    }
+	
+    void OnCollisionExit(Collision collisionInfo) {
+        // TODO : ideally would require that properties are initialized with their related entity
+        transform.parent.GetComponent<MapEntity>().Interact(EntityEvent.CollisionExit,
+															collisionInfo.gameObject.GetComponent<MapEntity>());
+    }
 }

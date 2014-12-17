@@ -5,7 +5,7 @@ public class EntPropertyUsesGravity : EntProperty
     [SerializeField]
     private int _fallingSpeed;
 
-    protected override void _Interact(EntityEvent action, params Object[] args) {
+    protected override void _Interact(EntityEvent action, MapEntity entity) {
         if (action == EntityEvent.Fall) {
             var posEntityPush = gameObject.transform.position;
             GameData.currentState.map.GetEntity(posEntityPush)
