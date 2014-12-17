@@ -28,7 +28,7 @@ public class BlockScript : MapEntity {
 															collisionInfo.gameObject.GetComponent<MapEntity>());
 	}
 
-	public static MapEntity createFromXMLNode(XmlNode node)
+	public static MapEntity CreateFromXmlNode(XmlNode node)
 	{
 		/*this.gameObject = */ Instantiate(GameData.blockLibrary.blocks[node.ChildNodes[0].Attributes["type"].Value]);
 		//id = node.ChildNodes[0].Attributes != null ? node.ChildNodes[0].Attributes["id"].Value : null;

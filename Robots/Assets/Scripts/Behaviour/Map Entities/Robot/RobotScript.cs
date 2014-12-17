@@ -14,7 +14,7 @@ public class RobotScript : RunnableEntity
 		GameData.guiRenderer.SelectEntity(this);
 	}
 
-	public static MapEntity createFromXMLNode(XmlNode node)
+	public static MapEntity CreateFromXMLNode(XmlNode node)
 	{
 		/*this.gameObject = */
 		Instantiate(GameData.blockLibrary.blocks[node.ChildNodes[0].Attributes["type"].Value]);
