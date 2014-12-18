@@ -7,7 +7,7 @@ public class GameStateLoader : MonoBehaviour
 	void Start()
 	{
 		// Debug
-		LoadFile("../../../templateformat.xml");
+		LoadFile("../Workspace/template.xml");
 	}
 
 	public void LoadFile(string filePath)

@@ -9,6 +9,11 @@ public class InstantiateManager : MonoBehaviour
 	[SerializeField]
 	private GameObject _robotPrefab;
 
+	void Start()
+	{
+		GameData.instantiateManager = this;
+	}
+
 	public GameObject robotPrefab
 	{
 		get

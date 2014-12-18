@@ -38,39 +38,23 @@ public class GameState
 	{
 		GameState newState = new GameState();
 
-		var nodes = doc.DocumentElement.SelectNodes("/gamestate/map");
-		if (nodes != null)
+		XmlNode mapNode = doc.DocumentElement.SelectSingleNode("/gamestate/map");
+		var width = mapNode.Attributes["width"].Value;
+		var height = mapNode.Attributes["height"].Value;
+		var depth = mapNode.Attributes["depth"].Value;
+
+		foreach (XmlNode entityNode in mapNode.ChildNodes)
 		{
-			foreach (XmlNode node in nodes)
+			if (entityNode.Name == "block")
 			{
-				var width = node.Attributes["width"].Value;
-				var height = node.Attributes["height"].Value;
-				var depth = node.Attributes["depth"].Value;
-				for (var i = 0; i < node.ChildNodes.Count; ++i)
-				{
-					if (node.ChildNodes[i].Name == "block")
-					{
-						BlockScript newBlock = BlockScript.CreateFromXmlNode(node.ChildNodes[i]);
-						newState.map.SetEntity(newBlock, newBlock.tr.position);
-					}
-					if (node.ChildNodes[i].Name == "robot")
-					{
-						var actionNodes = doc.DocumentElement.SelectNodes("/gamestate/actions/");
-						if (actionNodes != null)
-						{
-							var j = 0;
-							foreach (XmlNode actionNode in actionNodes)
-							{
-								if (actionNode.ChildNodes[j].Attributes["id"].Value == node.ChildNodes[i].Attributes["id"].Value)
-								{
-									RobotScript newRobot = RobotScript.CreateFromXmlNode(node.ChildNodes[i], actionNode.ChildNodes[j]);
-									newState.map.SetEntity(newRobot, newRobot.tr.position);
-								}
-								++j;
-							}
-						}
-					}
-				}
+				BlockScript newBlock = BlockScript.CreateFromXmlNode(entityNode);
+				newState.map.SetEntity(newBlock, newBlock.tr.position);
+			}
+
+			if (entityNode.Name == "robot")
+			{
+				RobotScript newRobot = RobotScript.CreateFromXmlNode(entityNode);
+				newState.map.SetEntity(newRobot, newRobot.tr.position);
 			}
 		}
 

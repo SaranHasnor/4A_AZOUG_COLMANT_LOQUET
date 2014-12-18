@@ -82,7 +82,7 @@ public class ActionQueue
 
 	public void SetCursor(int time, bool relative = false)
 	{
-		this.cursor = Mathf.Clamp(relative?cursor+time:time, 0, queue.Count);
+		this.cursor = Mathf.Clamp(relative ? cursor + time : time, 0, queue.Count);
 	}
 
 	public EntityAction GetAction(int timeOverride = -1)
@@ -97,7 +97,7 @@ public class ActionQueue
 		XmlDocument doc = new XmlDocument();
 		XmlElement node = doc.CreateElement("queue");
 
-		Dictionary<string, string> attributes = new Dictionary<string,string>();
+		Dictionary<string, string> attributes = new Dictionary<string, string>();
 
 		attributes.Add("id", queue[0].owner.id); // Temporary
 
@@ -117,11 +117,11 @@ public class ActionQueue
 	public static ActionQueue CreateFromXmlNode(XmlNode node)
 	{
 		ActionQueue result = new ActionQueue();
-		for(int i = 0 ; i < node.ChildNodes.Count ; ++i)
+		foreach (XmlNode actionNode in node)
 		{
-			if(node.ChildNodes[i].Name == "action")
+			if (actionNode.Name == "action")
 			{
-				result.SetAction(EntityAction.CreateFromXmlNode(node.ChildNodes[i], node.Attributes["id"].Value));
+				result.SetAction(EntityAction.CreateFromXmlNode(actionNode, node.Attributes["id"].Value));
 			}
 		}
 		result.SetCursor(0);

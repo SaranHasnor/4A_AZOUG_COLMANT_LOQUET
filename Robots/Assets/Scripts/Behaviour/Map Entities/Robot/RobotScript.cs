@@ -3,20 +3,20 @@ using System.Xml;
 
 public class RobotScript : RunnableEntity
 {
-	public static RobotScript CreateFromXmlNode(XmlNode RobotNode, XmlNode actionNode)
+	public static RobotScript CreateFromXmlNode(XmlNode robotNode)
 	{
-		GameObject robot = (GameObject)GameObject.Instantiate(	GameData.instantiateManager.robotPrefab
-																, Map.GetWorldPos(Vector3i.FromString(RobotNode.Attributes["position"].Value))
+		GameObject robot = (GameObject)GameObject.Instantiate(GameData.instantiateManager.robotPrefab
+																, Map.GetWorldPos(Vector3i.FromString(robotNode.Attributes["position"].Value))
 																, Quaternion.identity);
 		RobotScript script = robot.GetComponent<RobotScript>();
-		if (RobotNode.Attributes["team"] != null)
+		if (robotNode.Attributes["team"] != null)
 		{
-			Team t = RobotNode.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
-			script.InitializeMapEntity(t, RobotNode.Attributes["id"].Value);
+			Team t = robotNode.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
+			script.InitializeMapEntity(t, robotNode.Attributes["id"].Value);
 		}
 		else
-			script.InitializeMapEntity(Team.None, RobotNode.Attributes["id"].Value);
-		script.InitializeRunnableEntity(ActionQueue.CreateFromXmlNode(actionNode));
+			script.InitializeMapEntity(Team.None, robotNode.Attributes["id"].Value);
+		script.InitializeRunnableEntity(ActionQueue.CreateFromXmlNode(robotNode));
 		return script;
 	}
 
