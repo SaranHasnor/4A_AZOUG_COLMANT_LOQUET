@@ -29,7 +29,7 @@ public class TimeMaster : MonoBehaviour
 	private void NextTurn()
 	{
 		_currentTurn++;
-		// TODO GameMaster.CheckTurn;
+		GameData.gameMaster.CheckTurn(_currentTurn);
 	}
 
 	void Start()

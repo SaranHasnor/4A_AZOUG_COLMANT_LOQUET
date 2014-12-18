@@ -10,4 +10,6 @@ public static class GameData
 	public static GUIRenderer guiRenderer;
 
 	public static InstantiateManager instantiateManager;
+
+	public static GameMaster gameMaster;
 }

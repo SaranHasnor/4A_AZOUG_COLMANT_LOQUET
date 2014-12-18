@@ -22,8 +22,10 @@ public enum EntityEvent : int {
 ///     <c>BlocProperty</c> is abstract class.
 ///     Subclasses of this class can implement a variety of event functions, so this class is merely a "marker" for subclasses
 /// </summary>
-public abstract class EntProperty : MonoBehaviour {
+public abstract class EntProperty : MonoBehaviour
+{
 
+	protected MapEntity _owner;
     protected abstract void _Interact(EntityEvent actionType, MapEntity entity);
 
     private void Interact(EntityEvent actionType, MapEntity entity) {
@@ -34,7 +36,9 @@ public abstract class EntProperty : MonoBehaviour {
         }
     }
     
-    public void AddListener(MapEntity actuator) {
+    public void AddListener(MapEntity actuator)
+    {
+	    _owner = actuator;
         actuator.OnEntityInteraction += Interact;
     }
 
