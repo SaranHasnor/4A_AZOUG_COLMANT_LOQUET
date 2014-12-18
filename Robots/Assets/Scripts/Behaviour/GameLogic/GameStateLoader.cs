@@ -22,5 +22,6 @@ public class GameStateLoader : MonoBehaviour
 		doc.Load(filePath);
 
 		GameState newState = GameState.CreateFromXmlDocument(doc);
+		GameData.currentState = newState;
 	}
 }
