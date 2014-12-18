@@ -21,6 +21,8 @@ public class BlockLibrary : MonoBehaviour
 	public GameObject spawnerPrefab;
 	public GameObject teleporterPrefab;
 	public GameObject targetPrefab;
+	public GameObject staticPrefab;
+	public GameObject exitPrefab;
 
 	void Start()
 	{ // Load the blocks
@@ -39,5 +41,7 @@ public class BlockLibrary : MonoBehaviour
 		_blocks.Add("spawner", spawnerPrefab);
 		_blocks.Add("teleporter", teleporterPrefab);
 		_blocks.Add("teleporter_target", targetPrefab);
+		_blocks.Add("staticblock", staticPrefab);
+		_blocks.Add("exit", exitPrefab);
 	}
 }
