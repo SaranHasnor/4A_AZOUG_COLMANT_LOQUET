@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.IO;
 using System.Xml;
+using UnityEditor;
 using UnityEditor.AnimatedValues;
 
 public class GameStateLoader : MonoBehaviour
@@ -38,30 +39,25 @@ public class GameStateLoader : MonoBehaviour
 					}
 					if(node.ChildNodes[i].Name == "robot")
 					{
-						RobotScript.CreateFromXmlNode(node.ChildNodes[i]);
+						var actionNodes = doc.DocumentElement.SelectNodes("/gamestate/actions/");
+						if(actionNodes != null)
+						{
+							var j = 0;
+							foreach (XmlNode actionNode in actionNodes)
+							{
+								if (actionNode.ChildNodes[j].Attributes["id"].Value == node.ChildNodes[i].Attributes["id"].Value)
+								{
+									RobotScript.CreateFromXmlNode(node.ChildNodes[i], actionNode.ChildNodes[j]);
+								}
+								++j;
+							}
+
+						}
 					}
 				}
 			}
 		}
 
-		nodes = doc.DocumentElement.SelectNodes("/gamestate/actions/");
-		if(nodes != null)
-		{
-			foreach(XmlNode node in nodes)
-			{
-				for(var i = 0 ; i < node.ChildNodes.Count ; ++i)
-				{
-					if(node.ChildNodes[i].Name == "queue")
-					{
-						ActionQueue.CreateFromXmlNode(node.ChildNodes[i]);
-					}
-				}
-			}
-		}
-	}
-
-	public static Vector3i getVectorFromString(string s)
-	{
-		return new Vector3i(int.Parse(s[1].ToString()), int.Parse(s[3].ToString()), int.Parse(s[5].ToString()));
+		
 	}
 }

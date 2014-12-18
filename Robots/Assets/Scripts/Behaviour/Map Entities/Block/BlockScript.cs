@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Xml;
+﻿using System.Xml;
 using UnityEngine;
 
 public class BlockScript : MapEntity {
@@ -8,11 +7,18 @@ public class BlockScript : MapEntity {
 
 	public static BlockScript CreateFromXmlNode(XmlNode node)
 	{
-		GameObject block = (GameObject)GameObject.Instantiate(GameData.instantiateManager.BlockPrefabForType("type in xml"), Map.GetWorldPos(/*position*/Vector3i.forward), Quaternion.identity);
+		GameObject block = (GameObject)GameObject.Instantiate(	GameData.instantiateManager.BlockPrefabForType(node.Attributes["type"].Value)
+																, Map.GetWorldPos(Vector3i.FromString(node.Attributes["position"].Value))
+																, Quaternion.identity);
 		BlockScript script = block.GetComponent<BlockScript>();
-
-		script.InitializeMapEntity(/*stuff*/);
-
+		if(node.Attributes["team"] != null)
+		{
+			Team t;
+			t = node.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
+			script.InitializeMapEntity(Team.Player1, node.Attributes["id"].Value);
+		}
+		else
+			script.InitializeMapEntity(Team.None, node.Attributes["id"].Value);
 		return script;
 	}
 
