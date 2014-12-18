@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 
 public class EntPropertySpawner : EntProperty {
-	[SerializeField]
-	private GameObject _prefBot;
+
 	[SerializeField]
 	private Vector3 _position;
 	[SerializeField]
@@ -15,7 +14,11 @@ public class EntPropertySpawner : EntProperty {
 
 	protected override void _Interact(EntityEvent action, MapEntity entity) {
 		if (action == EntityEvent.Spawn || action == EntityEvent.Turn && _numberSpawn > 0) {
-			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.SetEntity(_prefBot, _position) == 0) {
+			GameObject go = (GameObject)GameObject.Instantiate(GameData.instantiateManager.robotPrefab, _position, Quaternion.identity);
+			RobotScript script = go.GetComponent<RobotScript>();
+			// Initialize it please ;_;
+
+			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.SetEntity(script, _position) == 0) {
 				--_numberSpawn;
 				_sinceLastSpawn = 0;
 			} else {
