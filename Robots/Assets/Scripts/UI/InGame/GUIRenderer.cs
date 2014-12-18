@@ -34,6 +34,10 @@ public class GUIRenderer : MonoBehaviour
 		{
 			GameData.timeMaster.ToggleRun();
 		}
+		if(GUI.Button(new Rect(Screen.width - 0.2f * Screen.width, 0.21f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Rewind"))
+		{
+			
+		}
 	}
 
 	private void DrawActionList(Rect rect)
