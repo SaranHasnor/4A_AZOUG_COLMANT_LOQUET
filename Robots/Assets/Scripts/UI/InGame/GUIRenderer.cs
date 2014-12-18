@@ -8,9 +8,9 @@ public class GUIRenderer : MonoBehaviour
 	private int _selectedActionIndex;
 
 	// Temporary hard-coded list before a cleaner and more generic system is implemented
-	private static System.Type[] _actionTypes = {
+	/*private static System.Type[] _actionTypes = {
 												   typeof(EntityActionMove)
-											   };
+											   };*/
 
 	private Vector2 _timelineScrollPos;
 
@@ -42,10 +42,10 @@ public class GUIRenderer : MonoBehaviour
 
 	private void DrawActionList(Rect rect)
 	{
-		foreach (System.Type type in _actionTypes)
+		/*foreach (System.Type type in _actionTypes)
 		{
 			
-		}
+		}*/
 	}
 
 	private void DrawActionTimeLine(List<EntityAction> timeline, Rect rect)

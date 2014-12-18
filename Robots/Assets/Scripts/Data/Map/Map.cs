@@ -126,6 +126,7 @@ public class Map
 		{
 			DeleteEntity(me.tr.position);
 			SetEntity(me, pos);
+			me.tr.position = pos;
 			return 0;
 		}
 		else
@@ -137,6 +138,7 @@ public class Map
 		{
 			DeleteEntity(me.tr.position);
 			SetEntity(me, GetWorldPos(pos));
+			me.tr.position = GetWorldPos(pos);
 			return 0;
 		}
 		else

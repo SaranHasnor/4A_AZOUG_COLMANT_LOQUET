@@ -11,6 +11,6 @@ public class EntityActionMove : EntityTargetedAction
 
 	protected override EntityActionResult _Run()
 	{
-		return owner.Move(_targetPosition) != -1 ? EntityActionResult.Success : EntityActionResult.Failure;
+		return owner.Teleport(_targetPosition) != -1 ? EntityActionResult.Success : EntityActionResult.Failure;
 	}
 }
