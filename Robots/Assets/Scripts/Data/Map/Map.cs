@@ -101,7 +101,11 @@ public class Map
 	public void DeleteEntity(Vector3 pos)
 	{
 		var index = GetLocalPos(pos);
-		_entities[index.x][index.y][index.z] = null; //delete l'object a l'exterieur ?!
+		_entities[index.x][index.y][index.z] = null;
+	}
+	public void DeleteEntity(Vector3i pos)
+	{
+		_entities[pos.x][pos.y][pos.z] = null;
 	}
 	public static Vector3i GetLocalPos(Vector3 pos)
 	{
@@ -184,7 +188,7 @@ public class Map
 		}
 		if(currentPos != entLocalPos)
 		{
-			DeleteEntity(GetWorldPos(entLocalPos));
+			DeleteEntity(entLocalPos);
 			SetEntity(me, GetWorldPos(currentPos));
 			me.transform.Translate(GetWorldPos(currentPos));
 			return 0;
