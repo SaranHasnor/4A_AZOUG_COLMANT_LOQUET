@@ -16,7 +16,7 @@ public abstract class EntityTargetedAction : EntityAction
 	{
 		Dictionary<string, string> attributes = new Dictionary<string, string>();
 
-		attributes.Add("position", ""); // FIXME
+		attributes.Add("position", _targetPosition.ToString());
 
 		return attributes;
 	}
