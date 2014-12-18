@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.IO;
 using System.Xml;
+using UnityEditor.AnimatedValues;
 
 public class GameStateLoader : MonoBehaviour
 {
@@ -57,5 +58,10 @@ public class GameStateLoader : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public static Vector3i getVectorFromString(string s)
+	{
+		return new Vector3i(int.Parse(s[1].ToString()), int.Parse(s[3].ToString()), int.Parse(s[5].ToString()));
 	}
 }

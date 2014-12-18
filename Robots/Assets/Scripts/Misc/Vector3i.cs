@@ -52,9 +52,24 @@
 			return new Vector3i(1, 0, 0);
 		}
 	}
-
+	public static Vector3i zero
+	{
+		get
+		{
+			return new Vector3i(0, 0, 0);
+		}
+	}
 	public static Vector3i operator +(Vector3i pos, Vector3i pos2)
 	{
 		return new Vector3i(pos.x + pos2.x, pos.y + pos2.y, pos.z + pos2.z);
+	}
+	public static Vector3i FromString(string s)
+	{
+		return new Vector3i(int.Parse(s[1].ToString()), int.Parse(s[3].ToString()), int.Parse(s[5].ToString()));
+	}
+
+	public override string ToString()
+	{
+		return "(" + x + "," + y + "," + z + ")";
 	}
 }
