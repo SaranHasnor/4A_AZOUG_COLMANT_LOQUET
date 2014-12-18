@@ -8,9 +8,12 @@ public class EntPropertyExit : EntProperty {
 		if (action == EntityEvent.Exit || action == EntityEvent.CollisionEnter) {
 			entity.Destroy();
 			--_necessaryNbOfBot;
+
 			if (_necessaryNbOfBot <= 0) {
-				// TODO : Call end
+				// TODO : Lock Porte
 				// Porte completed.
+				// this.RemoveListener();
+				// this.activate = false;
 			}
 		}
 	}

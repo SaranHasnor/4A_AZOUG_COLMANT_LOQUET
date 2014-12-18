@@ -26,6 +26,12 @@ public class TimeMaster : MonoBehaviour
 		}
 	}
 
+	private void NextTurn()
+	{
+		_currentTurn++;
+		// TODO GameMaster.CheckTurn;
+	}
+
 	void Start()
 	{
 		GameData.timeMaster = this;
@@ -60,7 +66,7 @@ public class TimeMaster : MonoBehaviour
 			}
 		}
 
-		_currentTurn++;
+		NextTurn();
 		_lastRunTime = Time.time;
 	}
 
