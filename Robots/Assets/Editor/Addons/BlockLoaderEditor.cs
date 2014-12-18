@@ -8,6 +8,10 @@ public class BlockLoaderEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
+		// TEMPORARILY DISABLED
+		base.OnInspectorGUI();
+		return;
+
 		BlockLibrary library = (BlockLibrary)target;
 
 		List<KeyValuePair<string, GameObject>> temp = new List<KeyValuePair<string,GameObject>>();
@@ -19,7 +23,7 @@ public class BlockLoaderEditor : Editor
 		while (valid)
 		{
 			valid = false;
-			bool existed = (library.blocks != null && library.blocks.Count > count);
+			bool existed = (library.blockList != null && library.blockList.Count > count);
 
 			EditorGUILayout.BeginHorizontal();
 
