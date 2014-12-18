@@ -11,7 +11,7 @@ public class EntPropertyExit : EntProperty {
 			GameData.gameMaster.SetExitBot();
 			if (_necessaryNbOfBot <= 0) {
 				// Porte completed.
-				RemoveListener(Owner);
+				RemoveListener(_owner);
 				enabled=!enabled;
 			}
 		}

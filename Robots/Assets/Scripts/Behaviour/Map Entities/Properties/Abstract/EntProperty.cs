@@ -25,7 +25,7 @@ public enum EntityEvent : int {
 public abstract class EntProperty : MonoBehaviour
 {
 
-	protected MapEntity Owner;
+	protected MapEntity _owner;
     protected abstract void _Interact(EntityEvent actionType, MapEntity entity);
 
     private void Interact(EntityEvent actionType, MapEntity entity) {
@@ -38,7 +38,7 @@ public abstract class EntProperty : MonoBehaviour
     
     public void AddListener(MapEntity actuator)
     {
-	    Owner = actuator;
+	    _owner = actuator;
         actuator.OnEntityInteraction += Interact;
     }
 
