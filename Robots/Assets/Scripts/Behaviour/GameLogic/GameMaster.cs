@@ -10,7 +10,7 @@ public class GameMaster : MonoBehaviour {
 
 	void Start() {
 		GameData.gameMaster = this;
-		GameData.currentState = new GameState();
+		//GameData.currentState = new GameState();
 		// Init
 		_nbOfBotExit = 0;
 		_allNbOfBot = 0;

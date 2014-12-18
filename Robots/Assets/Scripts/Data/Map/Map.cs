@@ -109,7 +109,7 @@ public class Map
 	}
 	public static int IsOnLimit(Vector3i index)
 	{
-		if(index.x > _limit || index.y > _limit || index.z > _limit)
+		if(index.x > _limit || index.x < 0 || index.y > _limit || index.y < 0 || index.z > _limit || index.z < 0)
 			return -1;
 		else
 			return 0;
