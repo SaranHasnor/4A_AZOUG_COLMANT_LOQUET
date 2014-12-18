@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.ComponentModel;
 
 public class GameMaster : MonoBehaviour {
 	private int _nbTurnMax;
