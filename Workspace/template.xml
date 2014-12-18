@@ -76,7 +76,7 @@
 		
 		<robot id="caca"	team="1" position="(0,1,5)">
 			<action class="EntityActionMove" position="(0,1,4)"/>
-			<!--<action class="EntityActionPush" target="31"/>-->
+			<action class="EntityActionPush" target="31"/>
 			<action class="EntityActionMove" position="(0,1,3)"/>
 			<action class="EntityActionMove" position="(1,1,3)"/>
 			<action class="EntityActionMove" position="(1,1,2)"/>
