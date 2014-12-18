@@ -82,8 +82,9 @@
 			<action class="EntityActionMove" position="(1,1,2)"/>
 			<action class="EntityActionMove" position="(5,1,2)"/>
 			//teleport
-			<action class="EntityActionMove" position="(5,1,2)"/>
-			<action class="EntityActionSelfDestruct"/>
+			<action class="EntityActionMove" position="(11,1,2)"/>
+			<action class="EntityActionSelfDestruct" />
+			<action class="EntityActionMove" position="(15,1,2)"/>
 			-->
 		</robot>
 	</map>
