@@ -55,7 +55,6 @@ public abstract class MapEntity : MonoBehaviour
 		}
 
 		_id = id ?? GameData.currentState.entities.Count.ToString();
-		GameData.currentState.entities.Add(_id, this);
 		_team = team;
 	}
 

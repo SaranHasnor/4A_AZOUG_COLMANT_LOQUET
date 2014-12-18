@@ -45,17 +45,23 @@ public class GameState
 
 		foreach (XmlNode entityNode in mapNode.ChildNodes)
 		{
+			MapEntity newEntity;
+
 			if (entityNode.Name == "block")
 			{
-				BlockScript newBlock = BlockScript.CreateFromXmlNode(entityNode);
-				newState.map.SetEntity(newBlock, newBlock.tr.position);
+				newEntity = BlockScript.CreateFromXmlNode(entityNode);
+			}
+			else if (entityNode.Name == "robot")
+			{
+				newEntity = RobotScript.CreateFromXmlNode(entityNode);
+			}
+			else
+			{
+				throw new System.Exception("aaaaaaaah");
 			}
 
-			if (entityNode.Name == "robot")
-			{
-				RobotScript newRobot = RobotScript.CreateFromXmlNode(entityNode);
-				newState.map.SetEntity(newRobot, newRobot.tr.position);
-			}
+			newState._map.SetEntity(newEntity, newEntity.tr.position);
+			newState._entities.Add(newEntity.id, newEntity);
 		}
 
 		return newState;
