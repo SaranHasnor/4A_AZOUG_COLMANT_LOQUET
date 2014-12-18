@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public abstract class EntityInteraction : EntityAction
 { // Action of an entity on another entity
-	private string _targetID;
+	protected string _targetID;
 
 	public EntityInteraction(string ownerID, string targetID)
 		: base(ownerID)
