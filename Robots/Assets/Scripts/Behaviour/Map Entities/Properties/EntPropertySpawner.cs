@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class EntPropertySpawner : EntProperty {
 	[SerializeField]
@@ -20,6 +21,14 @@ public class EntPropertySpawner : EntProperty {
 			} else {
 				++_sinceLastSpawn;
 			}
+		}
+	}
+
+	public override void SetParameters(Dictionary<string, string> parameters)
+	{
+		if (parameters.ContainsKey("position"))
+		{
+			//_position = Vector3i.FromString(parameters["position"]);
 		}
 	}
 

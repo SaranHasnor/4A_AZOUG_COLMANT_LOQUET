@@ -26,6 +26,15 @@ public abstract class MapEntity : MonoBehaviour
 	}
 
 	private EntProperty[] _properties;
+	public EntProperty[] properties
+	{
+		get
+		{
+			return _properties;
+		}
+	}
+
+
 	public event EntInteraction OnEntityInteraction;
 
 	private string _id;
