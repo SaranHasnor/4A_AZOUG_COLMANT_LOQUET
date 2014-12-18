@@ -13,7 +13,8 @@ public class PlayerCameraScript : MonoBehaviour
 	[SerializeField]
 	private float _magicNumber = 0.9f;
 
-	private Vector3 _anchorPoint = Vector3.zero;
+	[SerializeField]
+	private Vector3 _anchorPoint;
 
 	private float _desiredCameraDistance = 10.0f;
 
@@ -33,12 +34,12 @@ public class PlayerCameraScript : MonoBehaviour
 		Quaternion targetAngle = Quaternion.RotateTowards(currentAngle, desiredAngle, maxDelta);
 
 		//float currentCameraDistance = cameraPos.magnitude;
-		Vector3 desiredPosition = targetAngle * Vector3.forward * _desiredCameraDistance;
-		float diff2 = Vector3.Distance(this.transform.position, desiredPosition);
+		Vector3 desiredPosition = _anchorPoint + targetAngle * Vector3.forward * _desiredCameraDistance;
+		float diff2 = Vector3.Distance(cameraPos, desiredPosition);
 		float maxDelta2 = Mathf.Clamp(diff2 * _magicNumber, 1.0f, _maxCameraZoomSpeed) * Time.deltaTime;
 		float targetCameraDistance = Vector3.MoveTowards(cameraPos, desiredPosition, maxDelta2).magnitude;
 
-		Vector3 newPosition = targetAngle * Vector3.forward * targetCameraDistance;
+		Vector3 newPosition = _anchorPoint + targetAngle * Vector3.forward * targetCameraDistance;
 
 		this.transform.position = newPosition;
 		this.transform.LookAt(_anchorPoint); // I was going to recode it but I guess this works
