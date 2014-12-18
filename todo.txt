@@ -1,6 +1,22 @@
 ( ) = A faire, (/) = En cours, (X) = Résolu
 
 
-( ) Un jeu lololololol
+( ) Reprise de la structure pour plus de cohérence
+
+( ) Réseau
 
 ( ) Editeur de niveau
+
+( ) Interface
+
+( ) Test sur mobile
+
+( ) Animations
+
+( ) Plus d'actions, de propriétés...
+
+( ) Niveaux de test
+
+( ) Menu principal
+
+( ) Lecture des replays

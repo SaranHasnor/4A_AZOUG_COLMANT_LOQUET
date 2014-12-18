@@ -1,0 +1,37 @@
+Thomas Azoug:
+
+	Assets/Editor/*
+	Assets/Prefabs/* sauf Blocks
+	Assets/Scenes/GameScene.unity
+	Assets/Scripts/Behaviour/Camera/PlayerCameraScript.cs
+							/GameLogic/* sauf GameMaster.cs
+							/Misc/WayPointScript.cs
+	Assets/Data/Actions/*
+	Assets/Data/Misc/Pathfinding.cs
+	Assets/UI/InGame/GUIRenderer.cs (partiellement)
+
+
+Amaury Colmant:
+
+	Assets/Prefabs/Blocks
+	Assets/Scripts/Behaviour/GameLogic/GameMaster.cs
+									   TimeMaster.cs (partiellement)
+							/Map Entities/Properties/*
+
+
+Jonathan Loquet:
+
+	Assets/Materials*
+	Assets/Data/Map/Map.cs
+	Assets/Data/Misc/Vector3i.cs
+	Assets/UI/InGame/GUIRenderer.cs (partiellement)
+
+
+Collaboratif:
+
+	Workspace/template.xml
+	
+	Assets/Scripts/Behaviour/Map Entities/Abstract/*
+										 /Block/BlockScript.cs
+										 /Robot/RobotScript.cs
+	Assets/Data/Misc/GameData.cs
