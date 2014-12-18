@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class Map
 {
 	private List<List<List<MapEntity>>> _entities;
-	private const int _limit = 32; //TODO : from xml
-	private const float _size = 5f;
+	public const int _limit = 32; //TODO : from xml
+	public const float _size = 1f;
 	public Map()
 	{
 		_entities = new List<List<List<MapEntity>>>(_limit);
@@ -16,6 +16,11 @@ public class Map
 			for(var j = 0 ; j < _entities.Capacity ; ++j)
 			{
 				_entities[i].Add(new List<MapEntity>(_limit));
+				for(var k = 0 ; k < _entities.Capacity ; ++k)
+				{
+					_entities[i][j].Add(null);
+
+				}
 			}
 		}
 	}

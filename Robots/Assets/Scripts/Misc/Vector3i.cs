@@ -1,4 +1,6 @@
-﻿public class Vector3i
+﻿using UnityEngine;
+using System.Collections;
+public class Vector3i
 {
 	public Vector3i(int _x, int _y, int _z)
 	{
@@ -65,7 +67,8 @@
 	}
 	public static Vector3i FromString(string s)
 	{
-		return new Vector3i(int.Parse(s[1].ToString()), int.Parse(s[3].ToString()), int.Parse(s[5].ToString()));
+		var tmp = s.Split(',', '(', ')' );
+		return new Vector3i(int.Parse(tmp[1]), int.Parse(tmp[2]), int.Parse(tmp[3]));
 	}
 
 	public override string ToString()
