@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class EntityInteraction : EntityAction
 { // Action of an entity on another entity
@@ -11,8 +12,12 @@ public abstract class EntityInteraction : EntityAction
 		_target = target;
 	}
 
-	public override string ToString()
-	{ // FIXME: Create our own IDs
-		return "<" + this.GetType().ToString() + ":" + _target.networkView.viewID + ">";
+	public override Dictionary<string, string> XmlActionAttibutes()
+	{
+		Dictionary<string, string> attributes = new Dictionary<string, string>();
+
+		attributes.Add("target", _target.id);
+
+		return attributes;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 
 public enum EntityActionResult
@@ -51,14 +52,13 @@ public abstract class EntityAction
 			{
 				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(MapEntity) }).Invoke(new object[] { owner });
 			}
-
-			return null;
 		}
 		catch (System.Exception e)
 		{
 			Debug.LogException(e);
-			return null;
 		}
+
+		return null;
 	}
 
 	protected abstract EntityActionResult _Run();
@@ -76,5 +76,27 @@ public abstract class EntityAction
 		}
 	}
 
-	public override abstract string ToString(); // I never thought I'd have to do this
+	public XmlDocument ToXml()
+	{
+		XmlDocument doc = new XmlDocument();
+		XmlElement node = doc.CreateElement("action");
+
+		Dictionary<string, string> attributes = this.XmlActionAttibutes();
+
+		if (attributes.ContainsKey("class"))
+		{ // Security check
+			attributes.Remove("class");
+		}
+
+		attributes.Add("class", this.GetType().ToString());
+
+		foreach (KeyValuePair<string, string> attribute in attributes)
+		{
+			node.SetAttribute(attribute.Key, attribute.Value);
+		}
+
+		return doc;
+	}
+
+	public abstract Dictionary<string, string> XmlActionAttibutes();
 }

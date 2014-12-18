@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class EntityStateChange : EntityAction
 { // Action of an entity on itself
@@ -10,8 +11,10 @@ public abstract class EntityStateChange : EntityAction
 
 	}
 
-	public override string ToString()
+	public override Dictionary<string, string> XmlActionAttibutes()
 	{
-		return "<" + this.GetType().ToString() + ">";
+		Dictionary<string, string> attributes = new Dictionary<string, string>();
+
+		return attributes;
 	}
 }

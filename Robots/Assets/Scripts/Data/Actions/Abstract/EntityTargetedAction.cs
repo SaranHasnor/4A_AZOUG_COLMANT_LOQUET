@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class EntityTargetedAction : EntityAction
 { // Action of an entity on an empty cell
@@ -11,8 +12,12 @@ public abstract class EntityTargetedAction : EntityAction
 		_targetPosition = targetPosition;
 	}
 
-	public override string ToString()
+	public override Dictionary<string,string> XmlActionAttibutes()
 	{
-		return "<" + this.GetType().ToString() + ":" + _targetPosition.ToString() + ">";
+		Dictionary<string, string> attributes = new Dictionary<string, string>();
+
+		attributes.Add("position", ""); // FIXME
+
+		return attributes;
 	}
 }
