@@ -1,6 +1,6 @@
 <gamestate>
 	<map width="32" height="32" depth="32">
-		<block id="0"	type="spawner"		position="(-1,0,2)" team="1"/>
+		<block id="0"	type="spawner"		position="(0,0,5)" team="1"/>
 		<block id="1"	type="stoneblock"	position="(0,0,0)"/>
 		<block id="2"	type="stoneblock"	position="(1,0,0)"/>
 		<block id="3"	type="stoneblock"	position="(2,0,0)"/>
@@ -74,11 +74,13 @@
 		<block id="76"	type="staticblock"	position="(12,1,4)"/>
 		<block id="77"	type="exit"			position="(15,1,2)"/>
 		
-		<robot id="caca"	team="1" position="(-1,1,2)">
+		<robot id="caca"	team="1" position="(0,1,5)">
 			<action class="EntityActionMove" position="(0,1,2)"/>
-			<!--<action class="EntityActionPush" target="38"/>
+			<!--
+			<action class="EntityActionPush" target="38"/>
 			<action class="EntityActionMove" position="(1,1,2)"/>
-			<action class="EntityActionSelfDestruct"/>-->
+			<action class="EntityActionSelfDestruct"/>
+			-->
 		</robot>
 	</map>
 </gamestate>
