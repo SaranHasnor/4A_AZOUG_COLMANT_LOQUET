@@ -1,6 +1,8 @@
 <gamestate>
 	<map width="32" height="32" depth="32">
-		<block id="0"	type="spawner"		position="(0,0,5)" team="1"/>
+		<block id="0"	type="spawner"		position="(0,0,5)" team="1">
+			<property class="EntPropertySpawner" params="position=(0,1,5)"/>
+		</block>
 		<block id="1"	type="stoneblock"	position="(0,0,0)"/>
 		<block id="2"	type="stoneblock"	position="(1,0,0)"/>
 		<block id="3"	type="stoneblock"	position="(2,0,0)"/>

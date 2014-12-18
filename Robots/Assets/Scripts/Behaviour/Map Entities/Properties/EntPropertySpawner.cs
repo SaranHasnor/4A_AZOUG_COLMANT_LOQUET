@@ -31,7 +31,7 @@ public class EntPropertySpawner : EntProperty {
 	{
 		if (parameters.ContainsKey("position"))
 		{
-			//_position = Vector3i.FromString(parameters["position"]);
+			_position = Map.GetWorldPos(Vector3i.FromString(parameters["position"]));
 		}
 	}
 
