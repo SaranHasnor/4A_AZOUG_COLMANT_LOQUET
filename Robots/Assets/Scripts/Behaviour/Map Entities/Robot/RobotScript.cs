@@ -11,9 +11,8 @@ public class RobotScript : RunnableEntity
 		RobotScript script = robot.GetComponent<RobotScript>();
 		if (RobotNode.Attributes["team"] != null)
 		{
-			Team t;
-			t = RobotNode.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
-			script.InitializeMapEntity(Team.Player1, RobotNode.Attributes["id"].Value);
+			Team t = RobotNode.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
+			script.InitializeMapEntity(t, RobotNode.Attributes["id"].Value);
 		}
 		else
 			script.InitializeMapEntity(Team.None, RobotNode.Attributes["id"].Value);

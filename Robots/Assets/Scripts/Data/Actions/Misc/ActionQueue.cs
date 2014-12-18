@@ -5,8 +5,6 @@ using System.Xml;
 
 public class ActionQueue
 {
-	private RunnableEntity _owner;
-
 	private List<EntityAction> queue;
 	private int cursor;
 
@@ -101,7 +99,7 @@ public class ActionQueue
 
 		Dictionary<string, string> attributes = new Dictionary<string,string>();
 
-		attributes.Add("id", _owner.id);
+		attributes.Add("id", queue[0].owner.id); // Temporary
 
 		foreach (KeyValuePair<string, string> attribute in attributes)
 		{
@@ -118,14 +116,12 @@ public class ActionQueue
 
 	public static ActionQueue CreateFromXmlNode(XmlNode node)
 	{
-		MapEntity owner = MapEntity.entities[node.Attributes["id"].Value];
-
 		ActionQueue result = new ActionQueue();
 		for(int i = 0 ; i < node.ChildNodes.Count ; ++i)
 		{
 			if(node.ChildNodes[i].Name == "action")
 			{
-				result.SetAction(EntityAction.CreateFromXmlNode(node.ChildNodes[i], owner));
+				result.SetAction(EntityAction.CreateFromXmlNode(node.ChildNodes[i], node.Attributes["id"].Value));
 			}
 		}
 		result.SetCursor(0);

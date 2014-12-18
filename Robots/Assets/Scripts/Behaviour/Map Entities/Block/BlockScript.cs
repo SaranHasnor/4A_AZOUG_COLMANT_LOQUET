@@ -13,9 +13,8 @@ public class BlockScript : MapEntity {
 		BlockScript script = block.GetComponent<BlockScript>();
 		if(node.Attributes["team"] != null)
 		{
-			Team t;
-			t = node.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
-			script.InitializeMapEntity(Team.Player1, node.Attributes["id"].Value);
+			Team t = node.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
+			script.InitializeMapEntity(t, node.Attributes["id"].Value);
 		}
 		else
 			script.InitializeMapEntity(Team.None, node.Attributes["id"].Value);

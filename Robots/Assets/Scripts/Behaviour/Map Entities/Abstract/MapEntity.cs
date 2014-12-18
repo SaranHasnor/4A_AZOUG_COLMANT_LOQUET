@@ -28,16 +28,6 @@ public abstract class MapEntity : MonoBehaviour
 	private EntProperty[] _properties;
 	public event EntInteraction OnEntityInteraction;
 
-	private static Dictionary<string, MapEntity> _entities = new Dictionary<string, MapEntity>();
-	public static Dictionary<string, MapEntity> entities
-	{
-		get
-		{
-			return new Dictionary<string, MapEntity>(_entities);
-		}
-	}
-
-
 	private string _id;
 	public string id
 	{
@@ -64,8 +54,8 @@ public abstract class MapEntity : MonoBehaviour
 			property.AddListener(this);
 		}
 
-		_id = id ?? _entities.Count.ToString();
-		_entities.Add(_id, this);
+		_id = id ?? GameData.currentState.entities.Count.ToString();
+		GameData.currentState.entities.Add(_id, this);
 		_team = team;
 	}
 

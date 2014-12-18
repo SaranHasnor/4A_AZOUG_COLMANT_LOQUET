@@ -14,26 +14,26 @@ public enum EntityActionResult
 
 public abstract class EntityAction
 { // Generic action, subclasses should only be action categories, which should in turn be subclassed for actual actions
-	protected RunnableEntity _owner;
+	protected string _ownerID;
 
 	public RunnableEntity owner
 	{
 		get
 		{
-			return _owner;
+			return (RunnableEntity)GameData.currentState.entities[_ownerID];
 		}
 	}
 
-	protected EntityAction(RunnableEntity owner)
+	protected EntityAction(string ownerID)
 	{
-		this._owner = owner;
+		this._ownerID = ownerID;
 	}
 
-	public static EntityAction CreateFromXmlNode(XmlNode node, MapEntity owner)
+	public static EntityAction CreateFromXmlNode(XmlNode node, string ownerID)
 	{
 		string classString = node.Attributes["class"] != null ? node.Attributes["class"].Value : null;
 		string positionString = node.Attributes["position"] != null ? node.Attributes["position"].Value : null;
-		string targetID = node.Attributes["target"] != null ? node.Attributes["class"].Value : null;
+		string targetID = node.Attributes["target"] != null ? node.Attributes["target"].Value : null;
 
 		// Dirty way for now
 		try
@@ -42,15 +42,15 @@ public abstract class EntityAction
 
 			if (actualType.BaseType == typeof(EntityInteraction))
 			{
-				return (EntityAction)actualType.GetConstructor(new System.Type[] {typeof(MapEntity), typeof(MapEntity)}).Invoke(new object[] {owner, MapEntity.entities[targetID]});
+				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(string), typeof(string) }).Invoke(new object[] { ownerID, targetID });
 			}
 			else if (actualType.BaseType == typeof(EntityTargetedAction))
 			{
-				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(MapEntity), typeof(Vector3i) }).Invoke(new object[] { owner, Vector3i.forward /* FIXME */ });
+				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(string), typeof(Vector3i) }).Invoke(new object[] { ownerID, Vector3i.FromString(positionString) });
 			}
 			else if (actualType.BaseType == typeof(EntityStateChange))
 			{
-				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(MapEntity) }).Invoke(new object[] { owner });
+				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(string) }).Invoke(new object[] { ownerID });
 			}
 		}
 		catch (System.Exception e)

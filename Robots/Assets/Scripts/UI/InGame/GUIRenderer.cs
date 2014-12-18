@@ -71,7 +71,7 @@ public class GUIRenderer : MonoBehaviour
 			//_selectedActionIndex = index;
 			if (action == null)
 			{ // Temporary
-				_selectedEntity.SetAction(new EntityActionMove(_selectedEntity, new Vector3i(0, 0, 0)));
+				_selectedEntity.SetAction(new EntityActionMove(_selectedEntity.id, new Vector3i(0, 0, 0)));
 			}
 		}
 	}

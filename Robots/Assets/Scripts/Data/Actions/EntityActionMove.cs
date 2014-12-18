@@ -3,8 +3,8 @@ using System.Collections;
 
 public class EntityActionMove : EntityTargetedAction
 {
-	public EntityActionMove(RunnableEntity owner, Vector3i target)
-		: base(owner, target)
+	public EntityActionMove(string ownerID, Vector3i target)
+		: base(ownerID, target)
 	{
 
 	}

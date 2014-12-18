@@ -4,19 +4,19 @@ using System.Collections.Generic;
 
 public abstract class EntityInteraction : EntityAction
 { // Action of an entity on another entity
-	private RunnableEntity _target;
+	private string _targetID;
 
-	public EntityInteraction(RunnableEntity owner, RunnableEntity target)
-		: base(owner)
+	public EntityInteraction(string ownerID, string targetID)
+		: base(ownerID)
 	{
-		_target = target;
+		_targetID = targetID;
 	}
 
 	public override Dictionary<string, string> XmlActionAttibutes()
 	{
 		Dictionary<string, string> attributes = new Dictionary<string, string>();
 
-		attributes.Add("target", _target.id);
+		attributes.Add("target", _targetID);
 
 		return attributes;
 	}
