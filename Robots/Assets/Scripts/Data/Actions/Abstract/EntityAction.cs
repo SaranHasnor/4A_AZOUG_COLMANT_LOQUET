@@ -39,7 +39,6 @@ public abstract class EntityAction
 		try
 		{
 			System.Type actualType = System.Type.GetType(classString);
-
 			if (actualType.BaseType == typeof(EntityInteraction))
 			{
 				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(string), typeof(string) }).Invoke(new object[] { ownerID, targetID });

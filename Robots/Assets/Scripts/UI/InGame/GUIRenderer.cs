@@ -30,6 +30,14 @@ public class GUIRenderer : MonoBehaviour
 				DrawActionList(new Rect());
 			}
 		}
+		if (GUI.Button(new Rect(Screen.width - 0.2f*Screen.width, 0.01f*Screen.height, 0.2f*Screen.width, 0.2f*Screen.height), "Play/Pause"))
+		{
+			GameData.timeMaster.ToggleRun();
+		}
+		if(GUI.Button(new Rect(Screen.width - 0.2f * Screen.width, 0.21f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Rewind"))
+		{
+			
+		}
 	}
 
 	private void DrawActionList(Rect rect)

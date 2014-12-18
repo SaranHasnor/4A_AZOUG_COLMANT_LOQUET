@@ -16,6 +16,11 @@ public class TimeMaster : MonoBehaviour
 	private float _lastRunTime;
 	private ActionRunMode _runMode;
 
+	public void ToggleRun()
+	{
+		_runMode = _runMode == ActionRunMode.Simulation ? ActionRunMode.Paused : ActionRunMode.Simulation;
+	}
+
 	private int _currentTurn;
 	public int currentTurn
 	{
