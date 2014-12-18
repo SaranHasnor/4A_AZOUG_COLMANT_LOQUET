@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public enum ActionRunMode
@@ -24,6 +23,12 @@ public class TimeMaster : MonoBehaviour
 		{
 			return _currentTurn;
 		}
+	}
+
+	private void NextTurn()
+	{
+		_currentTurn++;
+		GameData.gameMaster.CheckTurn(_currentTurn);
 	}
 
 	void Start()
@@ -60,7 +65,7 @@ public class TimeMaster : MonoBehaviour
 			}
 		}
 
-		_currentTurn++;
+		NextTurn();
 		_lastRunTime = Time.time;
 	}
 
