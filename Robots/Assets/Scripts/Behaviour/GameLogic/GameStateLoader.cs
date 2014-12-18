@@ -4,10 +4,22 @@ using System.Xml;
 
 public class GameStateLoader : MonoBehaviour
 {
+	[SerializeField]
+	private TextAsset _template;
+
 	void Start()
 	{
 		// Debug
-		LoadFile("../Workspace/template.xml");
+		LoadTextAsset(_template);
+	}
+
+	public void LoadTextAsset(TextAsset asset)
+	{
+		var doc = new XmlDocument();
+		doc.LoadXml(_template.text);
+
+		GameState newState = GameState.CreateFromXmlDocument(doc);
+		GameData.currentState = newState;
 	}
 
 	public void LoadFile(string filePath)

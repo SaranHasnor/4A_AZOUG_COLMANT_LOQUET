@@ -29,7 +29,7 @@ Jonathan Loquet:
 
 Collaboratif:
 
-	Workspace/template.xml
+	Misc/template.xml
 	
 	Assets/Scripts/Behaviour/Map Entities/Abstract/*
 										 /Block/BlockScript.cs
