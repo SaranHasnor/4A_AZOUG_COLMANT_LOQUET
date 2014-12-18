@@ -31,10 +31,9 @@
 		<block id="28"	type="stoneblock"	position="(3,0,4)"/>
 		<block id="29"	type="stoneblock"	position="(4,0,4)"/>
 		<block id="30"	type="stoneblock"	position="(5,0,4)"/>
-		<block id="37"	type="sandblock"	position="(0,1,1)"/>
-		<block id="38"	type="sandblock"	position="(1,1,2)"/>
-		<block id="39"	type="sandblock"	position="(0,1,3)"/>
-		<block id="40"	type="teleporter"	position="(5,1,2)" target="3"/>
+		<block id="31"	type="sandblock"	position="(0,1,3)"/>
+		<block id="32"	type="sandblock"	position="(1,1,4)"/>
+		<block id="33"	type="teleporter"	position="(5,1,2)" target="3"/>
 		
 		<block id="41"	type="stoneblock"	position="(10,0,0)"/>
 		<block id="42"	type="stoneblock"	position="(11,0,0)"/>
@@ -75,10 +74,15 @@
 		<block id="77"	type="exit"			position="(15,1,2)"/>
 		
 		<robot id="caca"	team="1" position="(0,1,5)">
-			<action class="EntityActionMove" position="(0,1,2)"/>
+			<action class="EntityActionMove" position="(0,1,4)"/>
 			<!--
-			<action class="EntityActionPush" target="38"/>
+			<action class="EntityActionPush" target="31"/>
+			<action class="EntityActionMove" position="(0,1,3)"/>
+			<action class="EntityActionMove" position="(1,1,3)"/>
 			<action class="EntityActionMove" position="(1,1,2)"/>
+			<action class="EntityActionMove" position="(5,1,2)"/>
+			//teleport
+			<action class="EntityActionMove" position="(5,1,2)"/>
 			<action class="EntityActionSelfDestruct"/>
 			-->
 		</robot>
