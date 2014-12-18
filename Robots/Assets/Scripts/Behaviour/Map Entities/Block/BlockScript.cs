@@ -1,5 +1,6 @@
-﻿using System.Xml;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Xml;
+using System.Collections.Generic;
 
 public class BlockScript : MapEntity
 {
@@ -19,6 +20,28 @@ public class BlockScript : MapEntity
 		}
 		else
 			script.InitializeMapEntity(Team.None, node.Attributes["id"].Value);
+
+		// Read any property arguments
+		foreach (XmlNode propertyNode in node.ChildNodes)
+		{
+			foreach (EntProperty property in script.properties)
+			{
+				if (property.GetType().ToString() == propertyNode.Attributes["class"].Value)
+				{
+					Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+					foreach (string param in propertyNode.Attributes["params"].Value.Split(';'))
+					{
+						string[] str = param.Split('=');
+
+						parameters.Add(str[0], str[1]);
+					}
+
+					property.SetParameters(parameters);
+				}
+			}
+		}
+
 		return script;
 	}
 

@@ -55,13 +55,21 @@ public class TimeMaster : MonoBehaviour
 
 	private void RunActions()
 	{
-		foreach (RunnableEntity entity in _entities)
+		//foreach (RunnableEntity entity in _entities)
+		foreach (MapEntity entity in GameData.currentState.entities.Values)
 		{
-			EntityActionResult res = entity.RunNextAction();
-
-			if (res == EntityActionResult.Pending)
+			if (entity is RunnableEntity)
 			{
-				_pendingEntities.Add(entity);
+				EntityActionResult res = ((RunnableEntity)entity).RunNextAction();
+
+				if (res == EntityActionResult.Pending)
+				{
+					_pendingEntities.Add((RunnableEntity)entity);
+				}
+			}
+			else if (entity is BlockScript)
+			{
+				((BlockScript)entity).Interact(EntityEvent.Turn, null);
 			}
 		}
 
