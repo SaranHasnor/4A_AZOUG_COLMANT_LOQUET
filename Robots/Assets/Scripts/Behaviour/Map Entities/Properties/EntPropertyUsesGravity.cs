@@ -9,9 +9,9 @@ public class EntPropertyUsesGravity : EntProperty
         if (action == EntityEvent.Fall) {
             var posEntityPush = gameObject.transform.position;
             GameData.currentState.map.GetEntity(posEntityPush)
-                .Move(new Vector3(  gameObject.transform.position.x,
+                .Move(Map.GetLocalPos(new Vector3(  gameObject.transform.position.x,
                                     gameObject.transform.position.y - _fallingSpeed,
-                                    gameObject.transform.position.z ));
+                                    gameObject.transform.position.z )));
         }
     }
 }

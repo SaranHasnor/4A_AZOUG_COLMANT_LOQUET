@@ -14,19 +14,19 @@ public class EntPropertyPushable : EntProperty {
                 posEntityPush.y == posEntityPusher.y) {
                 var tmp = posEntityPusher.x > posEntityPush.x ? -_strongOfPush : _strongOfPush;
                 GameData.currentState.map.GetEntity(posEntityPush)
-                    .Move(new Vector3(posEntityPush.x + tmp, posEntityPush.y, posEntityPush.z));
+                    .Move(Map.GetLocalPos(new Vector3(posEntityPush.x + tmp, posEntityPush.y, posEntityPush.z)));
             } else if (posEntityPush.x == posEntityPusher.x &&
                        posEntityPush.y != posEntityPusher.y &&
                        posEntityPush.y == posEntityPusher.y) {
                 var tmp = posEntityPusher.y > posEntityPush.y ? -_strongOfPush : _strongOfPush;
                 GameData.currentState.map.GetEntity(posEntityPush)
-                    .Move(new Vector3(posEntityPush.x, posEntityPush.y + tmp, posEntityPush.z));
+                    .Move(Map.GetLocalPos(new Vector3(posEntityPush.x, posEntityPush.y + tmp, posEntityPush.z)));
             } else if (posEntityPush.x == posEntityPusher.x &&
                        posEntityPush.y == posEntityPusher.y &&
                        posEntityPush.y != posEntityPusher.y) {
                 var tmp = posEntityPusher.z > posEntityPush.z ? -_strongOfPush : _strongOfPush;
                 GameData.currentState.map.GetEntity(posEntityPush)
-                    .Move(new Vector3(posEntityPush.x, posEntityPush.y, posEntityPush.z + tmp));
+                    .Move(Map.GetLocalPos(new Vector3(posEntityPush.x, posEntityPush.y, posEntityPush.z + tmp)));
             } else {
 				Debug.Log("Error in EntPropertyPushable : Can't push");
             }

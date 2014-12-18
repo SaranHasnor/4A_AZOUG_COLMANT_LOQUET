@@ -120,7 +120,18 @@ public class Map
 		if(IsOnLimit(GetLocalPos(pos)) == 0 && GetEntity(pos) == null)
 		{
 			DeleteEntity(me.tr.position);
-			SetEntity(me.gameObject, pos);
+			SetEntity(me, pos);
+			return 0;
+		}
+		else
+			return -1;
+	}
+	public int TeleportEntity(MapEntity me, Vector3i pos)
+	{
+		if(IsOnLimit(pos) == 0 && GetEntity(GetWorldPos(pos)) == null)
+		{
+			DeleteEntity(me.tr.position);
+			SetEntity(me, GetWorldPos(pos));
 			return 0;
 		}
 		else
@@ -167,6 +178,53 @@ public class Map
 		{
 			DeleteEntity(me.tr.position);
 			SetEntity(me.gameObject, currentPos);
+			return 0;
+		}
+		else
+			return -1;
+
+	}
+	public int MoveEntity(MapEntity me, Vector3i pos)
+	{
+		var entLocalPos = GetLocalPos(me.tr.position);
+		var currentPos = GetLocalPos(me.tr.position);
+		if(entLocalPos.x != pos.x)
+		{
+			for(var i = entLocalPos.x ; i < pos.x ; i += (int)_size)
+			{
+				var nextPos = new Vector3i(i, entLocalPos.y, entLocalPos.z);
+				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+					currentPos = nextPos;
+				else
+					break;
+			}
+		}
+		else if(entLocalPos.y != pos.y)
+		{
+			for(var i = entLocalPos.y ; i < pos.y ; i += (int)_size)
+			{
+				var nextPos = new Vector3i(entLocalPos.x, i, entLocalPos.z);
+				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+					currentPos = nextPos;
+				else
+					break;
+			}
+		}
+		else if(entLocalPos.z != pos.z)
+		{
+			for(var i = entLocalPos.z ; i < pos.z ; i += (int)_size)
+			{
+				var nextPos = new Vector3i(entLocalPos.x, entLocalPos.y, i);
+				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+					currentPos = nextPos;
+				else
+					break;
+			}
+		}
+		if(currentPos != entLocalPos)
+		{
+			DeleteEntity(GetWorldPos(entLocalPos));
+			SetEntity(me, GetWorldPos(currentPos));
 			return 0;
 		}
 		else
