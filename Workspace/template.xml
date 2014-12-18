@@ -70,24 +70,18 @@
 		<block id="71"	type="teleporter_target"	position="(10,1,2)"/>
 		<block id="72"	type="staticblock"	position="(12,1,0)"/>
 		<block id="73"	type="staticblock"	position="(12,1,1)"/>
-		<block id="74"	type="staticblock"	position="(12,1,2)"/>
 		<block id="75"	type="staticblock"	position="(12,1,3)"/>
 		<block id="76"	type="staticblock"	position="(12,1,4)"/>
 		<block id="77"	type="exit"			position="(15,1,2)"/>
 		
 		<robot id="caca"	team="1" position="(0,1,5)">
 			<action class="EntityActionMove" position="(0,1,4)"/>
-			<!--
 			<action class="EntityActionPush" target="31"/>
 			<action class="EntityActionMove" position="(0,1,3)"/>
 			<action class="EntityActionMove" position="(1,1,3)"/>
 			<action class="EntityActionMove" position="(1,1,2)"/>
 			<action class="EntityActionMove" position="(5,1,2)"/>
-			//teleport
-			<action class="EntityActionMove" position="(11,1,2)"/>
-			<action class="EntityActionSelfDestruct" />
 			<action class="EntityActionMove" position="(15,1,2)"/>
-			-->
 		</robot>
 	</map>
 </gamestate>
