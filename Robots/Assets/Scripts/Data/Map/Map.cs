@@ -25,7 +25,6 @@ public class Map
 		}
 	}
 
-
 	public int SetEntity(GameObject go, Vector3 pos)
 	{
 		var index = GetLocalPos(pos);
@@ -188,7 +187,7 @@ public class Map
 		}
 		if(currentPos != entLocalPos)
 		{
-			DeleteEntity(entLocalPos);
+			DeleteEntity(GetWorldPos(entLocalPos));
 			SetEntity(me, GetWorldPos(currentPos));
 			me.transform.Translate(GetWorldPos(currentPos));
 			return 0;
