@@ -49,13 +49,12 @@ public class Map
 	}
 	public MapEntity GetEntity(Vector3 pos)
 	{
-		var index = GetLocalPos(pos);
-		try
-		{
-			return _entities[index.x][index.y][index.z];
-		}
-		catch(Exception)
-		{
+		return GetEntity(GetLocalPos(pos));
+	}
+	public MapEntity GetEntity(Vector3i pos) {
+		try {
+			return _entities[pos.x][pos.y][pos.z];
+		} catch (Exception) {
 			return null;
 		}
 	}

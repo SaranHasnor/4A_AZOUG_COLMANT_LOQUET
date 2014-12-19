@@ -6,8 +6,8 @@ public class EntPropertyPushable : EntProperty {
 
     protected override void _Interact(EntityEvent action, MapEntity entity) {
         if (action == EntityEvent.Move) {
-            var posEntityPusher = GameData.currentState.map.GetEntity(entity).transform.position;
-            var posEntityPush = gameObject.transform.position;
+            var posEntityPusher = Map.GetLocalPos(entity.tr.position);
+            var posEntityPush = Map.GetLocalPos(gameObject.transform.position);
 
             if (posEntityPush.x != posEntityPusher.x &&
                 posEntityPush.y == posEntityPusher.y &&
