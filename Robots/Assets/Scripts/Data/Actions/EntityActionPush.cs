@@ -12,7 +12,8 @@ public class EntityActionPush : EntityInteraction
 	protected override EntityActionResult _Run()
 	{
 		MapEntity target = GameData.currentState.entities[_targetID];
+		target.Interact(EntityEvent.Move, owner);
 
-		return target.Teleport(Map.GetLocalPos(2.0f * target.tr.position - owner.tr.position)) != -1 ? EntityActionResult.Success : EntityActionResult.Failure;
+		return EntityActionResult.Success; //target.Teleport(Map.GetLocalPos(2.0f * target.tr.position - owner.tr.position)) != -1 ? EntityActionResult.Success : EntityActionResult.Failure;
 	}
 }

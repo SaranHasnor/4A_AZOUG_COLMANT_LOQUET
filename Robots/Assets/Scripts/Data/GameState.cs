@@ -6,6 +6,7 @@ public class GameState
 { // Represents a snapshot of the game at a given time
 	private Map _map;
 	private Dictionary<string, MapEntity> _entities;
+	private Dictionary<string, ActionQueue> _actions;
 
 	public Map map
 	{
@@ -14,7 +15,6 @@ public class GameState
 			return _map;
 		}
 	}
-
 	public Dictionary<string, MapEntity> entities
 	{
 		get
@@ -22,11 +22,19 @@ public class GameState
 			return new Dictionary<string, MapEntity>(_entities);
 		}
 	}
+	public Dictionary<string, ActionQueue> actions
+	{
+		get
+		{
+			return new Dictionary<string, ActionQueue>(_actions);
+		}
+	}
 
 	public GameState()
 	{
 		_map = new Map();
 		_entities = new Dictionary<string, MapEntity>();
+		_actions = new Dictionary<string, ActionQueue>();
 	}
 
 	public void UpdateWithPlayerGameState(GameState state, Team playerTeam)
