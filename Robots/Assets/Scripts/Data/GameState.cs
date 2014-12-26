@@ -68,7 +68,7 @@ public class GameState
 				throw new System.Exception("aaaaaaaah");
 			}
 
-			newState._map.SetEntity(newEntity, newEntity.tr.position);
+			newState._map.SetEntity(newEntity, Map.GetLocalPos(newEntity.tr.position));
 			newState._entities.Add(newEntity.id, newEntity);
 		}
 

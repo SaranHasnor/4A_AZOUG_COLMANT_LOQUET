@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public abstract class EntityTargetedAction : EntityAction
 { // Action of an entity on an empty cell
-	protected Vector3i _targetPosition;
+	protected MapPosition _targetPosition;
 
-	public EntityTargetedAction(string ownerID, Vector3i targetPosition)
+	public EntityTargetedAction(string ownerID, MapPosition targetPosition)
 		: base(ownerID)
 	{
 		_targetPosition = targetPosition;
