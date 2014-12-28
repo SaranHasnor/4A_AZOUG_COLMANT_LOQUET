@@ -85,6 +85,6 @@ public abstract class MapEntity : MonoBehaviour
 
 	public void Destroy()
 	{
-		GameData.currentState.map.RemoveEntity(Map.GetLocalPos(tr.position));
+		GameData.currentState.map.RemoveEntity(GameData.currentState.map.ToLocalPos(tr.position));
 	}
 }

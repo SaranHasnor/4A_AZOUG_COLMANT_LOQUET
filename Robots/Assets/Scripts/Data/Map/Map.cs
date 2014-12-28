@@ -1,21 +1,54 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 
 public class Map
 {
 	private Dictionary<MapPosition, MapEntity> _entities;
-	public const int _limit = 32; //TODO : from xml
-	public const float _size = 1f;
-	public Map()
+
+	private float _blockSize;
+	public float blockSize
 	{
-		_entities = new Dictionary<MapPosition, MapEntity>((int)Mathf.Pow(_limit, 3));
-		for(var i = 0 ; i < _limit ; ++i)
+		get{ return _blockSize; }
+		set { _blockSize = value; }
+	}
+
+	private int _width;
+	public int width
+	{
+		get { return _width; }
+		set { _width = value; }
+	}
+
+	private int _height;
+	public int height
+	{
+		get{ return _height; }
+		set { _height = value; }
+	}
+
+	private int _depth;
+	public int depth
+	{
+		get{ return _depth; }
+		set { _depth = value; }
+	}
+	
+	public Map(int width, int height, int depth, float blockSize)
+	{
+		_width = width;
+		_height = height;
+		_depth = depth;
+		_blockSize = blockSize;
+
+		_entities = new Dictionary<MapPosition, MapEntity>(width * height * depth);
+		for(var i = 0 ; i < width ; ++i)
 		{
-			for(var j = 0 ; j < _limit ; ++j)
+			for(var j = 0 ; j < height ; ++j)
 			{
-				for(var k = 0 ; j < _limit ; ++j)
+				for(var k = 0 ; j < depth ; ++j)
 				{
 					_entities[new MapPosition(i, j, k)] = null;
 				}
@@ -37,7 +70,7 @@ public class Map
 	}
 	public MapEntity GetEntity(Vector3 pos)
 	{
-		return GetEntity(GetLocalPos(pos));
+		return GetEntity(ToLocalPos(pos));
 	}
 	public MapEntity GetEntity(MapPosition pos)
 	{
@@ -54,7 +87,7 @@ public class Map
 	{
 		try
 		{
-			return _entities[GetLocalPos(me.transform.position)];
+			return _entities[ToLocalPos(me.transform.position)];
 		}
 		catch(Exception)
 		{
@@ -91,35 +124,35 @@ public class Map
 		if(_entities.ContainsKey(pos)) //TODO : gerer le cas contraire ?
 			_entities[pos] = null;
 	}
-	public static MapPosition GetLocalPos(Vector3 pos)
+	public MapPosition ToLocalPos(Vector3 pos)
 	{
-		return new MapPosition((int)(pos.x / _size), (int)(pos.y / _size), (int)(pos.z / _size));
+		return new MapPosition((int)(pos.x / _width), (int)(pos.y / _height), (int)(pos.z / _depth));
 	}
 
-	public static Vector3 GetWorldPos(MapPosition localPos)
+	public Vector3 ToWorldPos(MapPosition localPos)
 	{
-		return new Vector3(localPos.x * _size, localPos.y * _size, localPos.z * _size);
+		return new Vector3(localPos.x * _width, localPos.y * _height, localPos.z * _depth);
 	}
 
 	public int TeleportEntity(MapEntity me, MapPosition pos)
 	{
 		if (!_entities.ContainsKey(pos) || GetEntity(pos) != null) return -1;
-		RemoveEntity(GetLocalPos(me.tr.position));
+		RemoveEntity(ToLocalPos(me.tr.position));
 		SetEntity(me, pos);
-		me.tr.position = GetWorldPos(pos);
+		me.tr.position = ToWorldPos(pos);
 		return 0;
 	}
 
 	public int MoveEntity(MapEntity me, MapPosition pos)
 	{
-		var entLocalPos = GetLocalPos(me.tr.position);
-		var currentPos = GetLocalPos(me.tr.position);
+		var entLocalPos = ToLocalPos(me.tr.position);
+		var currentPos = ToLocalPos(me.tr.position);
 		if(entLocalPos.x != pos.x) //TODO : adapter aux déplacements "complexes" ?! 
 		{
-			for(var i = entLocalPos.x ; i < pos.x ; i += (int)_size)
+			for(var i = entLocalPos.x ; i < pos.x ; i += (int)_width)
 			{
 				var nextPos = new MapPosition(i, entLocalPos.y, entLocalPos.z);
-				if(_entities.ContainsKey(nextPos) && GetEntity(GetWorldPos(nextPos)) == null)
+				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -127,10 +160,10 @@ public class Map
 		}
 		else if(entLocalPos.y != pos.y)
 		{
-			for(var i = entLocalPos.y ; i < pos.y ; i += (int)_size)
+			for(var i = entLocalPos.y ; i < pos.y ; i += (int)_height)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, i, entLocalPos.z);
-				if(_entities.ContainsKey(nextPos) && GetEntity(GetWorldPos(nextPos)) == null)
+				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -138,10 +171,10 @@ public class Map
 		}
 		else if(entLocalPos.z != pos.z)
 		{
-			for(var i = entLocalPos.z ; i < pos.z ; i += (int)_size)
+			for(var i = entLocalPos.z ; i < pos.z ; i += (int)_depth)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, entLocalPos.y, i);
-				if(_entities.ContainsKey(nextPos) && GetEntity(GetWorldPos(nextPos)) == null)
+				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -150,7 +183,7 @@ public class Map
 		if(currentPos == entLocalPos) return -1;
 		RemoveEntity(entLocalPos);
 		SetEntity(me, currentPos);
-		me.transform.Translate(GetWorldPos(currentPos));
+		me.transform.Translate(ToWorldPos(currentPos));
 		return 0;
 	}
 }

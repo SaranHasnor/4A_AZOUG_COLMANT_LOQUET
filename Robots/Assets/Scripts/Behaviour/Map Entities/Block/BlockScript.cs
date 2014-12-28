@@ -10,7 +10,7 @@ public class BlockScript : MapEntity
 	public static BlockScript CreateFromXmlNode(XmlNode node)
 	{
 		GameObject block = (GameObject)GameObject.Instantiate(GameData.instantiateManager.BlockPrefabForType(node.Attributes["type"].Value)
-																, Map.GetWorldPos(MapPosition.FromString(node.Attributes["position"].Value))
+																, GameData.currentState.map.ToWorldPos(MapPosition.FromString(node.Attributes["position"].Value))
 																, Quaternion.identity);
 		BlockScript script = block.GetComponent<BlockScript>();
 		if (node.Attributes["team"] != null)

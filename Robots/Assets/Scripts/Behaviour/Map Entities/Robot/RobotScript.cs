@@ -6,7 +6,7 @@ public class RobotScript : RunnableEntity
 	public static RobotScript CreateFromXmlNode(XmlNode robotNode)
 	{
 		GameObject robot = (GameObject)GameObject.Instantiate(GameData.instantiateManager.robotPrefab
-																, Map.GetWorldPos(MapPosition.FromString(robotNode.Attributes["position"].Value))
+																, GameData.currentState.map.ToWorldPos(MapPosition.FromString(robotNode.Attributes["position"].Value))
 																, Quaternion.identity);
 		RobotScript script = robot.GetComponent<RobotScript>();
 		if (robotNode.Attributes["team"] != null)

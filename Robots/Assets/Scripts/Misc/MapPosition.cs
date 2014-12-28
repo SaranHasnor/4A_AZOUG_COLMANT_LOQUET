@@ -3,34 +3,37 @@ using System.Collections;
 
 public class MapPosition 
 {
-	public MapPosition(int _x, int _y, int _z)
+	public MapPosition(int x, int y, int z)
 	{
-		x = _x;
-		y = _y;
-		z = _z;
+		_x = x;
+		_y = y;
+		_z = z;
 	}
 
 	public MapPosition(MapPosition pos)
 	{
-		x = pos.x;
-		y = pos.y;
-		z = pos.z;
+		_x = pos.x;
+		_y = pos.y;
+		_z = pos.z;
 	}
 
+	private int _x;
 	public int x
 	{
-		get { return x; }
-		set { x = value; }
+		get { return _x; }
+		set { _x = value; }
 	}
+	private int _y;
 	public int y
 	{
-		get { return y; }
-		set { y = value; }
+		get { return _y; }
+		set { _y = value; }
 	}
+	private int _z;
 	public int z
 	{
-		get { return z; }
-		set { z = value; }
+		get { return _z; }
+		set { _z = value; }
 	}
 
 #region operators

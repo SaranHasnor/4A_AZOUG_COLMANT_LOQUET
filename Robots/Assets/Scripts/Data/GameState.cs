@@ -32,7 +32,8 @@ public class GameState
 
 	public GameState()
 	{
-		_map = new Map();
+		// TODO : ajouter les parametres widht, height, depth et blocksize
+		//_map = new Map(); 
 		_entities = new Dictionary<string, MapEntity>();
 		_actions = new Dictionary<string, ActionQueue>();
 	}
@@ -68,7 +69,7 @@ public class GameState
 				throw new System.Exception("aaaaaaaah");
 			}
 
-			newState._map.SetEntity(newEntity, Map.GetLocalPos(newEntity.tr.position));
+			newState._map.SetEntity(newEntity, GameData.currentState.map.ToLocalPos(newEntity.tr.position));
 			newState._entities.Add(newEntity.id, newEntity);
 		}
 

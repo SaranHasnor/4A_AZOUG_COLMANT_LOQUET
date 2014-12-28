@@ -18,7 +18,8 @@ public class EntPropertySpawner : EntProperty {
 			RobotScript script = go.GetComponent<RobotScript>();
 			// Initialize it please ;_;
 
-			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.SetEntity(script, Map.GetLocalPos(_position)) == 0) {
+			if(_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.SetEntity(script, GameData.currentState.map.ToLocalPos(_position)) == 0)
+			{
 				--_numberSpawn;
 				_sinceLastSpawn = 0;
 			} else {
@@ -31,7 +32,7 @@ public class EntPropertySpawner : EntProperty {
 	{
 		if (parameters.ContainsKey("position"))
 		{
-			_position = Map.GetWorldPos(MapPosition.FromString(parameters["position"]));
+			_position = GameData.currentState.map.ToWorldPos(MapPosition.FromString(parameters["position"]));
 		}
 	}
 

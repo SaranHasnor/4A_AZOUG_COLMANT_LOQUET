@@ -6,27 +6,27 @@ public class EntPropertyPushable : EntProperty {
 
     protected override void _Interact(EntityEvent action, MapEntity entity) {
         if (action == EntityEvent.Move) {
-            var posEntityPusher = Map.GetLocalPos(entity.tr.position);
-            var posEntityPush = Map.GetLocalPos(gameObject.transform.position);
+			var posEntityPusher = GameData.currentState.map.ToLocalPos(entity.tr.position);
+			var posEntityPush = GameData.currentState.map.ToLocalPos(gameObject.transform.position);
 
             if (posEntityPush.x != posEntityPusher.x &&
                 posEntityPush.y == posEntityPusher.y &&
                 posEntityPush.y == posEntityPusher.y) {
                 var tmp = posEntityPusher.x > posEntityPush.x ? -_strongOfPush : _strongOfPush;
                 GameData.currentState.map.GetEntity(posEntityPush)
-                    .Move(Map.GetLocalPos(new Vector3(posEntityPush.x + tmp, posEntityPush.y, posEntityPush.z)));
+					.Move(GameData.currentState.map.ToLocalPos(new Vector3(posEntityPush.x + tmp, posEntityPush.y, posEntityPush.z)));
             } else if (posEntityPush.x == posEntityPusher.x &&
                        posEntityPush.y != posEntityPusher.y &&
                        posEntityPush.y == posEntityPusher.y) {
                 var tmp = posEntityPusher.y > posEntityPush.y ? -_strongOfPush : _strongOfPush;
                 GameData.currentState.map.GetEntity(posEntityPush)
-                    .Move(Map.GetLocalPos(new Vector3(posEntityPush.x, posEntityPush.y + tmp, posEntityPush.z)));
+					.Move(GameData.currentState.map.ToLocalPos(new Vector3(posEntityPush.x, posEntityPush.y + tmp, posEntityPush.z)));
             } else if (posEntityPush.x == posEntityPusher.x &&
                        posEntityPush.y == posEntityPusher.y &&
                        posEntityPush.y != posEntityPusher.y) {
                 var tmp = posEntityPusher.z > posEntityPush.z ? -_strongOfPush : _strongOfPush;
                 GameData.currentState.map.GetEntity(posEntityPush)
-                    .Move(Map.GetLocalPos(new Vector3(posEntityPush.x, posEntityPush.y, posEntityPush.z + tmp)));
+					.Move(GameData.currentState.map.ToLocalPos(new Vector3(posEntityPush.x, posEntityPush.y, posEntityPush.z + tmp)));
             } else {
 				Debug.Log("Error in EntPropertyPushable : Can't push");
             }
