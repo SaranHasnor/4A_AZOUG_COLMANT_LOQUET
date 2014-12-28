@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 
 public class Map
@@ -11,7 +10,7 @@ public class Map
 	private float _blockSize;
 	public float blockSize
 	{
-		get{ return _blockSize; }
+		get { return _blockSize; }
 		set { _blockSize = value; }
 	}
 
@@ -25,17 +24,17 @@ public class Map
 	private int _height;
 	public int height
 	{
-		get{ return _height; }
+		get { return _height; }
 		set { _height = value; }
 	}
 
 	private int _depth;
 	public int depth
 	{
-		get{ return _depth; }
+		get { return _depth; }
 		set { _depth = value; }
 	}
-	
+
 	public Map(int width, int height, int depth, float blockSize)
 	{
 		_width = width;
@@ -44,30 +43,28 @@ public class Map
 		_blockSize = blockSize;
 
 		_entities = new Dictionary<MapPosition, MapEntity>(width * height * depth);
-		for(var i = 0 ; i < width ; ++i)
-		{
-			for(var j = 0 ; j < height ; ++j)
-			{
-				for(var k = 0 ; j < depth ; ++j)
-				{
-					_entities[new MapPosition(i, j, k)] = null;
-				}
-			}
-		}
 	}
 
-	public int SetEntity(GameObject go, MapPosition pos)
+	public int AddEntity(MapEntity me, MapPosition pos = null)
 	{
-		if(!_entities.ContainsKey(pos)) return -1;
-		_entities[pos] = go.GetComponent<MapEntity>();
+		var newPos = pos ?? me.localPosition;
+		if(_entities.ContainsValue(me))
+			throw new Exception("Entity Already in current context");
+		if(pos == null || !IsValidPosition(newPos))
+			throw new Exception("Invalid position");
+		// TODO : envoyer l'evement de creation
+		_entities[newPos] = me;
 		return 0;
 	}
-	public int SetEntity(MapEntity me, MapPosition pos)
+
+	public void RemoveEntity(MapPosition pos)
 	{
-		if(!_entities.ContainsKey(pos)) return -1;
-		_entities[pos] = me;
-		return 0;
+		if(_entities.ContainsKey(pos))
+			_entities[pos] = null; // TODO : envoyer  l'évenement de destruction
+		else
+			throw new Exception("Entity doesn't exist in current context");
 	}
+
 	public MapEntity GetEntity(Vector3 pos)
 	{
 		return GetEntity(ToLocalPos(pos));
@@ -94,36 +91,30 @@ public class Map
 			return null;
 		}
 	}
-	public List<MapEntity> GetNeighbours(MapPosition pos)
-	{
-		var me = new List<MapEntity>(6)
-        {
-             GetNear(pos, MapDirection.left)
-            ,GetNear(pos, MapDirection.right)
-            ,GetNear(pos, MapDirection.up)
-            ,GetNear(pos, MapDirection.down)
-            ,GetNear(pos, MapDirection.forward)
-            ,GetNear(pos, MapDirection.back)
-        };
-		return me;
-	}
-	public MapEntity GetNear(MapPosition pos, MapDirection dir)
+	public MapEntity GetNeighbour(MapEntity entity, MapDirection direction)
 	{
 		try
 		{
-			return _entities[new MapPosition(pos + dir)];
+			return _entities[(entity.localPosition + direction)];
 		}
 		catch(Exception)
 		{
 			return null;
 		}
+	}
+	//TODO : utile ?
+	//public Dictionary<MapPosition, MapEntity> GetAllNeighbour(MapEntity entity)
+	//{
+	//	var me = new Dictionary<MapPosition, MapEntity>(6);
+	//	me[MapDirection.left]		= GetNeighbour(entity, MapDirection.left);
+	//	me[MapDirection.right]		= GetNeighbour(entity, MapDirection.right);
+	//	me[MapDirection.up]			= GetNeighbour(entity, MapDirection.up);
+	//	me[MapDirection.down]		= GetNeighbour(entity, MapDirection.down);
+	//	me[MapDirection.forward]	= GetNeighbour(entity, MapDirection.forward);
+	//	me[MapDirection.back]		= GetNeighbour(entity, MapDirection.back);
+	//	return me;
+	//}
 
-	}
-	public void RemoveEntity(MapPosition pos)
-	{
-		if(_entities.ContainsKey(pos)) //TODO : gerer le cas contraire ?
-			_entities[pos] = null;
-	}
 	public MapPosition ToLocalPos(Vector3 pos)
 	{
 		return new MapPosition((int)(pos.x / _width), (int)(pos.y / _height), (int)(pos.z / _depth));
@@ -134,11 +125,16 @@ public class Map
 		return new Vector3(localPos.x * _width, localPos.y * _height, localPos.z * _depth);
 	}
 
+	private bool IsValidPosition(MapPosition pos)
+	{
+		return (pos.x <= width && pos.y <= height && pos.z <= depth);
+	}
+
 	public int TeleportEntity(MapEntity me, MapPosition pos)
 	{
-		if (!_entities.ContainsKey(pos) || GetEntity(pos) != null) return -1;
+		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return -1;
 		RemoveEntity(ToLocalPos(me.tr.position));
-		SetEntity(me, pos);
+		AddEntity(me, pos);
 		me.tr.position = ToWorldPos(pos);
 		return 0;
 	}
@@ -149,7 +145,7 @@ public class Map
 		var currentPos = ToLocalPos(me.tr.position);
 		if(entLocalPos.x != pos.x) //TODO : adapter aux déplacements "complexes" ?! 
 		{
-			for(var i = entLocalPos.x ; i < pos.x ; i += (int)_width)
+			for(var i = entLocalPos.x ; i < pos.x ; i += _width)
 			{
 				var nextPos = new MapPosition(i, entLocalPos.y, entLocalPos.z);
 				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
@@ -160,7 +156,7 @@ public class Map
 		}
 		else if(entLocalPos.y != pos.y)
 		{
-			for(var i = entLocalPos.y ; i < pos.y ; i += (int)_height)
+			for(var i = entLocalPos.y ; i < pos.y ; i += _height)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, i, entLocalPos.z);
 				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
@@ -171,7 +167,7 @@ public class Map
 		}
 		else if(entLocalPos.z != pos.z)
 		{
-			for(var i = entLocalPos.z ; i < pos.z ; i += (int)_depth)
+			for(var i = entLocalPos.z ; i < pos.z ; i += _depth)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, entLocalPos.y, i);
 				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
@@ -182,7 +178,7 @@ public class Map
 		}
 		if(currentPos == entLocalPos) return -1;
 		RemoveEntity(entLocalPos);
-		SetEntity(me, currentPos);
+		AddEntity(me, currentPos);
 		me.transform.Translate(ToWorldPos(currentPos));
 		return 0;
 	}

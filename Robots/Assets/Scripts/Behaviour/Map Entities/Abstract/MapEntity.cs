@@ -55,6 +55,15 @@ public abstract class MapEntity : MonoBehaviour
 		}
 	}
 
+	private MapPosition _localPosition;
+	public MapPosition localPosition
+	{
+		get
+		{
+			return _localPosition;
+		}
+	}
+
 	protected void InitializeMapEntity(Team team = Team.None, string id = null)
 	{
 		_properties = _logic.GetComponents<EntProperty>();
