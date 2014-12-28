@@ -10,12 +10,12 @@ public class Map
 	public const float _size = 1f;
 	public Map()
 	{
-		_entities = new Dictionary<MapPosition, MapEntity>((int)Mathf.Pow(_size, 3));
-		for (var i = 0; i < _size; ++i)
+		_entities = new Dictionary<MapPosition, MapEntity>((int)Mathf.Pow(_limit, 3));
+		for(var i = 0 ; i < _limit ; ++i)
 		{
-			for(var j = 0 ; j < _size ; ++j)
+			for(var j = 0 ; j < _limit ; ++j)
 			{
-				for(var k = 0 ; j < _size ; ++j)
+				for(var k = 0 ; j < _limit ; ++j)
 				{
 					_entities[new MapPosition(i, j, k)] = null;
 				}
@@ -25,41 +25,36 @@ public class Map
 
 	public int SetEntity(GameObject go, MapPosition pos)
 	{
-		if(IsOnLimit(pos) == 0)
-		{
-			_entities[pos] = go.GetComponent<MapEntity>();
-			return 0;
-		}
-		else
-			return -1;
+		if(!_entities.ContainsKey(pos)) return -1;
+		_entities[pos] = go.GetComponent<MapEntity>();
+		return 0;
 	}
 	public int SetEntity(MapEntity me, MapPosition pos)
 	{
-		if(IsOnLimit(pos) == 0)
-		{
-			_entities[pos] = me;
-			return 0;
-		}
-		else
-			return -1;
+		if(!_entities.ContainsKey(pos)) return -1;
+		_entities[pos] = me;
+		return 0;
 	}
 	public MapEntity GetEntity(Vector3 pos)
 	{
 		return GetEntity(GetLocalPos(pos));
 	}
-	public MapEntity GetEntity(MapPosition pos) {
-		try {
+	public MapEntity GetEntity(MapPosition pos)
+	{
+		try
+		{
 			return _entities[pos];
-		} catch (Exception) {
+		}
+		catch(Exception)
+		{
 			return null;
 		}
 	}
 	public MapEntity GetEntity(MapEntity me)
 	{
-		var index = GetLocalPos(me.transform.position); //TODO : creer variable dans mapEntity ? 
 		try
 		{
-			return _entities[index];
+			return _entities[GetLocalPos(me.transform.position)];
 		}
 		catch(Exception)
 		{
@@ -81,7 +76,6 @@ public class Map
 	}
 	public MapEntity GetNear(MapPosition pos, MapDirection dir)
 	{
-		
 		try
 		{
 			return _entities[new MapPosition(pos + dir)];
@@ -94,7 +88,8 @@ public class Map
 	}
 	public void RemoveEntity(MapPosition pos)
 	{
-		_entities[pos] = null;
+		if(_entities.ContainsKey(pos)) //TODO : gerer le cas contraire ?
+			_entities[pos] = null;
 	}
 	public static MapPosition GetLocalPos(Vector3 pos)
 	{
@@ -105,35 +100,26 @@ public class Map
 	{
 		return new Vector3(localPos.x * _size, localPos.y * _size, localPos.z * _size);
 	}
-	public static int IsOnLimit(MapPosition index)
-	{
-		if(index.x > _limit || index.x < 0 || index.y > _limit || index.y < 0 || index.z > _limit || index.z < 0)
-			return -1;
-		return 0;
-	}
 
 	public int TeleportEntity(MapEntity me, MapPosition pos)
 	{
-		if(IsOnLimit(pos) == 0 && GetEntity(pos) == null)
-		{
-			RemoveEntity(GetLocalPos(me.tr.position));
-			SetEntity(me, pos);
-			me.tr.position = GetWorldPos(pos);
-			return 0;
-		}
-		return -1;
+		if (!_entities.ContainsKey(pos) || GetEntity(pos) != null) return -1;
+		RemoveEntity(GetLocalPos(me.tr.position));
+		SetEntity(me, pos);
+		me.tr.position = GetWorldPos(pos);
+		return 0;
 	}
 
 	public int MoveEntity(MapEntity me, MapPosition pos)
 	{
 		var entLocalPos = GetLocalPos(me.tr.position);
 		var currentPos = GetLocalPos(me.tr.position);
-		if(entLocalPos.x != pos.x)
+		if(entLocalPos.x != pos.x) //TODO : adapter aux déplacements "complexes" ?! 
 		{
 			for(var i = entLocalPos.x ; i < pos.x ; i += (int)_size)
 			{
 				var nextPos = new MapPosition(i, entLocalPos.y, entLocalPos.z);
-				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+				if(_entities.ContainsKey(nextPos) && GetEntity(GetWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -144,7 +130,7 @@ public class Map
 			for(var i = entLocalPos.y ; i < pos.y ; i += (int)_size)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, i, entLocalPos.z);
-				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+				if(_entities.ContainsKey(nextPos) && GetEntity(GetWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -155,19 +141,16 @@ public class Map
 			for(var i = entLocalPos.z ; i < pos.z ; i += (int)_size)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, entLocalPos.y, i);
-				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+				if(_entities.ContainsKey(nextPos) && GetEntity(GetWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
 			}
 		}
-		if(currentPos != entLocalPos)
-		{
-			RemoveEntity(entLocalPos);
-			SetEntity(me, currentPos);
-			me.transform.Translate(GetWorldPos(currentPos));
-			return 0;
-		}
-		return -1;
+		if(currentPos == entLocalPos) return -1;
+		RemoveEntity(entLocalPos);
+		SetEntity(me, currentPos);
+		me.transform.Translate(GetWorldPos(currentPos));
+		return 0;
 	}
 }
