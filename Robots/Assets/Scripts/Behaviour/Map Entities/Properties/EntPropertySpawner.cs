@@ -12,8 +12,8 @@ public class EntPropertySpawner : EntProperty {
 
 	private static uint _sinceLastSpawn = 0;
 
-	protected override void _Interact(EntityEvent action, MapEntity entity) {
-		if (action == EntityEvent.Spawn || action == EntityEvent.Turn && _numberSpawn > 0) {
+	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
+		if (actionType == EntityEvent.Spawn || actionType == EntityEvent.Turn && _numberSpawn > 0) {
 			GameObject go = (GameObject)GameObject.Instantiate(GameData.instantiateManager.robotPrefab, _position, Quaternion.identity);
 			RobotScript script = go.GetComponent<RobotScript>();
 			// Initialize it please ;_;

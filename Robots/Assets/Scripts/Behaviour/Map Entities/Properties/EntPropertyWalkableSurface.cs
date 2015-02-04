@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 
-public class EntPropertyDestructible : EntProperty {
+public class EntPropertyWalkableSurface : EntProperty {
 	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
-		if (actionType == EntityEvent.Destroy) {
+		if (actionType == EntityEvent.StepOn) {
 			GameData.currentState.map.GetEntity(entity).Destroy();
-        }
-    }
+		} else if (actionType == EntityEvent.StepOff) {
+			
+		}
+	}
 }

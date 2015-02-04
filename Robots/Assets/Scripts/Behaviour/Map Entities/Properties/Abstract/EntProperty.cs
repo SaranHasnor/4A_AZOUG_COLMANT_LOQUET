@@ -8,15 +8,12 @@ public enum EntityEvent : int
 	Fall,
 	Resize,
 	Rotate,
-	Solid,
-	Stick,
 	Spawn,
-	Exit,
 	Teleport,
-
-	CollisionEnter,
-	CollisionStay,
-	CollisionExit,
+	Collide,
+	StepOn,
+	StepOff,
+	Push,
 	Turn
 };
 

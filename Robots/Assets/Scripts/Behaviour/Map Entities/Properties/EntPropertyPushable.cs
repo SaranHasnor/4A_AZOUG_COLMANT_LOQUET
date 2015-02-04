@@ -4,8 +4,8 @@ public class EntPropertyPushable : EntProperty {
     [SerializeField]
     private int _strongOfPush = 1;
 
-    protected override void _Interact(EntityEvent action, MapEntity entity) {
-        if (action == EntityEvent.Move) {
+	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
+		if (actionType == EntityEvent.Move) {
 			var posEntityPusher = GameData.currentState.map.ToLocalPos(entity.tr.position);
 			var posEntityPush = GameData.currentState.map.ToLocalPos(gameObject.transform.position);
 
