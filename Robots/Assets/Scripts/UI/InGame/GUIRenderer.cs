@@ -24,7 +24,7 @@ public class GUIRenderer : MonoBehaviour
 	{
 		if (_selectedEntity != null)
 		{
-			DrawActionTimeLine(_selectedEntity.actions, new Rect(0.0f, 0.7f * Screen.height, Screen.width, 0.3f * Screen.height));
+			DrawActionTimeLine(_selectedEntity.actionQueue.actions, new Rect(0.0f, 0.7f * Screen.height, Screen.width, 0.3f * Screen.height));
 			if (_selectedActionIndex != -1)
 			{
 				DrawActionList(new Rect());

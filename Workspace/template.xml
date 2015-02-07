@@ -73,8 +73,9 @@
 		<block id="75"	type="staticblock"	position="(12,1,3)"/>
 		<block id="76"	type="staticblock"	position="(12,1,4)"/>
 		<block id="77"	type="exit"			position="(15,1,2)"/>
-		
-		<robot id="caca"	team="1" position="(0,1,5)">
+	</map>
+	<actions>
+		<entity id="robot_0_1">
 			<action class="EntityActionMove" position="(0,1,4)"/>
 			<action class="EntityActionPush" target="31"/>
 			<action class="EntityActionMove" position="(0,1,3)"/>
@@ -88,10 +89,6 @@
 			<action class="EntityActionMove" position="(12,1,2)"/>
 			<action class="EntityActionMove" position="(13,1,2)"/>
 			<action class="EntityActionMove" position="(14,1,2)"/>
-			
-		</robot>
-	</map>
-	<actions>
-		
+		</entity>
 	</actions>
 </gamestate>

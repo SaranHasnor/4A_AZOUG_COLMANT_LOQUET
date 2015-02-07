@@ -4,50 +4,45 @@ using System.Collections.Generic;
 
 public abstract class RunnableEntity : MapEntity
 { // Describes an entity that should be run by the TimeMaster every turn
-	protected ActionQueue _queue;
-
-	public List<EntityAction> actions
-	{
+	
+	public ActionQueue actionQueue
+	{ // For convinience I guess (I don't really like making this public because it can be modified, but we don't filter access to GameData so it doesn't matter anyway)
 		get
 		{
-			return _queue.actions;
+			return GameData.currentState.actions[this.id];
 		}
 	}
 
-	protected void InitializeRunnableEntity(/*Team team = Team.None, string id = null, */ActionQueue actionQueue = null)
+	protected void InitializeRunnableEntity()
 	{
-		/*base.InitializeMapEntity(team, id);*/
-
-		this._queue = actionQueue ?? new ActionQueue();
-
 		// Notify the Time Master of our existence so he can manage our action queue
 		GameData.timeMaster.RegisterEntity(this);
 	}
 
 	public EntityActionResult RunNextAction()
 	{
-		return _queue.Run();
+		return this.actionQueue.Run();
 	}
 
 	public void StopCurrentAction()
-	{
+	{ // In case it's pending, etc.
 
 	}
 
 	public void MoveToTime(int time, bool relative = false)
 	{
-		_queue.SetCursor(time, relative);
+		this.actionQueue.SetCursor(time, relative);
 
 		// TODO: Find out where we would be at this time
 	}
 
 	public EntityAction ActionAtTime(int time = -1)
 	{
-		return _queue.GetAction(time);
+		return this.actionQueue.GetAction(time);
 	}
 
 	public void SetAction(EntityAction action, int time = -1)
 	{
-		_queue.SetAction(action, time);
+		this.actionQueue.SetAction(action, time);
 	}
 }

@@ -8,7 +8,7 @@ public class EntPropertyExit : EntProperty {
 		if (action == EntityEvent.Exit || action == EntityEvent.CollisionEnter) {
 			entity.Destroy();
 			--_necessaryNbOfBot;
-			GameData.gameMaster.SetExitBot();
+			GameData.gameMaster.OnBotExit();
 			if (_necessaryNbOfBot <= 0) {
 				// Porte completed.
 				RemoveListener(_owner);

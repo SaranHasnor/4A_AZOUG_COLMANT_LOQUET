@@ -60,7 +60,6 @@ public class TimeMaster : MonoBehaviour
 
 	private void RunActions()
 	{
-		//foreach (RunnableEntity entity in _entities)
 		foreach (MapEntity entity in GameData.currentState.entities.Values)
 		{
 			if (entity is RunnableEntity)

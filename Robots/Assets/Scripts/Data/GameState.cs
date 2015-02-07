@@ -72,6 +72,15 @@ public class GameState
 			newState._entities.Add(newEntity.id, newEntity);
 		}
 
+		XmlNode actionQueuesNode = doc.DocumentElement.SelectSingleNode("/gamestate/actions");
+
+		foreach (XmlNode actionQueueNode in actionQueuesNode.ChildNodes)
+		{
+			ActionQueue newActionQueue = ActionQueue.CreateFromXmlNode(actionQueueNode); ;
+
+			newState._actions.Add(actionQueueNode.Attributes["id"].Value, newActionQueue);
+		}
+
 		return newState;
 	}
 
