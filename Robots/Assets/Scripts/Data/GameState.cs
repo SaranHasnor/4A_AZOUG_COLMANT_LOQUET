@@ -64,9 +64,8 @@ public class GameState
 			{
 				newEntity = RobotScript.CreateFromXmlNode(entityNode);
 			}
-			else
-			{
-				throw new System.Exception("aaaaaaaah");
+			else {
+				throw new System.ArgumentException(System.String.Format("L'information inatendu {0}, c'est produit dans CreateFromXmlDocument.", entityNode.Name));
 			}
 
 			newState._map.AddEntity(newEntity, GameData.currentState.map.ToLocalPos(newEntity.tr.position));

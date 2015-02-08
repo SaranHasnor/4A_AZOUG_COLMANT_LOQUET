@@ -69,6 +69,7 @@ public class Map
 	{
 		return GetEntity(ToLocalPos(pos));
 	}
+
 	public MapEntity GetEntity(MapPosition pos)
 	{
 		try
@@ -102,18 +103,17 @@ public class Map
 			return null;
 		}
 	}
-	//TODO : utile ?
-	//public Dictionary<MapPosition, MapEntity> GetAllNeighbour(MapEntity entity)
-	//{
-	//	var me = new Dictionary<MapPosition, MapEntity>(6);
-	//	me[MapDirection.left]		= GetNeighbour(entity, MapDirection.left);
-	//	me[MapDirection.right]		= GetNeighbour(entity, MapDirection.right);
-	//	me[MapDirection.up]			= GetNeighbour(entity, MapDirection.up);
-	//	me[MapDirection.down]		= GetNeighbour(entity, MapDirection.down);
-	//	me[MapDirection.forward]	= GetNeighbour(entity, MapDirection.forward);
-	//	me[MapDirection.back]		= GetNeighbour(entity, MapDirection.back);
-	//	return me;
-	//}
+
+	public Dictionary<MapPosition, MapEntity> GetAllNeighbour(MapEntity entity) {
+		var me = new Dictionary<MapPosition, MapEntity>(6);
+		me[MapDirection.left] = GetNeighbour(entity, MapDirection.left);
+		me[MapDirection.right] = GetNeighbour(entity, MapDirection.right);
+		me[MapDirection.up] = GetNeighbour(entity, MapDirection.up);
+		me[MapDirection.down] = GetNeighbour(entity, MapDirection.down);
+		me[MapDirection.forward] = GetNeighbour(entity, MapDirection.forward);
+		me[MapDirection.back] = GetNeighbour(entity, MapDirection.back);
+		return me;
+	}
 
 	public MapPosition ToLocalPos(Vector3 pos)
 	{
@@ -176,6 +176,7 @@ public class Map
 					break;
 			}
 		}
+
 		if(currentPos == entLocalPos) return -1;
 		RemoveEntity(entLocalPos);
 		AddEntity(me, currentPos);

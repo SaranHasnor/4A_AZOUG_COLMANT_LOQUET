@@ -18,8 +18,7 @@ public class EntPropertySpawner : EntProperty {
 			RobotScript script = go.GetComponent<RobotScript>();
 			// Initialize it please ;_;
 
-			if(_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(script, GameData.currentState.map.ToLocalPos(_position)) == 0)
-			{
+			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(script, GameData.currentState.map.ToLocalPos(_position)) == 0) {
 				--_numberSpawn;
 				_sinceLastSpawn = 0;
 			} else {

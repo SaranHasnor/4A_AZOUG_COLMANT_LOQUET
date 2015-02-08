@@ -16,9 +16,9 @@ public class GameMaster : MonoBehaviour {
 		_allNbOfBot = 0;
 		_allNbOfDeath = 0;
 		
-		/*foreach (var property in MapEntity.entities.GetEnumerator().Current.Value.GetComponents<EntPropertySpawner>()) {
-			_allNbOfBot += property.GetNbSpawn();
-		}*/
+		//foreach (var property in MapEntity.entities.GetEnumerator().Current.Value.GetComponents<EntPropertySpawner>()) {
+		//	_allNbOfBot += property.GetNbSpawn();
+		//}
 	}
 
 	public void CheckTurn(int turn) {
