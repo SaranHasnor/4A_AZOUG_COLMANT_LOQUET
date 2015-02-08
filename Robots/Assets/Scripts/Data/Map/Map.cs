@@ -61,13 +61,15 @@ public class Map
 		return true;
 	}
 
-	public void RemoveEntity(MapEntity me)
+	public bool RemoveEntity(MapEntity me)
 	{
 		if (_entities.ContainsValue(me))
 		{
 			me.Interact(EntityEvent.Destroy, me);
 			_entities[me.localPosition] = null;
+			return true;
 		}
+		return false;
 	}
 
 	public MapEntity GetEntity(Vector3 pos)
