@@ -188,24 +188,24 @@ public class Map
 	}
 
 	/// <summary>
-	///		Allows to verify the possibility of moving an entity to a given position and
-	///		returns the last possibly ateignable possition.
+	///		Moves an entity in a given position and returns the distance traveled.
 	/// </summary>
 	/// <param name="entity">Is the entity that can be moved.</param>
 	/// <param name="pos">This is the position that we want to achieve.</param>
-	/// <returns>Returns</returns>
-	public int MoveEntity(MapEntity me, MapPosition pos) {
-		var entLocalPos = ToLocalPos(me.tr.position);
+	/// <returns>Returns the distance traveled or -1 if an error occurred.</returns>
+	public int MoveEntity(MapEntity entity, MapPosition pos) {
+		var entLocalPos = ToLocalPos(entity.tr.position);
 		if (pos.Equals(entLocalPos)) return 0;
 
-		var nextPos = CanMoveEntity(me, pos);
+		var nextPos = CanMoveEntity(entity, pos);
 		if (nextPos.Equals(entLocalPos)) return 0;
 
-		RemoveEntity(GetEntity(entLocalPos));
-		_entities[nextPos] = me;
-		me.localPosition = nextPos;
-		me.transform.Translate(ToWorldPos(nextPos));
-		me.Interact(EntityEvent.Move, me);
+		if (RemoveEntity(GetEntity(entLocalPos))) return -1;
+
+		_entities[nextPos] = entity;
+		entity.localPosition = nextPos;
+		entity.transform.Translate(ToWorldPos(nextPos));
+		entity.Interact(EntityEvent.Move, entity);
 
 		return Math.Abs(nextPos.x.Equals(entLocalPos.x)
 			? nextPos.y.Equals(entLocalPos.y)
