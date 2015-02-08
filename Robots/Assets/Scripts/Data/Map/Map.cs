@@ -48,28 +48,30 @@ public class Map
 	public int AddEntity(MapEntity me, MapPosition pos = null)
 	{
 		var newPos = pos ?? me.localPosition;
-		if(_entities.ContainsValue(me))
-			throw new Exception("Entity Already in current context");
-		if(pos == null || !IsValidPosition(newPos))
-			throw new Exception("Invalid position");
-		// TODO : envoyer l'evement de creation
+		if (_entities.ContainsValue(me))
+			return -1;
+		if (pos == null || !IsValidPosition(newPos))
+			return -1;
+		me.Interact(EntityEvent.Create, me);
 		_entities[newPos] = me;
 		return 0;
 	}
 
 	public void RemoveEntity(MapPosition pos)
 	{
-		if(_entities.ContainsKey(pos))
-			_entities[pos] = null; // TODO : envoyer  l'évenement de destruction
-		else
-			throw new Exception("Entity doesn't exist in current context");
+		if (_entities.ContainsKey(pos))
+		{
+			_entities[pos].Interact(EntityEvent.Destroy, _entities[pos]);
+			_entities[pos] = null;
+		}
+		//else
+		//	throw new Exception("Entity doesn't exist in current context");
 	}
 
 	public MapEntity GetEntity(Vector3 pos)
 	{
 		return GetEntity(ToLocalPos(pos));
 	}
-
 	public MapEntity GetEntity(MapPosition pos)
 	{
 		try
@@ -103,15 +105,15 @@ public class Map
 			return null;
 		}
 	}
-
-	public Dictionary<MapPosition, MapEntity> GetAllNeighbour(MapEntity entity) {
+	public Dictionary<MapPosition, MapEntity> GetAllNeighbour(MapEntity entity)
+	{
 		var me = new Dictionary<MapPosition, MapEntity>(6);
-		me[MapDirection.left] = GetNeighbour(entity, MapDirection.left);
-		me[MapDirection.right] = GetNeighbour(entity, MapDirection.right);
-		me[MapDirection.up] = GetNeighbour(entity, MapDirection.up);
-		me[MapDirection.down] = GetNeighbour(entity, MapDirection.down);
-		me[MapDirection.forward] = GetNeighbour(entity, MapDirection.forward);
-		me[MapDirection.back] = GetNeighbour(entity, MapDirection.back);
+		me[MapDirection.left]		= GetNeighbour(entity, MapDirection.left);
+		me[MapDirection.right]		= GetNeighbour(entity, MapDirection.right);
+		me[MapDirection.up]			= GetNeighbour(entity, MapDirection.up);
+		me[MapDirection.down]		= GetNeighbour(entity, MapDirection.down);
+		me[MapDirection.forward]	= GetNeighbour(entity, MapDirection.forward);
+		me[MapDirection.back]		= GetNeighbour(entity, MapDirection.back);
 		return me;
 	}
 
@@ -143,7 +145,7 @@ public class Map
 	{
 		var entLocalPos = ToLocalPos(me.tr.position);
 		var currentPos = ToLocalPos(me.tr.position);
-		if(entLocalPos.x != pos.x) //TODO : adapter aux déplacements "complexes" ?! 
+		if(entLocalPos.x != pos.x)
 		{
 			for(var i = entLocalPos.x ; i < pos.x ; i += _width)
 			{
@@ -176,11 +178,11 @@ public class Map
 					break;
 			}
 		}
-
 		if(currentPos == entLocalPos) return -1;
 		RemoveEntity(entLocalPos);
 		AddEntity(me, currentPos);
 		me.transform.Translate(ToWorldPos(currentPos));
+		me.Interact(EntityEvent.Move, me);
 		return 0;
 	}
 }

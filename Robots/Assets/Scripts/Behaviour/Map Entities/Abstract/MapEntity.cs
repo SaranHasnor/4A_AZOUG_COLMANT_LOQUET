@@ -46,15 +46,6 @@ public abstract class MapEntity : MonoBehaviour
 		}
 	}
 
-	private Team _team;
-	public Team team
-	{
-		get
-		{
-			return _team;
-		}
-	}
-
 	private MapPosition _localPosition;
 	public MapPosition localPosition
 	{
@@ -64,7 +55,33 @@ public abstract class MapEntity : MonoBehaviour
 		}
 	}
 
-	protected void InitializeMapEntity(Team team = Team.None, string id = null)
+	private Team _team;
+	public Team team
+	{
+		get
+		{
+			return _team;
+		}
+		set
+		{
+			if (_team == Team.None)
+			{ // You can join a team if you don't have any, but you can't switch team afterwards
+				_team = value;
+			}
+		}
+	}
+
+	public static Team StringToTeam(string str)
+	{
+		if (str.Equals("1"))
+			return Team.Player1;
+		if (str.Equals("2"))
+			return Team.Player2;
+
+		return Team.None;
+	}
+
+	protected void InitializeMapEntity(string id = null)
 	{
 		_properties = _logic.GetComponents<EntProperty>();
 		foreach(var property in _properties)
@@ -73,7 +90,6 @@ public abstract class MapEntity : MonoBehaviour
 		}
 
 		_id = id ?? GameData.currentState.entities.Count.ToString();
-		_team = team;
 	}
 
 	public void Interact(EntityEvent action, MapEntity entity)

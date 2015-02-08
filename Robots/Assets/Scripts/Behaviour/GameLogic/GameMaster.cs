@@ -1,43 +1,67 @@
 ﻿using UnityEngine;
 
-public class GameMaster : MonoBehaviour {
-	private int _nbTurnMax;
+public class GameMaster : MonoBehaviour
+{
+	private int _maxTurns;
 
-	private uint _necessaryNbOfBot;
-	private uint _nbOfBotExit;
-	private uint _allNbOfBot;
-	private uint _allNbOfDeath;
+	private uint _robotGoalCount;
+	private uint _robotExitCount;
+	private uint _robotTotalCount;
+	private uint _robotDeadCount;
 
-	void Start() {
+	void Start()
+	{
 		GameData.gameMaster = this;
-		//GameData.currentState = new GameState();
-		// Init
-		_nbOfBotExit = 0;
-		_allNbOfBot = 0;
-		_allNbOfDeath = 0;
-		
-		//foreach (var property in MapEntity.entities.GetEnumerator().Current.Value.GetComponents<EntPropertySpawner>()) {
-		//	_allNbOfBot += property.GetNbSpawn();
-		//}
 	}
 
-	public void CheckTurn(int turn) {
-		if (turn >= _nbTurnMax && _nbTurnMax != -1) {
+	public void DidLoadMap()
+	{ // Notifies the game master that a new map has been loaded
+		foreach (MapEntity entity in GameData.currentState.entities.Values)
+		{
+			foreach (EntProperty property in entity.properties)
+			{
+				if (property is EntPropertySpawner)
+				{
+					EntPropertySpawner spawner = property as EntPropertySpawner;
+
+					uint count = spawner.GetNbSpawn();
+					string prefix = "robot_" + spawner.owner.id + "_";
+
+					for (uint i = 0; i < count; i++)
+					{
+						string id = prefix + count;
+						GameData.instantiateManager.SpawnRobot(spawner.owner.team, id);
+					}
+
+					_robotGoalCount += count;
+				}
+			}
+		}
+	}
+
+	public void CheckTurn(int turn)
+	{
+		if (turn >= _maxTurns && _maxTurns != -1)
+		{
 			// TODO : End Lose
 		}
 	}
 
-	public void SetExitBot() {
-		_nbOfBotExit++;
-		if (_nbOfBotExit >= _nbTurnMax) {
+	public void OnBotExit()
+	{
+		_robotExitCount++;
+		if (_robotExitCount >= _maxTurns)
+		{
 			// TODO : End Win
 		}
 	}
 
 	// TODO: use it
-	public void SetDeathBot() {
-		_allNbOfDeath++;
-		if (_allNbOfBot - _allNbOfDeath <= _necessaryNbOfBot - _nbOfBotExit) {
+	public void OnBotDeath()
+	{
+		_robotDeadCount++;
+		if (_robotTotalCount - _robotDeadCount <= _robotGoalCount - _robotExitCount)
+		{
 			// TODO : End Lose
 		}
 	}

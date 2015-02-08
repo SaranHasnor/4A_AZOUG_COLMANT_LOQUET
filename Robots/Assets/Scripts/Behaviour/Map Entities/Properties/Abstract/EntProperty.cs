@@ -32,6 +32,13 @@ public enum EntityEvent : int {
 /// </summary>
 public abstract class EntProperty : MonoBehaviour {
 	protected MapEntity _owner;
+	public MapEntity owner
+	{
+		get
+		{
+			return _owner;
+		}
+	}
 
 	protected abstract void _Interact(EntityEvent actionType, MapEntity entity);
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Xml;
+<<<<<<< HEAD
 using System.Linq;
 
 public class BlockScript : MapEntity {
@@ -7,16 +8,26 @@ public class BlockScript : MapEntity {
 	// Maybe we could also have blocks take actions at specific turns, but I'd like this to be a property instead
 
 	public static BlockScript CreateFromXmlNode(XmlNode node) {
+=======
+using System.Collections.Generic;
+
+public class BlockScript : MapEntity
+{
+	public static BlockScript CreateFromXmlNode(XmlNode node)
+	{ // TODO: Move some of this to the instantiate manager
+>>>>>>> origin/UpgradeEvent
 		GameObject block = (GameObject)GameObject.Instantiate(GameData.instantiateManager.BlockPrefabForType(node.Attributes["type"].Value)
 																, GameData.currentState.map.ToWorldPos(MapPosition.FromString(node.Attributes["position"].Value))
 																, Quaternion.identity);
 		BlockScript script = block.GetComponent<BlockScript>();
-		if (node.Attributes["team"] != null) {
-			Team t = node.Attributes["team"].Value == "1" ? Team.Player1 : Team.Player2;
-			script.InitializeMapEntity(t, node.Attributes["id"].Value);
-		} else
-			script.InitializeMapEntity(Team.None, node.Attributes["id"].Value);
-
+		
+		script.InitializeMapEntity(node.Attributes["id"].Value);
+		
+		if (node.Attributes["team"] != null)
+		{
+			script.team = MapEntity.StringToTeam(node.Attributes["team"].Value);
+		}
+		
 		// Read any property arguments
 		foreach (XmlNode propertyNode in node.ChildNodes) {
 			foreach (var property in script.properties) {

@@ -13,13 +13,18 @@ public class GameStateLoader : MonoBehaviour
 		LoadTextAsset(_template);
 	}
 
+	public void LoadFromXmlDocument(XmlDocument doc)
+	{
+		GameData.currentState = GameState.CreateFromXmlDocument(doc);
+		GameData.gameMaster.DidLoadMap();
+	}
+
 	public void LoadTextAsset(TextAsset asset)
 	{
 		var doc = new XmlDocument();
 		doc.LoadXml(_template.text);
 
-		GameState newState = GameState.CreateFromXmlDocument(doc);
-		GameData.currentState = newState;
+		this.LoadFromXmlDocument(doc);
 	}
 
 	public void LoadFile(string filePath)
@@ -33,7 +38,6 @@ public class GameStateLoader : MonoBehaviour
 		var doc = new XmlDocument();
 		doc.Load(filePath);
 
-		GameState newState = GameState.CreateFromXmlDocument(doc);
-		GameData.currentState = newState;
+		this.LoadFromXmlDocument(doc);
 	}
 }
