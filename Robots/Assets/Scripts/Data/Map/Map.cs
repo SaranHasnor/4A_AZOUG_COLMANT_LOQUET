@@ -121,12 +121,12 @@ public class Map
 
 	public MapPosition ToLocalPos(Vector3 pos)
 	{
-		return new MapPosition((int)(pos.x / _width), (int)(pos.y / _height), (int)(pos.z / _depth));
+		return new MapPosition((int)(pos.x / blockSize), (int)(pos.y / blockSize), (int)(pos.z / blockSize));
 	}
 
 	public Vector3 ToWorldPos(MapPosition localPos)
 	{
-		return new Vector3(localPos.x * _width, localPos.y * _height, localPos.z * _depth);
+		return new Vector3(localPos.x * blockSize, localPos.y * blockSize, localPos.z * blockSize);
 	}
 
 	private bool IsValidPosition(MapPosition pos)
@@ -138,7 +138,7 @@ public class Map
 	{
 		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
 		RemoveEntity(me);
-		AddEntity(me, pos);
+		me.localPosition = pos;
 		me.tr.position = ToWorldPos(pos);
 		return true;
 	}
@@ -190,7 +190,7 @@ public class Map
 
 		if(nextPos.Equals(entLocalPos)) return -1;
 		RemoveEntity(GetEntity(entLocalPos));
-		AddEntity(me, nextPos);
+		me.localPosition = nextPos;
 		me.transform.Translate(ToWorldPos(nextPos));
 		me.Interact(EntityEvent.Move, me);
 		return 0;
