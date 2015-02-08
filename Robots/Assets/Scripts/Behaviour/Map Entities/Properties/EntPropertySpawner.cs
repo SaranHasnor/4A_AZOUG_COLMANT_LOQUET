@@ -18,7 +18,7 @@ public class EntPropertySpawner : EntProperty {
 			string robotId = "robot_" + this.owner.id + "_" + (_currentSpawnCount+1);
 			RobotScript newRobot = (RobotScript)GameData.instantiateManager.entities[robotId];
 			
-			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(newRobot, GameData.currentState.map.ToLocalPos(_position)) == 0) {
+			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(newRobot, GameData.currentState.map.ToLocalPos(_position))) {
 				_currentSpawnCount++;
 				--_numberSpawn;
 				_sinceLastSpawn = 0;

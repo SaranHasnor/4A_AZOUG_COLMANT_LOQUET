@@ -45,27 +45,25 @@ public class Map
 		_entities = new Dictionary<MapPosition, MapEntity>(width * height * depth);
 	}
 
-	public int AddEntity(MapEntity me, MapPosition pos = null)
+	public bool AddEntity(MapEntity me, MapPosition pos = null)
 	{
 		var newPos = pos ?? me.localPosition;
 		if (_entities.ContainsValue(me))
-			return -1;
+			return false;
 		if (pos == null || !IsValidPosition(newPos))
-			return -1;
+			return false;
 		me.Interact(EntityEvent.Create, me);
 		_entities[newPos] = me;
-		return 0;
+		return true;
 	}
 
-	public void RemoveEntity(MapPosition pos)
+	public void RemoveEntity(MapEntity me)
 	{
-		if (_entities.ContainsKey(pos))
+		if (_entities.ContainsValue(me))
 		{
-			_entities[pos].Interact(EntityEvent.Destroy, _entities[pos]);
-			_entities[pos] = null;
+			me.Interact(EntityEvent.Destroy, me);
+			_entities[me.localPosition] = null;
 		}
-		//else
-		//	throw new Exception("Entity doesn't exist in current context");
 	}
 
 	public MapEntity GetEntity(Vector3 pos)
@@ -132,13 +130,13 @@ public class Map
 		return (pos.x <= width && pos.y <= height && pos.z <= depth);
 	}
 
-	public int TeleportEntity(MapEntity me, MapPosition pos)
+	public bool TeleportEntity(MapEntity me, MapPosition pos)
 	{
-		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return -1;
-		RemoveEntity(ToLocalPos(me.tr.position));
+		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
+		RemoveEntity(me);
 		AddEntity(me, pos);
 		me.tr.position = ToWorldPos(pos);
-		return 0;
+		return true;
 	}
 
 	public int MoveEntity(MapEntity me, MapPosition pos)
@@ -179,7 +177,7 @@ public class Map
 			}
 		}
 		if(currentPos == entLocalPos) return -1;
-		RemoveEntity(entLocalPos);
+		RemoveEntity(GetEntity(entLocalPos));
 		AddEntity(me, currentPos);
 		me.transform.Translate(ToWorldPos(currentPos));
 		me.Interact(EntityEvent.Move, me);

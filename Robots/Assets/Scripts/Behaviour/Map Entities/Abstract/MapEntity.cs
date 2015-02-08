@@ -103,13 +103,13 @@ public abstract class MapEntity : MonoBehaviour
 		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
-	public int Teleport(MapPosition pos)
+	public bool Teleport(MapPosition pos)
 	{
 		return GameData.currentState.map.TeleportEntity(this, pos);
 	}
 
 	public void Destroy()
 	{
-		GameData.currentState.map.RemoveEntity(GameData.currentState.map.ToLocalPos(tr.position));
+		GameData.currentState.map.RemoveEntity(GameData.currentState.map.GetEntity(tr.position));
 	}
 }

@@ -14,7 +14,7 @@ public class EntPropertyTeleporter : EntProperty
 	{
 		if (action == EntityEvent.Teleport || action == EntityEvent.Collide)
 		{
-			if(_sinceLastTeleport >= _frequencyTeleport && GameData.currentState.map.GetEntity(entity).Teleport(GameData.currentState.map.ToLocalPos(_target.gameObject.transform.position)) == 0)
+			if(_sinceLastTeleport >= _frequencyTeleport && GameData.currentState.map.GetEntity(entity).Teleport(GameData.currentState.map.ToLocalPos(_target.gameObject.transform.position)))
 				_sinceLastTeleport = 0;
 			else
 				++_sinceLastTeleport;
