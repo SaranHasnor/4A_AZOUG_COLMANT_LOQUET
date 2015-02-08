@@ -8,31 +8,36 @@ public class EntPropertyPushable : EntProperty {
 		if (actionType == EntityEvent.Push) {
 			var posEntityPusher = GameData.currentState.map.ToLocalPos(entity.tr.position);
 			var posEntityPush = GameData.currentState.map.ToLocalPos(gameObject.transform.position);
-			Vector3 posToPush;
+			MapDirection direction;
 
 			if (posEntityPush.x != posEntityPusher.x &&
 				posEntityPush.y == posEntityPusher.y &&
 				posEntityPush.y == posEntityPusher.y) {
-				var tmp = posEntityPusher.x > posEntityPush.x ? -_strongOfPush : _strongOfPush;
-				posToPush = new Vector3(posEntityPush.x + tmp, posEntityPush.y, posEntityPush.z);
+				direction = posEntityPusher.x > posEntityPush.x ? MapDirection.left : MapDirection.right;
 			} else if (posEntityPush.x == posEntityPusher.x &&
 						 posEntityPush.y != posEntityPusher.y &&
 						 posEntityPush.y == posEntityPusher.y) {
-				var tmp = posEntityPusher.y > posEntityPush.y ? -_strongOfPush : _strongOfPush;
-				posToPush = new Vector3(posEntityPush.x, posEntityPush.y + tmp, posEntityPush.z);
+				direction = posEntityPusher.y > posEntityPush.y ? MapDirection.down : MapDirection.up;
 			} else if (posEntityPush.x == posEntityPusher.x &&
 						 posEntityPush.y == posEntityPusher.y &&
 						 posEntityPush.y != posEntityPusher.y) {
-				var tmp = posEntityPusher.z > posEntityPush.z ? -_strongOfPush : _strongOfPush;
-				posToPush = new Vector3(posEntityPush.x, posEntityPush.y, posEntityPush.z + tmp);
+				direction = posEntityPusher.z > posEntityPush.z ? MapDirection.back : MapDirection.forward;
 			} else {
 				Debug.Log("Error in EntPropertyPushable : Can't push");
-				return;
+				direction = MapDirection.zero;
 			}
 
 			GameData.currentState.map.GetEntity(posEntityPush)
-				.Move(GameData.currentState.map.ToLocalPos(posToPush));
+				.Move(PosToMove(entity, direction, _strongOfPush));
 		}
+	}
+
+	public MapDirection DirectionToMove(MapEntity entity) {
+		return 
+	}
+
+	public MapPosition PosToMove(MapEntity entity, MapDirection direction, int strong) {
+		return GameData.currentState.map.ToLocalPos(entity.transform.position) + direction*strong;
 	}
 
 	public int getStrongOfPush() {

@@ -14,9 +14,11 @@ public class EntPropertySticky : EntProperty {
 			throw new ArgumentException(String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
 
 			// Check that this entity can be pushed.
-			var propPusable = entity.gameObject.GetComponents<EntPropertyPushable>(); // TODO Amau : may be change by entity.properties
+			var propPusable = entity.gameObject.GetComponent<EntPropertyPushable>(); // TODO Amau : may be change by entity.properties
 			if (propPusable == null)
 				return;
+
+			entity.properties[0].
 
 			// Get all related entities. 
 			var nbMaxSticky = _nbMaxSticky;
@@ -26,9 +28,10 @@ public class EntPropertySticky : EntProperty {
 			if (neighboursSticky.Count >= nbMaxSticky)
 				return;
 
-
-			//foreach (var neighbourSticky in neighboursSticky)
-			//	neighbourSticky.CanMove();
+			propPusable.getStrongOfPush();
+			foreach (var neighbourSticky in neighboursSticky)
+				// if pushable
+				neighbourSticky.CanMove(neighboursSticky);
 		}
     }
 
@@ -43,8 +46,9 @@ public class EntPropertySticky : EntProperty {
 		// TODO Amau : check that neighbour is not static
 		foreach (var neighbour in neighbours
 			.Where(neighbour => neighbour != null)
-			.Where(neighbour => neighbour.gameObject.GetComponents<EntPropertyPushable>() != null)
-			.Where(neighbour => neighbour.gameObject.GetComponents<EntPropertyImmaterial>() == null)) {  // TODO Amau : may be change by entity.properties
+			//.Where(neighbour => neighbour.gameObject.GetComponents<EntPropertyPushable>() != null)
+			//.Where(neighbour => neighbour.gameObject.GetComponents<EntPropertyImmaterial>() == null)
+			) {  // TODO Amau : may be change by entity.properties
 			foreach (var newNeighbour in GetAllNeighbourRecur(neighbour, nbRecurs++, ref nbMaxSticky)
 				.Where(newNeighbour => !listRetour.Contains(newNeighbour))) {
 				listRetour.Add(newNeighbour);
