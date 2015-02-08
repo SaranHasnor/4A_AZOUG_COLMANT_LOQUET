@@ -139,47 +139,55 @@ public class Map
 		return true;
 	}
 
-	public int MoveEntity(MapEntity me, MapPosition pos)
-	{
-		var entLocalPos = ToLocalPos(me.tr.position);
-		var currentPos = ToLocalPos(me.tr.position);
-		if(entLocalPos.x != pos.x)
-		{
-			for(var i = entLocalPos.x ; i < pos.x ; i += _width)
-			{
+	/// <summary>
+	///		Allows to verify the possibility of moving an entity to a given position and
+	///		returns the last possibly ateignable possition.
+	/// </summary>
+	/// <param name="entity">Is the entity that can be moved.</param>
+	/// <param name="pos">This is the position that we want to achieve.</param>
+	/// <returns>Returns a location on the map that the entity <c>entity</c> can achieve.</returns>
+	public MapPosition CanMoveEntity(MapEntity entity, MapPosition pos) {
+		var entLocalPos = ToLocalPos(entity.tr.position);
+		var currentPos = ToLocalPos(entity.tr.position);
+
+		if (entLocalPos.x != pos.x) {
+			for (var i = entLocalPos.x; i < pos.x; i += _width) {
 				var nextPos = new MapPosition(i, entLocalPos.y, entLocalPos.z);
-				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
+				if (_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
 			}
-		}
-		else if(entLocalPos.y != pos.y)
-		{
-			for(var i = entLocalPos.y ; i < pos.y ; i += _height)
-			{
+		} else if (entLocalPos.y != pos.y) {
+			for (var i = entLocalPos.y; i < pos.y; i += _height) {
 				var nextPos = new MapPosition(entLocalPos.x, i, entLocalPos.z);
-				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
+				if (_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
 			}
-		}
-		else if(entLocalPos.z != pos.z)
-		{
-			for(var i = entLocalPos.z ; i < pos.z ; i += _depth)
+		} else if (entLocalPos.z != pos.z) {
+			for (var i = entLocalPos.z; i < pos.z; i += _depth)
 			{
 				var nextPos = new MapPosition(entLocalPos.x, entLocalPos.y, i);
-				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
+				if (_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
 			}
 		}
-		if(currentPos == entLocalPos) return -1;
+
+		return currentPos;
+	}
+
+	public int MoveEntity(MapEntity me, MapPosition pos) {
+		var entLocalPos = ToLocalPos(me.tr.position);
+		var nextPos = CanMoveEntity(me, pos);
+
+		if(nextPos == entLocalPos) return -1;
 		RemoveEntity(GetEntity(entLocalPos));
-		AddEntity(me, currentPos);
-		me.transform.Translate(ToWorldPos(currentPos));
+		AddEntity(me, nextPos);
+		me.transform.Translate(ToWorldPos(nextPos));
 		me.Interact(EntityEvent.Move, me);
 		return 0;
 	}

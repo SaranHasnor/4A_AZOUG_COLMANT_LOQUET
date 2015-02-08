@@ -98,6 +98,16 @@ public abstract class MapEntity : MonoBehaviour
 			OnEntityInteraction(action, entity);
 	}
 
+	/// <summary>
+	///		Allows to verify the possibility of moving this entity to a given position and
+	///		returns the last possibly ateignable possition.
+	/// </summary>
+	/// <param name="pos">Is the entity that can be moved.</param>
+	/// <returns>Returns a location on the map that this entity can achieve.</returns>
+	public MapPosition CanMove(MapPosition pos) {
+		return GameData.currentState.map.CanMoveEntity(this, pos);
+	}
+
 	public int Move(MapPosition pos)
 	{
 		return GameData.currentState.map.MoveEntity(this, pos);

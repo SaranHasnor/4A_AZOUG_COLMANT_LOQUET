@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-public class EntPropertyTeleporter : EntProperty
-{
+public class EntPropertyTeleporter : EntProperty {
 	[SerializeField]
 	private EntPropertyTeleporterTarget _target;
 
@@ -19,5 +18,11 @@ public class EntPropertyTeleporter : EntProperty
 			else
 				++_sinceLastTeleport;
 		}
+	}
+
+	/// <summary><c>SetParameters</c> is a function to parameterize a property.</summary>
+	/// <param name="Frequence">It's the frequence of teleportation by turn.</param>
+	public void SetParameters(uint Frequence) { // TODO Amau : Fix SetParameters.
+		_frequencyTeleport = Frequence;
 	}
 }

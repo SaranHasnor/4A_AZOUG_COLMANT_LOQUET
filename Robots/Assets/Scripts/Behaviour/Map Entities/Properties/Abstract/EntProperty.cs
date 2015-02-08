@@ -18,7 +18,7 @@ public enum EntityEvent : int {
 	// TTL
 	Spawn,
 	Damage,
-	Breakable,
+	Break,
 
 	// Other
 	Collide,
