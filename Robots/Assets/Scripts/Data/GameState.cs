@@ -57,9 +57,8 @@ public class GameState
 		}
 
 		_entities.Remove(entity.id);
-		_map.RemoveEntity(entity);
 
-		return true;
+		return _map.RemoveEntity(entity);
 	}
 
 	public void UpdateWithPlayerGameState(GameState state, Team playerTeam)
