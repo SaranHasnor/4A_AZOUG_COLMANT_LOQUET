@@ -1,21 +1,14 @@
 ﻿using UnityEngine;
 using System.Xml;
-<<<<<<< HEAD
 using System.Linq;
-
-public class BlockScript : MapEntity {
-	// The only argument for making this a runnable entity is to update their state each turn
-	// Maybe we could also have blocks take actions at specific turns, but I'd like this to be a property instead
-
-	public static BlockScript CreateFromXmlNode(XmlNode node) {
-=======
-using System.Collections.Generic;
 
 public class BlockScript : MapEntity
 {
+	// The only argument for making this a runnable entity is to update their state each turn
+	// Maybe we could also have blocks take actions at specific turns, but I'd like this to be a property instead
 	public static BlockScript CreateFromXmlNode(XmlNode node)
-	{ // TODO: Move some of this to the instantiate manager
->>>>>>> origin/UpgradeEvent
+	{
+		// TODO: Move some of this to the instantiate manager
 		GameObject block = (GameObject)GameObject.Instantiate(GameData.instantiateManager.BlockPrefabForType(node.Attributes["type"].Value)
 																, GameData.currentState.map.ToWorldPos(MapPosition.FromString(node.Attributes["position"].Value))
 																, Quaternion.identity);
@@ -43,11 +36,11 @@ public class BlockScript : MapEntity
 	}
 }
 
-public class EntPropertyDestroy : EntProperty {
-	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
-		if (actionType == EntityEvent.Destroy) {
-			// TODO : Completer algo property Destroy
-			throw new System.ArgumentException(System.String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
-		}
-	}
-}
+//public class EntPropertyDestroy : EntProperty {
+//	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
+//		if (actionType == EntityEvent.Destroy) {
+//			// TODO : Completer algo property Destroy
+//			throw new System.ArgumentException(System.String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
+//		}
+//	}
+//}
