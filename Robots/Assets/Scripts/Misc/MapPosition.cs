@@ -80,4 +80,12 @@ public class MapPosition
 	{
 		return "(" + x + "," + y + "," + z + ")";
 	}
+
+	public static MapPosition zero
+	{
+		get
+		{
+			return new MapPosition(0, 0, 0);
+		}
+	}
 }

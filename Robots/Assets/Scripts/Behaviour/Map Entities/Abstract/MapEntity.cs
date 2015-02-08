@@ -53,6 +53,10 @@ public abstract class MapEntity : MonoBehaviour
 		{
 			return _localPosition;
 		}
+		set
+		{
+			_localPosition = value;
+		}
 	}
 
 	private Team _team;

@@ -51,9 +51,13 @@ public class Map
 			return false;
 		if (pos == null || !IsValidPosition(pos))
 			return false;
+		
+		me.localPosition = pos;
 		me.tr.position = ToWorldPos(pos);
+
 		me.Interact(EntityEvent.Create, me);
 		_entities[pos] = me;
+
 		return true;
 	}
 
