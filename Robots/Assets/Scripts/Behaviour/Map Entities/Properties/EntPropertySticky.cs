@@ -8,8 +8,7 @@ public class EntPropertySticky : EntProperty {
 	private uint _nbMaxSticky = 10;
 
 	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
-		if (actionType == EntityEvent.Push)
-		{
+		if (actionType == EntityEvent.Push) {
 			// TODO : Completer algo property Stick
 			throw new ArgumentException(String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
 
@@ -17,8 +16,6 @@ public class EntPropertySticky : EntProperty {
 			var propPusable = entity.gameObject.GetComponent<EntPropertyPushable>(); // TODO Amau : may be change by entity.properties
 			if (propPusable == null)
 				return;
-
-			entity.properties[0].
 
 			// Get all related entities. 
 			var nbMaxSticky = _nbMaxSticky;
@@ -28,12 +25,26 @@ public class EntPropertySticky : EntProperty {
 			if (neighboursSticky.Count >= nbMaxSticky)
 				return;
 
-			propPusable.getStrongOfPush();
-			foreach (var neighbourSticky in neighboursSticky)
+			var direction = MapDirection.DirectionToMove(
+				GameData.currentState.map.ToLocalPos(gameObject.transform.position),
+				GameData.currentState.map.ToLocalPos(entity.tr.position)
+				);
+
+			var strong = propPusable.getStrongOfPush();
+
+			foreach (var neighbourSticky in neighboursSticky) {
 				// if pushable
-				neighbourSticky.CanMove(neighboursSticky);
+				var nextPos = neighbourSticky.CanMove(neighbourSticky.localPosition + direction * strong);
+				strong = direction.x == 0
+					? direction.y == 0
+						? nextPos.z + neighbourSticky.localPosition.z
+						: nextPos.y + neighbourSticky.localPosition.y
+					: nextPos.x + neighbourSticky.localPosition.x;
+			}
+
+			// TODO Amau: Push neighboursSticky in direction of strong
 		}
-    }
+	}
 
 	private List<MapEntity> GetAllNeighbourRecur(MapEntity entity, uint nbRecurs, ref uint nbMaxSticky) {
 		var neighbours = new List<MapEntity>(GameData.currentState.map.GetAllNeighbour(entity).Values.ToList());

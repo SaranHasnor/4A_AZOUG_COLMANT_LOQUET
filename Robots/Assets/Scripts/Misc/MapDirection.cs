@@ -50,5 +50,32 @@ public class MapDirection : MapPosition
 		}
 	}
 
+	/// <summary>
+	///		Determines the direction between two position.
+	/// </summary>
+	/// <param name="startPos">This is the position from which the direction is determined.</param>
+	/// <param name="targetPos">This is the position where the direction will point.</param>
+	/// <returns>One direction of type <c>MapDirection</c>.</returns>
+	public static MapDirection DirectionToMove(MapPosition startPos, MapPosition targetPos) {
+		MapDirection direction;
 
+		if (startPos.x != targetPos.x &&
+			startPos.y == targetPos.y &&
+			startPos.y == targetPos.y) {
+			direction = targetPos.x > startPos.x ? left : right;
+		} else if (startPos.x == targetPos.x &&
+					startPos.y != targetPos.y &&
+					startPos.y == targetPos.y) {
+			direction = targetPos.y > startPos.y ? down : up;
+		} else if (startPos.x == targetPos.x &&
+					startPos.y == targetPos.y &&
+					startPos.y != targetPos.y) {
+			direction = targetPos.z > startPos.z ? back : forward;
+		} else {
+			Debug.Log("Error in EntPropertyPushable : Can't push");
+			direction = new MapDirection(0, 0, 0);
+		}
+
+		return direction;
+	}
 }
