@@ -10,6 +10,7 @@ public class EntPropertySticky : EntProperty {
 	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
 
 		if (actionType == EntityEvent.Move || actionType == EntityEvent.Push) {
+			// TODO : Completer algo property Stick
 			throw new ArgumentException(String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
 		}
     }

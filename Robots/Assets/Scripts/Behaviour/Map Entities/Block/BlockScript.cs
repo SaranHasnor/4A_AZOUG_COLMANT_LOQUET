@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Xml;
-using System.Collections.Generic;
+using System.Linq;
 
 public class BlockScript : MapEntity {
 	// The only argument for making this a runnable entity is to update their state each turn
@@ -19,15 +19,9 @@ public class BlockScript : MapEntity {
 
 		// Read any property arguments
 		foreach (XmlNode propertyNode in node.ChildNodes) {
-			foreach (EntProperty property in script.properties) {
+			foreach (var property in script.properties) {
 				if (property.GetType().ToString() == propertyNode.Attributes["class"].Value) {
-					Dictionary<string, string> parameters = new Dictionary<string, string>();
-
-					foreach (string param in propertyNode.Attributes["params"].Value.Split(';')) {
-						string[] str = param.Split('=');
-
-						parameters.Add(str[0], str[1]);
-					}
+					var parameters = propertyNode.Attributes["params"].Value.Split(';').Select(param => param.Split('=')).ToDictionary(str => str[0], str => str[1]);
 
 					property.SetParameters(parameters);
 				}
@@ -35,5 +29,14 @@ public class BlockScript : MapEntity {
 		}
 
 		return script;
+	}
+}
+
+public class EntPropertyDestroy : EntProperty {
+	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
+		if (actionType == EntityEvent.Destroy) {
+			// TODO : Completer algo property Destroy
+			throw new System.ArgumentException(System.String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
+		}
 	}
 }
