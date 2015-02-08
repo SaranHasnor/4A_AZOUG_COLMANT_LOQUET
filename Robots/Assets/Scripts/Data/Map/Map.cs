@@ -61,13 +61,15 @@ public class Map
 		return true;
 	}
 
-	public void RemoveEntity(MapEntity me)
+	public bool RemoveEntity(MapEntity me)
 	{
 		if (_entities.ContainsValue(me))
 		{
 			me.Interact(EntityEvent.Destroy, me);
 			_entities[me.localPosition] = null;
+			return true;
 		}
+		return false;
 	}
 
 	public MapEntity GetEntity(Vector3 pos)
@@ -138,6 +140,7 @@ public class Map
 	{
 		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
 		RemoveEntity(me);
+		_entities[pos] = me;
 		me.localPosition = pos;
 		me.tr.position = ToWorldPos(pos);
 		return true;
@@ -199,6 +202,7 @@ public class Map
 		if (nextPos.Equals(entLocalPos)) return 0;
 
 		RemoveEntity(GetEntity(entLocalPos));
+		_entities[nextPos] = me;
 		me.localPosition = nextPos;
 		me.transform.Translate(ToWorldPos(nextPos));
 		me.Interact(EntityEvent.Move, me);
