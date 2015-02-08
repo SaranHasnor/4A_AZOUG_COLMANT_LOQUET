@@ -12,9 +12,9 @@ public class EntPropertyTeleporter : EntProperty
 
 	protected override void _Interact(EntityEvent action, MapEntity entity)
 	{
-		if (action == EntityEvent.Teleport || action == EntityEvent.CollisionEnter)
+		if (action == EntityEvent.Teleport || action == EntityEvent.Collide)
 		{
-			if (_sinceLastTeleport >= _frequencyTeleport && GameData.currentState.map.GetEntity(entity).Teleport(Map.GetLocalPos(_target.gameObject.transform.position)) == 0)
+			if(_sinceLastTeleport >= _frequencyTeleport && GameData.currentState.map.GetEntity(entity).Teleport(GameData.currentState.map.ToLocalPos(_target.gameObject.transform.position)) == 0)
 				_sinceLastTeleport = 0;
 			else
 				++_sinceLastTeleport;

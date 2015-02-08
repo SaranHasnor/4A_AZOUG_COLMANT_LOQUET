@@ -32,7 +32,8 @@ public class GameState
 
 	public GameState()
 	{
-		_map = new Map();
+		// TODO : ajouter les parametres widht, height, depth et blocksize
+		//_map = new Map(); 
 		_entities = new Dictionary<string, MapEntity>();
 		_actions = new Dictionary<string, ActionQueue>();
 	}
@@ -63,12 +64,11 @@ public class GameState
 			{
 				newEntity = RobotScript.CreateFromXmlNode(entityNode);
 			}
-			else
-			{
-				throw new System.Exception("aaaaaaaah");
+			else {
+				throw new System.ArgumentException(System.String.Format("L'information inatendu {0}, c'est produit dans CreateFromXmlDocument.", entityNode.Name));
 			}
 
-			newState._map.SetEntity(newEntity, newEntity.tr.position);
+			newState._map.AddEntity(newEntity, GameData.currentState.map.ToLocalPos(newEntity.tr.position));
 			newState._entities.Add(newEntity.id, newEntity);
 		}
 

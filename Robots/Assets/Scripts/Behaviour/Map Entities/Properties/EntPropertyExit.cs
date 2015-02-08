@@ -5,7 +5,7 @@ public class EntPropertyExit : EntProperty {
 	private uint _necessaryNbOfBot;
 
 	protected override void _Interact(EntityEvent action, MapEntity entity) {
-		if (action == EntityEvent.Exit || action == EntityEvent.CollisionEnter) {
+		if (action == EntityEvent.Collide) {
 			entity.Destroy();
 			--_necessaryNbOfBot;
 			GameData.gameMaster.OnBotExit();

@@ -1,162 +1,156 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor;
 
 public class Map
 {
-	private List<List<List<MapEntity>>> _entities;
-	public const int _limit = 32; //TODO : from xml
-	public const float _size = 1f;
-	public Map()
-	{
-		_entities = new List<List<List<MapEntity>>>(_limit);
-		for(var i = 0 ; i < _entities.Capacity ; ++i)
-		{
-			_entities.Add(new List<List<MapEntity>>(_limit));
-			for(var j = 0 ; j < _entities.Capacity ; ++j)
-			{
-				_entities[i].Add(new List<MapEntity>(_limit));
-				for(var k = 0 ; k < _entities.Capacity ; ++k)
-				{
-					_entities[i][j].Add(null);
+	private Dictionary<MapPosition, MapEntity> _entities;
 
-				}
-			}
-		}
+	private float _blockSize;
+	public float blockSize
+	{
+		get { return _blockSize; }
+		set { _blockSize = value; }
 	}
 
-	public int SetEntity(GameObject go, Vector3 pos)
+	private int _width;
+	public int width
 	{
-		var index = GetLocalPos(pos);
-		if(IsOnLimit(index) == 0)
-		{
-			_entities[index.x][index.y][index.z] = go.GetComponent<MapEntity>();
-			return 0;
-		}
-		else
-			return -1;
+		get { return _width; }
+		set { _width = value; }
 	}
-	public int SetEntity(MapEntity me, Vector3 pos)
+
+	private int _height;
+	public int height
 	{
-		var index = GetLocalPos(pos);
-		if(IsOnLimit(index) == 0)
-		{
-			_entities[index.x][index.y][index.z] = me;
-			return 0;
-		}
-		else
-			return -1;
+		get { return _height; }
+		set { _height = value; }
 	}
+
+	private int _depth;
+	public int depth
+	{
+		get { return _depth; }
+		set { _depth = value; }
+	}
+
+	public Map(int width, int height, int depth, float blockSize)
+	{
+		_width = width;
+		_height = height;
+		_depth = depth;
+		_blockSize = blockSize;
+
+		_entities = new Dictionary<MapPosition, MapEntity>(width * height * depth);
+	}
+
+	public int AddEntity(MapEntity me, MapPosition pos = null)
+	{
+		var newPos = pos ?? me.localPosition;
+		if (_entities.ContainsValue(me))
+			return -1;
+		if (pos == null || !IsValidPosition(newPos))
+			return -1;
+		me.Interact(EntityEvent.Create, me);
+		_entities[newPos] = me;
+		return 0;
+	}
+
+	public void RemoveEntity(MapPosition pos)
+	{
+		if (_entities.ContainsKey(pos))
+		{
+			_entities[pos].Interact(EntityEvent.Destroy, _entities[pos]);
+			_entities[pos] = null;
+		}
+		//else
+		//	throw new Exception("Entity doesn't exist in current context");
+	}
+
 	public MapEntity GetEntity(Vector3 pos)
 	{
-		return GetEntity(GetLocalPos(pos));
+		return GetEntity(ToLocalPos(pos));
 	}
-	public MapEntity GetEntity(Vector3i pos) {
-		try {
-			return _entities[pos.x][pos.y][pos.z];
-		} catch (Exception) {
+	public MapEntity GetEntity(MapPosition pos)
+	{
+		try
+		{
+			return _entities[pos];
+		}
+		catch(Exception)
+		{
 			return null;
 		}
 	}
 	public MapEntity GetEntity(MapEntity me)
 	{
-		var index = GetLocalPos(me.transform.position); //TODO : creer variable dans mapEntity ? 
 		try
 		{
-			return _entities[index.x][index.y][index.z];
+			return _entities[ToLocalPos(me.transform.position)];
 		}
 		catch(Exception)
 		{
 			return null;
 		}
 	}
-	public List<MapEntity> GetNeighbours(Vector3 pos)
+	public MapEntity GetNeighbour(MapEntity entity, MapDirection direction)
 	{
-		var me = new List<MapEntity>(6)
-        {
-             GetNear(pos, Vector3i.left)
-            ,GetNear(pos, Vector3i.right)
-            ,GetNear(pos, Vector3i.up)
-            ,GetNear(pos, Vector3i.down)
-            ,GetNear(pos, Vector3i.forward)
-            ,GetNear(pos, Vector3i.back)
-        };
+		try
+		{
+			return _entities[(entity.localPosition + direction)];
+		}
+		catch(Exception)
+		{
+			return null;
+		}
+	}
+	public Dictionary<MapPosition, MapEntity> GetAllNeighbour(MapEntity entity)
+	{
+		var me = new Dictionary<MapPosition, MapEntity>(6);
+		me[MapDirection.left]		= GetNeighbour(entity, MapDirection.left);
+		me[MapDirection.right]		= GetNeighbour(entity, MapDirection.right);
+		me[MapDirection.up]			= GetNeighbour(entity, MapDirection.up);
+		me[MapDirection.down]		= GetNeighbour(entity, MapDirection.down);
+		me[MapDirection.forward]	= GetNeighbour(entity, MapDirection.forward);
+		me[MapDirection.back]		= GetNeighbour(entity, MapDirection.back);
 		return me;
 	}
-	public MapEntity GetNear(Vector3 pos, Vector3i dir)
-	{
-		Vector3i index = GetLocalPos(pos) + dir;
-		try
-		{
-			return _entities[index.x][index.y][index.z];
-		}
-		catch(Exception)
-		{
-			return null;
-		}
 
-	}
-	public void DeleteEntity(Vector3 pos)
+	public MapPosition ToLocalPos(Vector3 pos)
 	{
-		var index = GetLocalPos(pos);
-		_entities[index.x][index.y][index.z] = null;
-	}
-	public void DeleteEntity(Vector3i pos)
-	{
-		_entities[pos.x][pos.y][pos.z] = null;
-	}
-	public static Vector3i GetLocalPos(Vector3 pos)
-	{
-		return new Vector3i((int)(pos.x / _size), (int)(pos.y / _size), (int)(pos.z / _size));
+		return new MapPosition((int)(pos.x / _width), (int)(pos.y / _height), (int)(pos.z / _depth));
 	}
 
-	public static Vector3 GetWorldPos(Vector3i localPos)
+	public Vector3 ToWorldPos(MapPosition localPos)
 	{
-		return new Vector3(localPos.x * _size, localPos.y * _size, localPos.z * _size);
-	}
-	public static int IsOnLimit(Vector3i index)
-	{
-		if(index.x > _limit || index.x < 0 || index.y > _limit || index.y < 0 || index.z > _limit || index.z < 0)
-			return -1;
-		else
-			return 0;
+		return new Vector3(localPos.x * _width, localPos.y * _height, localPos.z * _depth);
 	}
 
-	public int TeleportEntity(MapEntity me, Vector3 pos)
+	private bool IsValidPosition(MapPosition pos)
 	{
-		if(IsOnLimit(GetLocalPos(pos)) == 0 && GetEntity(pos) == null)
-		{
-			DeleteEntity(me.tr.position);
-			SetEntity(me, pos);
-			me.tr.position = pos;
-			return 0;
-		}
-		else
-			return -1;
-	}
-	public int TeleportEntity(MapEntity me, Vector3i pos)
-	{
-		if(IsOnLimit(pos) == 0 && GetEntity(GetWorldPos(pos)) == null)
-		{
-			DeleteEntity(me.tr.position);
-			SetEntity(me, GetWorldPos(pos));
-			me.tr.position = GetWorldPos(pos);
-			return 0;
-		}
-		else
-			return -1;
+		return (pos.x <= width && pos.y <= height && pos.z <= depth);
 	}
 
-	public int MoveEntity(MapEntity me, Vector3i pos)
+	public int TeleportEntity(MapEntity me, MapPosition pos)
 	{
-		var entLocalPos = GetLocalPos(me.tr.position);
-		var currentPos = GetLocalPos(me.tr.position);
+		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return -1;
+		RemoveEntity(ToLocalPos(me.tr.position));
+		AddEntity(me, pos);
+		me.tr.position = ToWorldPos(pos);
+		return 0;
+	}
+
+	public int MoveEntity(MapEntity me, MapPosition pos)
+	{
+		var entLocalPos = ToLocalPos(me.tr.position);
+		var currentPos = ToLocalPos(me.tr.position);
 		if(entLocalPos.x != pos.x)
 		{
-			for(var i = entLocalPos.x ; i < pos.x ; i += (int)_size)
+			for(var i = entLocalPos.x ; i < pos.x ; i += _width)
 			{
-				var nextPos = new Vector3i(i, entLocalPos.y, entLocalPos.z);
-				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+				var nextPos = new MapPosition(i, entLocalPos.y, entLocalPos.z);
+				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -164,10 +158,10 @@ public class Map
 		}
 		else if(entLocalPos.y != pos.y)
 		{
-			for(var i = entLocalPos.y ; i < pos.y ; i += (int)_size)
+			for(var i = entLocalPos.y ; i < pos.y ; i += _height)
 			{
-				var nextPos = new Vector3i(entLocalPos.x, i, entLocalPos.z);
-				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+				var nextPos = new MapPosition(entLocalPos.x, i, entLocalPos.z);
+				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
@@ -175,24 +169,20 @@ public class Map
 		}
 		else if(entLocalPos.z != pos.z)
 		{
-			for(var i = entLocalPos.z ; i < pos.z ; i += (int)_size)
+			for(var i = entLocalPos.z ; i < pos.z ; i += _depth)
 			{
-				var nextPos = new Vector3i(entLocalPos.x, entLocalPos.y, i);
-				if(IsOnLimit(nextPos) == 0 && GetEntity(GetWorldPos(nextPos)) == null)
+				var nextPos = new MapPosition(entLocalPos.x, entLocalPos.y, i);
+				if(_entities.ContainsKey(nextPos) && GetEntity(ToWorldPos(nextPos)) == null)
 					currentPos = nextPos;
 				else
 					break;
 			}
 		}
-		if(currentPos != entLocalPos)
-		{
-			DeleteEntity(GetWorldPos(entLocalPos));
-			SetEntity(me, GetWorldPos(currentPos));
-			me.transform.Translate(GetWorldPos(currentPos));
-			return 0;
-		}
-		else
-			return -1;
-
+		if(currentPos == entLocalPos) return -1;
+		RemoveEntity(entLocalPos);
+		AddEntity(me, currentPos);
+		me.transform.Translate(ToWorldPos(currentPos));
+		me.Interact(EntityEvent.Move, me);
+		return 0;
 	}
 }

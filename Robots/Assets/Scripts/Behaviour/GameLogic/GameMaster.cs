@@ -12,7 +12,6 @@ public class GameMaster : MonoBehaviour
 	void Start()
 	{
 		GameData.gameMaster = this;
-		//GameData.currentState = new GameState();
 	}
 
 	public void DidLoadMap()

@@ -45,7 +45,7 @@ public abstract class EntityAction
 			}
 			else if (actualType.BaseType == typeof(EntityTargetedAction))
 			{
-				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(string), typeof(Vector3i) }).Invoke(new object[] { ownerID, Vector3i.FromString(positionString) });
+				return (EntityAction)actualType.GetConstructor(new System.Type[] { typeof(string), typeof(MapPosition) }).Invoke(new object[] { ownerID, MapPosition.FromString(positionString) });
 			}
 			else if (actualType.BaseType == typeof(EntityStateChange))
 			{

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EntityActionMove : EntityTargetedAction
 {
-	public EntityActionMove(string ownerID, Vector3i target)
+	public EntityActionMove(string ownerID, MapPosition target)
 		: base(ownerID, target)
 	{
 

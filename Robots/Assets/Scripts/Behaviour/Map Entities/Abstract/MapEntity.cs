@@ -46,6 +46,15 @@ public abstract class MapEntity : MonoBehaviour
 		}
 	}
 
+	private MapPosition _localPosition;
+	public MapPosition localPosition
+	{
+		get
+		{
+			return _localPosition;
+		}
+	}
+
 	private Team _team;
 	public Team team
 	{
@@ -89,18 +98,18 @@ public abstract class MapEntity : MonoBehaviour
 			OnEntityInteraction(action, entity);
 	}
 
-	public int Move(Vector3i pos)
+	public int Move(MapPosition pos)
 	{
 		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
-	public int Teleport(Vector3i pos)
+	public int Teleport(MapPosition pos)
 	{
 		return GameData.currentState.map.TeleportEntity(this, pos);
 	}
 
 	public void Destroy()
 	{
-		GameData.currentState.map.DeleteEntity(tr.position);
+		GameData.currentState.map.RemoveEntity(GameData.currentState.map.ToLocalPos(tr.position));
 	}
 }
