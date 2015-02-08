@@ -33,10 +33,33 @@ public class GameState
 
 	public GameState()
 	{
-		// TODO : ajouter les parametres widht, height, depth et blocksize
-		//_map = new Map();
 		_entities = new Dictionary<string, MapEntity>();
 		_actions = new Dictionary<string, ActionQueue>();
+	}
+
+	public bool AddEntity(MapEntity entity, MapPosition position = null)
+	{
+		if (_entities.ContainsValue(entity))
+		{
+			return false;
+		}
+
+		_entities.Add(entity.id, entity);
+
+		return _map.AddEntity(entity, position);
+	}
+
+	public bool RemoveEntity(MapEntity entity)
+	{
+		if (!_entities.ContainsValue(entity))
+		{
+			return false;
+		}
+
+		_entities.Remove(entity.id);
+		_map.RemoveEntity(entity);
+
+		return true;
 	}
 
 	public void UpdateWithPlayerGameState(GameState state, Team playerTeam)

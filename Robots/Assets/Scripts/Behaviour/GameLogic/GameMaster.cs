@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class GameMaster : MonoBehaviour
 {
@@ -30,8 +31,9 @@ public class GameMaster : MonoBehaviour
 
 					for (uint i = 0; i < count; i++)
 					{
-						string id = prefix + count;
-						GameData.instantiateManager.SpawnRobot(id, spawner.owner.team);
+						string id = prefix + (i+1);
+						RobotScript robot = GameData.instantiateManager.SpawnRobot(id, spawner.owner.team);
+						spawner.EnqueueRobotSpawn(robot);
 						_robotTotalCount++;
 					}
 

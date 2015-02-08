@@ -10,18 +10,21 @@ public class EntPropertySpawner : EntProperty {
 	[SerializeField]
 	private uint _numberSpawn=1;
 
+	private Queue<RobotScript> _spawnQueue = new Queue<RobotScript>();
+
 	private static uint _sinceLastSpawn = 0;
 	private static uint _currentSpawnCount = 0;
 
 	protected override void _Interact(EntityEvent action, MapEntity entity) {
 		if (action == EntityEvent.Spawn || action == EntityEvent.Turn && _numberSpawn > 0) {
-			string robotId = "robot_" + this.owner.id + "_" + (_currentSpawnCount+1);
-			RobotScript newRobot = (RobotScript)GameData.instantiateManager.entities[robotId];
-			
-			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(newRobot, _position)) {
-				_currentSpawnCount++;
-				--_numberSpawn;
-				_sinceLastSpawn = 0;
+			if (_sinceLastSpawn >= _frequencySpawn) {
+				RobotScript newRobot = _spawnQueue.Peek();
+				if (GameData.currentState.AddEntity(newRobot, _position)) {
+					_spawnQueue.Dequeue();
+					_currentSpawnCount++;
+					--_numberSpawn;
+					_sinceLastSpawn = 0;
+				}
 			} else {
 				++_sinceLastSpawn;
 			}
@@ -34,6 +37,11 @@ public class EntPropertySpawner : EntProperty {
 		{
 			_position = MapPosition.FromString(parameters["position"]);
 		}
+	}
+
+	public void EnqueueRobotSpawn(RobotScript robot)
+	{
+		this._spawnQueue.Enqueue(robot);
 	}
 
 	public uint GetNbSpawn() {
