@@ -53,17 +53,22 @@ public class MapPosition
 	{
 		return new MapPosition(pos.x / number, pos.y / number, pos.z / number);
 	}
-	public static bool operator ==(MapPosition pos, MapPosition pos2)
-	{
-		return (pos.x == pos2.x
-					&& pos.y == pos2.y
-					&& pos.z == pos2.z);
-	}
-	public static bool operator !=(MapPosition pos, MapPosition pos2)
-	{
-		return !(pos == pos2);
-	}
 #endregion
+
+	private bool _Equals(MapPosition pos)
+	{
+		return (this.x == pos.x
+			&& this.y == pos.y
+			&& this.z == pos.z);
+	}
+
+	public override bool Equals(object obj)
+	{
+		if (obj == null)
+			return false;
+
+		return this._Equals((MapPosition)obj);
+	}
 
 	public static MapPosition FromString(string s)
 	{

@@ -47,13 +47,13 @@ public class Map
 
 	public bool AddEntity(MapEntity me, MapPosition pos = null)
 	{
-		var newPos = pos ?? me.localPosition;
 		if (_entities.ContainsValue(me))
 			return false;
-		if (pos == null || !IsValidPosition(newPos))
+		if (pos == null || !IsValidPosition(pos))
 			return false;
+		me.tr.position = ToWorldPos(pos);
 		me.Interact(EntityEvent.Create, me);
-		_entities[newPos] = me;
+		_entities[pos] = me;
 		return true;
 	}
 
@@ -184,7 +184,7 @@ public class Map
 		var entLocalPos = ToLocalPos(me.tr.position);
 		var nextPos = CanMoveEntity(me, pos);
 
-		if(nextPos == entLocalPos) return -1;
+		if(nextPos.Equals(entLocalPos)) return -1;
 		RemoveEntity(GetEntity(entLocalPos));
 		AddEntity(me, nextPos);
 		me.transform.Translate(ToWorldPos(nextPos));

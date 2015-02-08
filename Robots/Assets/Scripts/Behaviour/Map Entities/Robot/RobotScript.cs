@@ -3,21 +3,27 @@ using System.Xml;
 
 public class RobotScript : RunnableEntity
 {
-	public static RobotScript CreateFromXmlNode(XmlNode robotNode)
+	public static RobotScript CreateFromXmlNode(XmlNode node)
 	{
-		GameObject robot = (GameObject)GameObject.Instantiate(GameData.instantiateManager.robotPrefab
-																, GameData.currentState.map.ToWorldPos(MapPosition.FromString(robotNode.Attributes["position"].Value))
-																, Quaternion.identity);
-		RobotScript script = robot.GetComponent<RobotScript>();
+		string id;
+		Team team;
+		MapPosition position;
 
-		script.InitializeMapEntity(robotNode.Attributes["id"].Value);
-
-		if (robotNode.Attributes["team"] != null)
+		try
 		{
-			script.team = MapEntity.StringToTeam(robotNode.Attributes["team"].Value);
+			id = node.Attributes["id"].Value;
+			position = MapPosition.FromString(node.Attributes["position"].Value);
+		}
+		catch (System.Exception e)
+		{
+			Debug.LogError("Mandatory parameter missing in Robot node");
+			throw e;
 		}
 
-		script.InitializeRunnableEntity();
+		team = (node.Attributes["team"] != null) ? MapEntity.StringToTeam(node.Attributes["team"].Value) : Team.None;
+
+		RobotScript script = GameData.instantiateManager.SpawnRobot(id, position, team);
+
 		return script;
 	}
 

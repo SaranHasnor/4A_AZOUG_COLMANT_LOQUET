@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class EntPropertySpawner : EntProperty {
 
 	[SerializeField]
-	private Vector3 _position;
+	private MapPosition _position;
 	[SerializeField]
 	private uint _frequencySpawn=1;
 	[SerializeField]
@@ -18,7 +18,7 @@ public class EntPropertySpawner : EntProperty {
 			string robotId = "robot_" + this.owner.id + "_" + (_currentSpawnCount+1);
 			RobotScript newRobot = (RobotScript)GameData.instantiateManager.entities[robotId];
 			
-			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(newRobot, GameData.currentState.map.ToLocalPos(_position))) {
+			if (_sinceLastSpawn >= _frequencySpawn && GameData.currentState.map.AddEntity(newRobot, _position)) {
 				_currentSpawnCount++;
 				--_numberSpawn;
 				_sinceLastSpawn = 0;
@@ -32,7 +32,7 @@ public class EntPropertySpawner : EntProperty {
 	{
 		if (parameters.ContainsKey("position"))
 		{
-			_position = GameData.currentState.map.ToWorldPos(MapPosition.FromString(parameters["position"]));
+			_position = MapPosition.FromString(parameters["position"]);
 		}
 	}
 

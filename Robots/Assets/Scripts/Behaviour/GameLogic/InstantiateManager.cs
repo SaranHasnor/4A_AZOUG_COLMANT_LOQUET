@@ -20,6 +20,8 @@ public class InstantiateManager : MonoBehaviour
 		}
 	}
 
+	private static MapPosition _uninitializedPos = new MapPosition(0, 0, 1500);
+
 	void Start()
 	{
 		GameData.instantiateManager = this;
@@ -35,7 +37,7 @@ public class InstantiateManager : MonoBehaviour
 		}
 	}
 
-	public GameObject BlockPrefabForType(string type)
+	private GameObject _BlockPrefabForType(string type)
 	{
 		if (!_blockLibrary.blocks.ContainsKey(type))
 		{
@@ -45,36 +47,41 @@ public class InstantiateManager : MonoBehaviour
 		return _blockLibrary.blocks[type];
 	}
 
-	public void SpawnRobot(Team team, string id)
-	{ // TODO: Put them really far away
-		GameObject result = GameObject.Instantiate(_robotPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-		RobotScript script = result.GetComponent<RobotScript>();
+	private MapEntity _SpawnEntity(GameObject prefab, string id, MapPosition position, Team team = Team.None)
+	{ // TODO: Create a position where all uninitialized entities go
+		GameObject result = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		MapEntity script = result.GetComponent<MapEntity>();
+		script.InitializeMapEntity(id, position, team);
 
 		_entities.Add(id, script);
 
-		script.team = team;
-	}
-
-	/*public BlockScript CreateBlock(string type, Vector3i pos, int team = -1)
-	{
-		if (!_blockLibrary.blocks.ContainsKey(type))
-		{
-			Debug.LogError("Tried to create unknown block type " + type);
-			return null;
-		}
-
-		GameObject prefab = _blockLibrary.blocks[type];
-		//GameObject result = GameObject.Instantiate(prefab, Map.GetLocalPos(pos), Quaternion.identity);
-		BlockScript script = result.getComponent<BlockScript>();
-
 		return script;
 	}
 
-	public RobotScript SpawnRobot(Vector3i pos, int team = -1)
+	private MapEntity _SpawnEntity(GameObject prefab)
 	{
-		//GameObject result = GameObject.Instantiate(_robotPrefab, Map.GetLocalPos(pos), Quaternion.identity);
-		RobotScript script = result.getComponent<RobotScript>();
+		string id = "entity_" + _entities.Count.ToString();
 
-		return script;
-	}*/
+		return _SpawnEntity(prefab, id, _uninitializedPos);
+	}
+
+	public RobotScript SpawnRobot(string id, MapPosition position, Team team)
+	{
+		return _SpawnEntity(_robotPrefab, id, position, team) as RobotScript;
+	}
+
+	public RobotScript SpawnRobot(string id, Team team)
+	{
+		return _SpawnEntity(_robotPrefab, id, _uninitializedPos, team) as RobotScript;
+	}
+
+	public BlockScript SpawnBlock(string type, string id, MapPosition position, Team team)
+	{
+		return _SpawnEntity(_BlockPrefabForType(type), id, position, team) as BlockScript;
+	}
+
+	public BlockScript SpawnBlock(string type)
+	{
+		return _SpawnEntity(_BlockPrefabForType(type)) as BlockScript;
+	}
 }

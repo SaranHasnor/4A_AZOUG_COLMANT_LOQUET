@@ -11,7 +11,6 @@ public enum ActionRunMode
 
 public class TimeMaster : MonoBehaviour
 {
-	private List<RunnableEntity> _entities;
 	private List<RunnableEntity> _pendingEntities;
 	private float _lastRunTime;
 	private ActionRunMode _runMode;
@@ -40,22 +39,10 @@ public class TimeMaster : MonoBehaviour
 	{
 		GameData.timeMaster = this;
 
-		_entities = new List<RunnableEntity>();
 		_pendingEntities = new List<RunnableEntity>();
 		_runMode = ActionRunMode.Paused;
 
 		_currentTurn = 0;
-	}
-
-	public void RegisterEntity(RunnableEntity entity)
-	{
-		if (_entities.Contains(entity))
-		{
-			Debug.LogWarning("Entity " + entity.name + " tried to register twice");
-			return;
-		}
-
-		_entities.Add(entity);
 	}
 
 	private void RunActions()

@@ -2,7 +2,8 @@
 
 public class GameMaster : MonoBehaviour
 {
-	private int _maxTurns;
+	[SerializeField]
+	private int _maxTurns = -1;
 
 	private uint _robotGoalCount;
 	private uint _robotExitCount;
@@ -30,7 +31,8 @@ public class GameMaster : MonoBehaviour
 					for (uint i = 0; i < count; i++)
 					{
 						string id = prefix + count;
-						GameData.instantiateManager.SpawnRobot(spawner.owner.team, id);
+						GameData.instantiateManager.SpawnRobot(id, spawner.owner.team);
+						_robotTotalCount++;
 					}
 
 					_robotGoalCount += count;

@@ -5,9 +5,6 @@ using System.Xml;
 public class GameState
 { // Represents a snapshot of the game at a given time
 	private Map _map;
-	private Dictionary<string, MapEntity> _entities;
-	private Dictionary<string, ActionQueue> _actions;
-
 	public Map map
 	{
 		get
@@ -15,6 +12,8 @@ public class GameState
 			return _map;
 		}
 	}
+
+	private Dictionary<string, MapEntity> _entities;
 	public Dictionary<string, MapEntity> entities
 	{
 		get
@@ -22,6 +21,8 @@ public class GameState
 			return new Dictionary<string, MapEntity>(_entities);
 		}
 	}
+
+	private Dictionary<string, ActionQueue> _actions;
 	public Dictionary<string, ActionQueue> actions
 	{
 		get
@@ -33,7 +34,7 @@ public class GameState
 	public GameState()
 	{
 		// TODO : ajouter les parametres widht, height, depth et blocksize
-		//_map = new Map(); 
+		//_map = new Map();
 		_entities = new Dictionary<string, MapEntity>();
 		_actions = new Dictionary<string, ActionQueue>();
 	}
@@ -48,9 +49,12 @@ public class GameState
 		GameState newState = new GameState();
 
 		XmlNode mapNode = doc.DocumentElement.SelectSingleNode("/gamestate/map");
-		var width = mapNode.Attributes["width"].Value;
-		var height = mapNode.Attributes["height"].Value;
-		var depth = mapNode.Attributes["depth"].Value;
+
+		int width = int.Parse(mapNode.Attributes["width"].Value);
+		int height = int.Parse(mapNode.Attributes["height"].Value);
+		int depth = int.Parse(mapNode.Attributes["depth"].Value);
+
+		newState._map = new Map(width, height, depth, 1.0f);
 
 		foreach (XmlNode entityNode in mapNode.ChildNodes)
 		{
@@ -68,8 +72,8 @@ public class GameState
 				throw new System.ArgumentException(System.String.Format("L'information inatendu {0}, c'est produit dans CreateFromXmlDocument.", entityNode.Name));
 			}
 
-			newState._map.AddEntity(newEntity, GameData.currentState.map.ToLocalPos(newEntity.tr.position));
 			newState._entities.Add(newEntity.id, newEntity);
+			newState._map.AddEntity(newEntity, newEntity.localPosition);
 		}
 
 		XmlNode actionQueuesNode = doc.DocumentElement.SelectSingleNode("/gamestate/actions");

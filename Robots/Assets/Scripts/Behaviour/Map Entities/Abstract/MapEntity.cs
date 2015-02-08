@@ -62,13 +62,6 @@ public abstract class MapEntity : MonoBehaviour
 		{
 			return _team;
 		}
-		set
-		{
-			if (_team == Team.None)
-			{ // You can join a team if you don't have any, but you can't switch team afterwards
-				_team = value;
-			}
-		}
 	}
 
 	public static Team StringToTeam(string str)
@@ -81,15 +74,30 @@ public abstract class MapEntity : MonoBehaviour
 		return Team.None;
 	}
 
-	protected void InitializeMapEntity(string id = null)
+	private void _LoadProperties()
 	{
+		if (_properties != null)
+		{
+			foreach (var property in _properties)
+			{
+				property.RemoveListener(this);
+			}
+		}
+
 		_properties = _logic.GetComponents<EntProperty>();
-		foreach(var property in _properties)
+		foreach (var property in _properties)
 		{
 			property.AddListener(this);
 		}
+	}
 
-		_id = id ?? GameData.currentState.entities.Count.ToString();
+	public void InitializeMapEntity(string id, MapPosition position, Team team = Team.None)
+	{
+		_LoadProperties();
+
+		_id = id;
+		_team = team;
+		_localPosition = position;
 	}
 
 	public void Interact(EntityEvent action, MapEntity entity)

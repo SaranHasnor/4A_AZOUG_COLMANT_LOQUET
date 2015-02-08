@@ -13,12 +13,6 @@ public abstract class RunnableEntity : MapEntity
 		}
 	}
 
-	protected void InitializeRunnableEntity()
-	{
-		// Notify the Time Master of our existence so he can manage our action queue
-		GameData.timeMaster.RegisterEntity(this);
-	}
-
 	public EntityActionResult RunNextAction()
 	{
 		return this.actionQueue.Run();

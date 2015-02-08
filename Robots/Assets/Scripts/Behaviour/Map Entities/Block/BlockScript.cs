@@ -4,22 +4,25 @@ using System.Linq;
 
 public class BlockScript : MapEntity
 {
-	// The only argument for making this a runnable entity is to update their state each turn
-	// Maybe we could also have blocks take actions at specific turns, but I'd like this to be a property instead
 	public static BlockScript CreateFromXmlNode(XmlNode node)
 	{
-		// TODO: Move some of this to the instantiate manager
-		GameObject block = (GameObject)GameObject.Instantiate(GameData.instantiateManager.BlockPrefabForType(node.Attributes["type"].Value)
-																, GameData.currentState.map.ToWorldPos(MapPosition.FromString(node.Attributes["position"].Value))
-																, Quaternion.identity);
-		BlockScript script = block.GetComponent<BlockScript>();
+		string id;
+		string type;
+		Team team;
+		MapPosition position;
 		
-		script.InitializeMapEntity(node.Attributes["id"].Value);
-		
-		if (node.Attributes["team"] != null)
-		{
-			script.team = MapEntity.StringToTeam(node.Attributes["team"].Value);
+		try {
+			id = node.Attributes["id"].Value;
+			type = node.Attributes["type"].Value;
+			position = MapPosition.FromString(node.Attributes["position"].Value);
+		} catch (System.Exception e) {
+			Debug.LogError("Mandatory parameter missing in Block node");
+			throw e;
 		}
+
+		team = (node.Attributes["team"] != null) ? MapEntity.StringToTeam(node.Attributes["team"].Value) : Team.None;
+
+		BlockScript script = GameData.instantiateManager.SpawnBlock(type, id, position, team);
 		
 		// Read any property arguments
 		foreach (XmlNode propertyNode in node.ChildNodes) {
