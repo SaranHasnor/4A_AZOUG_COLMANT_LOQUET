@@ -140,6 +140,7 @@ public class Map
 	{
 		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
 		RemoveEntity(me);
+		_entities[pos] = me;
 		me.localPosition = pos;
 		me.tr.position = ToWorldPos(pos);
 		return true;
@@ -192,6 +193,7 @@ public class Map
 
 		if(nextPos.Equals(entLocalPos)) return -1;
 		RemoveEntity(GetEntity(entLocalPos));
+		_entities[nextPos] = me;
 		me.localPosition = nextPos;
 		me.transform.Translate(ToWorldPos(nextPos));
 		me.Interact(EntityEvent.Move, me);
