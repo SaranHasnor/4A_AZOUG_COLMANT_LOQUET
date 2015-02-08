@@ -47,10 +47,16 @@ public class Map
 
 	public bool AddEntity(MapEntity me, MapPosition pos = null)
 	{
-		var newPos = pos ?? me.localPosition;
-		if (_entities.ContainsValue(me))
+		var newPos = MapPosition.zero;
+		if(pos != null)
+		{
+			newPos = me.localPosition = pos;
+		}
+		else
+			newPos = me.localPosition;
+		if(_entities.ContainsValue(me))
 			return false;
-		if (pos == null || !IsValidPosition(newPos))
+		if(!IsValidPosition(newPos))
 			return false;
 		me.Interact(EntityEvent.Create, me);
 		_entities[newPos] = me;

@@ -49,12 +49,6 @@ public class MapDirection : MapPosition
 			return new MapDirection(1, 0, 0);
 		}
 	}
-	public static MapDirection zero
-	{
-		get
-		{
-			return new MapDirection(0, 0, 0);
-		}
-	}
+
 
 }
