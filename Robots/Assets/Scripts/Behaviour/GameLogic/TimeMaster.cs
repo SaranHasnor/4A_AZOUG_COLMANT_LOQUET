@@ -58,10 +58,18 @@ public class TimeMaster : MonoBehaviour
 	{ // While simulation or execution is running, run one action every second
 		if (_runMode == ActionRunMode.Simulation)
 		{
+			if (GameData.gameMaster.isVictory() || GameData.gameMaster.isLose())
+				return;
+
 			if (Time.time - _lastRunTime >= 1.0f)
 			{
 				RunActions();
 			}
 		}
+	}
+
+	public int GetTurn()
+	{
+		return _currentTurn;
 	}
 }
