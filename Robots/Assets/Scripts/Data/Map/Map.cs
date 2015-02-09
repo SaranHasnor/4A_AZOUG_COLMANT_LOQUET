@@ -139,10 +139,11 @@ public class Map
 	public bool TeleportEntity(MapEntity me, MapPosition pos)
 	{
 		if(_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
-		RemoveEntity(me);
+		_entities[me.localPosition] = null;
 		_entities[pos] = me;
 		me.localPosition = pos;
 		me.tr.position = ToWorldPos(pos);
+		me.Interact(EntityEvent.Teleport, me);
 		return true;
 	}
 
