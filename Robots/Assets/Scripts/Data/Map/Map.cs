@@ -173,8 +173,12 @@ public class Map
 		}
 		if (i > 0)
 			MoveEntityAtPos(entityPos, currentPos);
-		if(obstacle != null)
+		if (obstacle != null)
+		{
 			_entities[currentPos].Interact(EntityEvent.Collide, _entities[obstacle]);
+			_entities[obstacle].Interact(EntityEvent.Collide, _entities[currentPos]);
+		}
+			
 		return i;
 	}
 

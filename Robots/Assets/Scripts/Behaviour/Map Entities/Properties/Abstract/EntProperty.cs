@@ -41,6 +41,7 @@ public abstract class EntProperty : MonoBehaviour {
 	}
 
 	protected abstract void _Interact(EntityEvent actionType, MapEntity entity);
+	//protected abstract void _Interact(EntityEvent actionType, params object[] obj);
 
 	private void Interact(EntityEvent actionType, MapEntity entity) {
 		try {

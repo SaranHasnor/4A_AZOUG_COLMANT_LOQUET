@@ -31,22 +31,34 @@ public class GUIRenderer : MonoBehaviour
 
 	void OnGUI()
 	{
-		if (_selectedEntity != null)
+
+		if (GameData.gameMaster.isVictory()) {
+			DrawVictory();
+		} else if (GameData.gameMaster.isLose()) {
+			DrawLose();
+		}
+		else
 		{
-			DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.7f * Screen.height, Screen.width, 0.3f * Screen.height));
-			if (_selectedActionIndex != -1)
+			if (_selectedEntity != null)
 			{
-				DrawActionList(new Rect());
+				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.7f*Screen.height, Screen.width, 0.3f*Screen.height));
+				if (_selectedActionIndex != -1)
+				{
+					DrawActionList(new Rect());
+				}
+			}
+			if (GUI.Button(
+				new Rect(Screen.width - 0.2f*Screen.width, 0.01f*Screen.height, 0.2f*Screen.width, 0.2f*Screen.height), "Play/Pause"))
+			{
+				GameData.timeMaster.ToggleRun();
+			}
+			if (GUI.Button(
+				new Rect(Screen.width - 0.2f*Screen.width, 0.21f*Screen.height, 0.2f*Screen.width, 0.2f*Screen.height), "Rewind"))
+			{
+
 			}
 		}
-		if (GUI.Button(new Rect(Screen.width - 0.2f * Screen.width, 0.01f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Play/Pause"))
-		{
-			GameData.timeMaster.ToggleRun();
-		}
-		if (GUI.Button(new Rect(Screen.width - 0.2f * Screen.width, 0.21f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Rewind"))
-		{
-
-		}
+		DrawTurn();
 	}
 
 	private void DrawActionList(Rect rect)
@@ -90,6 +102,36 @@ public class GUIRenderer : MonoBehaviour
 			{ // Temporary
 				_selectedQueue.SetAction(new EntityActionMove(_selectedEntity.id, new MapPosition(0, 0, 0)));
 			}
+		}
+	}
+
+	private void DrawVictory()
+	{
+		GUI.Box(
+			new Rect(0.25f*Screen.width, 0.25f*Screen.height, 0.5f*Screen.width, 0.5f*Screen.height),
+			"WINNER");
+	}
+
+	private void DrawLose() {
+		GUI.Box(
+			new Rect(0.25f * Screen.width, 0.25f * Screen.height, 0.5f * Screen.width, 0.5f * Screen.height),
+			"LOSER");
+	}
+
+	private void DrawTurn() {
+		if (GameData.gameMaster.GetMaxTurn() == -1)
+		{
+			GUI.Label(
+				new Rect(0.49f * Screen.width, 0.01f * Screen.height, 0.02f * Screen.width, 0.05f * Screen.height),
+				GameData.timeMaster.GetTurn().ToString()
+				);
+		}
+		else
+		{
+			GUI.Label(
+				new Rect(0.45f * Screen.width, 0.01f * Screen.height, 0.05f * Screen.width, 0.05f * Screen.height),
+				GameData.timeMaster.GetTurn() + "/" + GameData.gameMaster.GetMaxTurn()
+				);
 		}
 	}
 

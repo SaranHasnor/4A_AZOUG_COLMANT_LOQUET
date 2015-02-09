@@ -6,13 +6,14 @@ public class GameMaster : MonoBehaviour
 	[SerializeField]
 	private int _maxTurns = -1;
 
-	private uint _robotGoalCount;
+	[SerializeField]
+	private uint _robotGoalCount = 1;
+
 	private uint _robotExitCount;
 	private uint _robotTotalCount;
 	private uint _robotDeadCount;
 
-	void Start()
-	{
+	void Start() {
 		GameData.gameMaster = this;
 	}
 
@@ -54,10 +55,15 @@ public class GameMaster : MonoBehaviour
 	public void OnBotExit()
 	{
 		_robotExitCount++;
-		if (_robotExitCount >= _maxTurns)
+		if (_robotExitCount >= _robotGoalCount)
 		{
 			// TODO : End Win
 		}
+	}
+
+	public bool isVictory()
+	{
+		return _robotExitCount >= _robotGoalCount;
 	}
 
 	// TODO: use it
@@ -68,5 +74,15 @@ public class GameMaster : MonoBehaviour
 		{
 			// TODO : End Lose
 		}
+	}
+
+	public bool isLose() {
+		return _robotTotalCount - _robotDeadCount >= _robotGoalCount - _robotExitCount
+			|| (GameData.timeMaster.GetTurn() >= _maxTurns && _maxTurns != -1);
+	}
+
+	public int GetMaxTurn()
+	{
+		return _maxTurns;
 	}
 }
