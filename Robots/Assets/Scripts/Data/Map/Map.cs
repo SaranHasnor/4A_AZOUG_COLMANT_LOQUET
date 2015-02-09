@@ -133,9 +133,10 @@ public class Map
 
 	public bool MoveEntityAtPos(MapPosition entityPos, MapPosition targetPos)
 	{
-		if (_entities.ContainsKey(targetPos) || GetEntity(targetPos) != null)
+		if (_entities.ContainsKey(targetPos))
 		{
-			_entities[entityPos].Interact(EntityEvent.Collide, _entities[entityPos]);
+			_entities[entityPos].Interact(EntityEvent.Collide, _entities[targetPos]);
+			_entities[targetPos].Interact(EntityEvent.Collide, _entities[entityPos]);
 			return false;
 		}
 		var entity = GetEntity(entityPos);
