@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public abstract class RunnableEntity : MapEntity
-{ // Describes an entity that should be run by the TimeMaster every turn
-	
+public class EntPropertyRunnable : EntProperty
+{
 	public ActionQueue actionQueue
 	{ // For convinience I guess (I don't really like making this public because it can be modified, but we don't filter access to GameData so it doesn't matter anyway)
 		get
 		{
-			return GameData.currentState.actions[this.id];
+			return GameData.currentState.actions[this.owner.id];
 		}
 	}
 
@@ -38,5 +36,13 @@ public abstract class RunnableEntity : MapEntity
 	public void SetAction(EntityAction action, int time = -1)
 	{
 		this.actionQueue.SetAction(action, time);
+	}
+
+	protected override void _Interact(EntityEvent actionType, MapEntity entity)
+	{
+		if (actionType == EntityEvent.Turn)
+		{
+			this.RunNextAction();
+		}
 	}
 }

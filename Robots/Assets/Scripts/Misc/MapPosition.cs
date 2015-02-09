@@ -70,6 +70,11 @@ public class MapPosition
 		return this._Equals((MapPosition)obj);
 	}
 
+	public override int GetHashCode()
+	{
+		return (new Vector3(this.x, this.y, this.z)).GetHashCode();
+	}
+
 	public static MapPosition FromString(string s)
 	{
 		var tmp = s.Split(',', '(', ')');

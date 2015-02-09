@@ -16,11 +16,11 @@ public abstract class EntityAction
 { // Generic action, subclasses should only be action categories, which should in turn be subclassed for actual actions
 	protected string _ownerID;
 
-	public RunnableEntity owner
+	public MapEntity owner
 	{
 		get
 		{
-			return (RunnableEntity)GameData.currentState.entities[_ownerID];
+			return GameData.currentState.entities[_ownerID];
 		}
 	}
 

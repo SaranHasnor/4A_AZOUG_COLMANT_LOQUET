@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Xml;
 
-public class RobotScript : RunnableEntity
+public class RobotScript : MapEntity
 {
 	public static RobotScript CreateFromXmlNode(XmlNode node)
 	{
