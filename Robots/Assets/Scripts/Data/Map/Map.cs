@@ -88,17 +88,6 @@ public class Map
 			return null;
 		}
 	}
-	public MapEntity GetEntity(MapEntity me)
-	{
-		try
-		{
-			return _entities[ToLocalPos(me.transform.position)];
-		}
-		catch(Exception)
-		{
-			return null;
-		}
-	}
 	public MapEntity GetNeighbour(MapEntity entity, MapDirection direction)
 	{
 		try
