@@ -120,9 +120,10 @@ public abstract class MapEntity : MonoBehaviour
 		return GameData.currentState.map.CanMoveEntity(this, pos);
 	}
 
-	public int Move(MapPosition pos)
+	public bool Move(MapPosition pos)
 	{
-		return GameData.currentState.map.MoveEntity(this, pos);
+		// TODO : correction booleen
+		return GameData.currentState.map.MoveEntity(this, pos)>=0;
 	}
 
 	public bool Teleport(MapPosition pos)
