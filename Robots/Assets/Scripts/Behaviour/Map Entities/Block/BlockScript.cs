@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Xml;
 using System.Linq;
+using System.Collections.Generic;
 
 public class BlockScript : MapEntity
 {
@@ -28,7 +29,7 @@ public class BlockScript : MapEntity
 		foreach (XmlNode propertyNode in node.ChildNodes) {
 			foreach (var property in script.properties) {
 				if (property.GetType().ToString() == propertyNode.Attributes["class"].Value) {
-					var parameters = propertyNode.Attributes["params"].Value.Split(';').Select(param => param.Split('=')).ToDictionary(str => str[0], str => str[1]);
+					Dictionary<string, string> parameters = propertyNode.Attributes["params"].Value.Split(';').Select(param => param.Split('=')).ToDictionary(str => str[0], str => str[1]);
 
 					property.SetParameters(parameters);
 				}

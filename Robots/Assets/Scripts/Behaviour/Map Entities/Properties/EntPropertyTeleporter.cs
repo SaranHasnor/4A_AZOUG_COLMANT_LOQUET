@@ -12,25 +12,25 @@ public class EntPropertyTeleporter : EntProperty {
 
 	protected override void _Interact(EntityEvent action, MapEntity entity)
 	{
-		if (action == EntityEvent.Collide)
+		if (action == EntityEvent.Turn)
 		{
-			Debug.Log("Collision");
+			++_sinceLastTeleport;
+		}
+		else if (action == EntityEvent.Collide)
+		{
 			if (_sinceLastTeleport >= _frequencyTeleport)
 			{
-				if (entity.Move(GameData.currentState.entities[_targetID].localPosition))
-				{
-					_sinceLastTeleport = 0;
-				}
-			}
-			else
-			{
-				++_sinceLastTeleport;
+				GameData.currentState.entities[_targetID].Interact(EntityEvent.Teleport, entity);
+				_sinceLastTeleport = 0;
 			}
 		}
 	}
 
 	public override void SetParameters(Dictionary<string, string> parameters)
 	{
-		_targetID = parameters["target"];
+		if (parameters.ContainsKey("target"))
+		{
+			_targetID = parameters["target"];
+		}
 	}
 }

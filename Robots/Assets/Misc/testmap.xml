@@ -35,7 +35,9 @@
     <block id="30"	type="stoneblock"	position="(5,0,4)"/>
     <block id="31"	type="sandblock"	position="(0,1,3)"/>
     <block id="32"	type="sandblock"	position="(1,1,4)"/>
-    <block id="33"	type="teleporter"	position="(5,1,2)" target="3"/>
+    <block id="33"	type="teleporter"	position="(5,1,2)">
+      <property class="EntPropertyTeleporter" params="target=71"/>
+    </block>
 
     <block id="41"	type="stoneblock"	position="(10,0,0)"/>
     <block id="42"	type="stoneblock"	position="(11,0,0)"/>
@@ -67,7 +69,9 @@
     <block id="68"	type="stoneblock"	position="(13,0,4)"/>
     <block id="69"	type="stoneblock"	position="(14,0,4)"/>
     <block id="70"	type="stoneblock"	position="(15,0,4)"/>
-    <block id="71"	type="teleporter_target"	position="(10,1,2)"/>
+    <block id="71"	type="teleporter_target"	position="(10,1,2)">
+      <property class="EntPropertyTeleporterTarget" params="exitDirection=(1,0,0)"/>
+    </block>
     <block id="72"	type="staticblock"	position="(12,1,0)"/>
     <block id="73"	type="staticblock"	position="(12,1,1)"/>
     <block id="75"	type="staticblock"	position="(12,1,3)"/>
@@ -85,10 +89,10 @@
       <action class="EntityActionMove" position="(3,1,2)"/>
       <action class="EntityActionMove" position="(4,1,2)"/>
       <action class="EntityActionMove" position="(5,1,2)"/>
-      <action class="EntityActionMove" position="(11,1,2)"/>
       <action class="EntityActionMove" position="(12,1,2)"/>
       <action class="EntityActionMove" position="(13,1,2)"/>
       <action class="EntityActionMove" position="(14,1,2)"/>
+      <action class="EntityActionMove" position="(15,1,2)"/>
     </entity>
   </actions>
 </gamestate>
