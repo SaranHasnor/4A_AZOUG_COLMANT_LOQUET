@@ -5,11 +5,12 @@ public class EntPropertyPushable : EntProperty {
 	private int _strongOfPush = 1;
 
 	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
-		if (actionType == EntityEvent.Push) {
-			var posEntityPush = GameData.currentState.map.ToLocalPos(gameObject.transform.position);
+		if (actionType == EntityEvent.Push)
+		{
+			var posEntityPush = owner.localPosition;
 
 			GameData.currentState.map.GetEntity(posEntityPush)
-				.Move(PosToMove(entity, MapDirection.DirectionToMove(posEntityPush, GameData.currentState.map.ToLocalPos(entity.tr.position)), _strongOfPush));
+				.Push(MapDirection.DirectionToMove(posEntityPush, entity.localPosition), _strongOfPush);
 		}
 	}
 

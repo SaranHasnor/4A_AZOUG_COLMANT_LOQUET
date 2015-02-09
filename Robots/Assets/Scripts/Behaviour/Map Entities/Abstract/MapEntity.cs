@@ -126,9 +126,9 @@ public abstract class MapEntity : MonoBehaviour
 		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
-	public bool Teleport(MapPosition pos)
+	public bool Push(MapDirection direction, int distance)
 	{
-		return GameData.currentState.map.MoveEntity(this, pos);
+		return GameData.currentState.map.PushEntity(this, direction, distance) > 0;
 	}
 
 	public void Destroy()

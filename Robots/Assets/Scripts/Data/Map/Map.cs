@@ -165,7 +165,7 @@ public class Map
 		int i;
 		for(i = 0 ; i < distance ; ++i)
 		{
-			if(_entities[(currentPos + direction)] != null) break;
+			if(_entities.ContainsKey((currentPos + direction))) break;
 			currentPos += direction;
 		}
 		if (i > 0)

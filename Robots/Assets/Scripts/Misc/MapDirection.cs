@@ -61,18 +61,18 @@ public class MapDirection : MapPosition
 
 		if (startPos.x != targetPos.x &&
 			startPos.y == targetPos.y &&
-			startPos.y == targetPos.y) {
+			startPos.z == targetPos.z) {
 			direction = targetPos.x > startPos.x ? left : right;
 		} else if (startPos.x == targetPos.x &&
 					startPos.y != targetPos.y &&
-					startPos.y == targetPos.y) {
+					startPos.z == targetPos.z) {
 			direction = targetPos.y > startPos.y ? down : up;
 		} else if (startPos.x == targetPos.x &&
 					startPos.y == targetPos.y &&
-					startPos.y != targetPos.y) {
+					startPos.z != targetPos.z) {
 			direction = targetPos.z > startPos.z ? back : forward;
 		} else {
-			Debug.Log("Error in EntPropertyPushable : Can't push");
+			Debug.Log("Error in EntPropertyPushable : Can't push "+startPos + " " + targetPos);
 			direction = new MapDirection(0, 0, 0);
 		}
 
