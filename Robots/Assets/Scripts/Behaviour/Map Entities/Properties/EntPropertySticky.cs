@@ -13,24 +13,24 @@ public class EntPropertySticky : EntProperty {
 			throw new ArgumentException(String.Format("L'event {0} a été levé mais l'implémentation n'est pas terminé.", actionType));
 
 			// Check that this entity can be pushed.
-			var propPusable = entity.gameObject.GetComponent<EntPropertyPushable>(); // TODO Amau : may be change by entity.properties
-			if (propPusable == null)
-				return;
+			//var propPusable = entity.gameObject.GetComponent<EntPropertyPushable>(); // TODO Amau : may be change by entity.properties
+			//if (propPusable == null)
+			//	return;
 
-			// Get all related entities. 
-			var nbMaxSticky = _nbMaxSticky;
-			var neighboursSticky = GetAllNeighbourRecur(entity, 0, ref nbMaxSticky);
+			//// Get all related entities. 
+			//var nbMaxSticky = _nbMaxSticky;
+			//var neighboursSticky = GetAllNeighbourRecur(entity, 0, ref nbMaxSticky);
 
-			// Check that can interact with all entities
-			if (neighboursSticky.Count >= nbMaxSticky)
-				return;
+			//// Check that can interact with all entities
+			//if (neighboursSticky.Count >= nbMaxSticky)
+			//	return;
 
-			var direction = MapDirection.DirectionToMove(
-				GameData.currentState.map.ToLocalPos(gameObject.transform.position),
-				GameData.currentState.map.ToLocalPos(entity.tr.position)
-				);
+			//var direction = MapDirection.DirectionToMove(
+			//	GameData.currentState.map.ToLocalPos(gameObject.transform.position),
+			//	GameData.currentState.map.ToLocalPos(entity.tr.position)
+			//	);
 
-			var strong = propPusable.getStrongOfPush();
+			//var strong = propPusable.getStrongOfPush();
 
 			//foreach (var neighbourSticky in neighboursSticky) {
 			//	// if pushable
