@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.UI;
 
 public class Map
 {
@@ -136,16 +137,43 @@ public class Map
 		return (pos.x <= width && pos.y <= height && pos.z <= depth);
 	}
 
-	public bool TeleportEntity(MapEntity me, MapPosition pos)
+	public bool MoveEntity(MapEntity me, MapPosition pos)
 	{
-		if(_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
-		_entities[me.localPosition] = null;
-		_entities[pos] = me;
-		me.localPosition = pos;
-		me.tr.position = ToWorldPos(pos);
-		me.Interact(EntityEvent.Teleport, me);
+		return MoveEntityAtPos(me.localPosition, pos);
+	}
+
+	public bool MoveEntityAtPos(MapPosition entityPos, MapPosition targetPos)
+	{
+		if(_entities.ContainsKey(targetPos) || GetEntity(targetPos) != null) return false;
+		var entity = GetEntity(entityPos);
+		entity.localPosition = targetPos;
+		entity.tr.position = ToWorldPos(targetPos);
+		_entities.Remove(entityPos);
+		_entities.Add(targetPos, entity);
+		entity.Interact(EntityEvent.Teleport, entity);
 		return true;
 	}
+
+	public int PushEntity(MapEntity me, MapDirection direction, int distance)
+	{
+		return PushEntityAtPos(me.localPosition, direction, distance);
+	}
+
+	public int PushEntityAtPos(MapPosition entityPos, MapDirection direction, int distance)
+	{
+		var currentPos = entityPos;
+		int i;
+		for(i = 0 ; i < distance ; ++i)
+		{
+			if(_entities[(currentPos + direction)] != null) break;
+			currentPos += direction;
+		}
+		if (i > 0)
+			MoveEntityAtPos(entityPos, currentPos);
+		return i;
+	}
+
+
 
 	/// <summary>
 	///		Allows to verify the possibility of moving an entity to a given position and
@@ -154,84 +182,82 @@ public class Map
 	/// <param name="entity">Is the entity that can be moved.</param>
 	/// <param name="pos">This is the position that we want to achieve.</param>
 	/// <returns>Returns a location on the map that the entity <c>entity</c> can achieve.</returns>
-	public MapPosition CanMoveEntity(MapEntity entity, MapPosition pos) {
-		MapEntity value;
-		var currentPos = new MapPosition(entity.localPosition);
+	//public MapPosition CanMoveEntity(MapEntity entity, MapPosition pos) {
+	//	MapEntity value;
+	//	var currentPos = new MapPosition(entity.localPosition);
 
-		if (currentPos.x != pos.x)
-		{
-			if (currentPos.x < pos.x) {
-				for (var i = currentPos.x + (int)blockSize; i <= pos.x; i += (int)blockSize)
-				{
-					var nextPos = new MapPosition(i, currentPos.y, currentPos.z);
-					if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
-						currentPos = nextPos;
-					else
-						break;
-				}
-			}
-			else {
-				for (var i = currentPos.x - (int)blockSize; i >= pos.x; i -= (int)blockSize)
-				{
-					var nextPos = new MapPosition(i, currentPos.y, currentPos.z);
-					if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
-						currentPos = nextPos;
-					else
-						break;
-				}
-			}
-			
-		} else if (currentPos.y != pos.y)
-		{
-			if (currentPos.y < pos.y) {
-				for (var i = currentPos.y + (int)blockSize; i <= pos.y; i += (int)blockSize)
-				{
-					var nextPos = new MapPosition(currentPos.x, i, currentPos.z);
-					if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
-						currentPos = nextPos;
-					else
-						break;
-				}
-			}
-			else {
-				for (var i = currentPos.y - (int)blockSize; i >= pos.y; i -= (int)blockSize)
-				{
-					var nextPos = new MapPosition(currentPos.x, i, currentPos.z);
-					if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
-						currentPos = nextPos;
-					else
-						break;
-				}
-			}
+	//	if (currentPos.x != pos.x)
+	//	{
+	//		if (currentPos.x < pos.x) {
+	//			for (var i = currentPos.x; i <= pos.x; i ++)
+	//			{
+	//				var nextPos = new MapPosition(i, currentPos.y, currentPos.z);
+	//				if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
+	//					currentPos = nextPos;
+	//				else
+	//					break;
+	//			}
+	//		}
+	//		else {
+	//			for (var i = currentPos.x; i >= pos.x; i --)
+	//			{
+	//				var nextPos = new MapPosition(i, currentPos.y, currentPos.z);
+	//				if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
+	//					currentPos = nextPos;
+	//				else
+	//					break;
+	//			}
+	//		}
 
-		} else if (currentPos.z != pos.z)
-		{
-			if (currentPos.z < pos.z) {
-				for (var i = currentPos.z + (int)blockSize; i <= pos.z; i += (int)blockSize)
-				{
-					var nextPos = new MapPosition(currentPos.x, currentPos.y, i);
-					if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
-						currentPos = nextPos;
-					else
-						break;
-				}
-			}
-			else {
-				for (var i = currentPos.z - (int)blockSize; i >= pos.z; i -= (int)blockSize)
-				{
-					var nextPos = new MapPosition(currentPos.x, currentPos.y, i);
-					if (!_entities.ContainsKey(nextPos) && !_entities.TryGetValue(nextPos, out value)) {
-						currentPos = nextPos;
-					}
-					else {
-						break;
-					}
-				}
-			}
+	//	} else if (currentPos.y != pos.y)
+	//	{
+	//		if (currentPos.y < pos.y) {
+	//			for (var i = currentPos.y; i <= pos.y; i ++)
+	//			{
+	//				var nextPos = new MapPosition(currentPos.x, i, currentPos.z);
+	//				if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
+	//					currentPos = nextPos;
+	//				else
+	//					break;
+	//			}
+	//		}
+	//		else {
+	//			for (var i = currentPos.y; i >= pos.y; i --)
+	//			{
+	//				var nextPos = new MapPosition(currentPos.x, i, currentPos.z);
+	//				if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
+	//					currentPos = nextPos;
+	//				else
+	//					break;
+	//			}
+	//		}
 
-		}
-		return currentPos;
-	}
+	//	} else if (currentPos.z != pos.z)
+	//	{
+	//		if (currentPos.z < pos.z) {
+	//			for (var i = currentPos.z; i <= pos.z; i ++)
+	//			{
+	//				var nextPos = new MapPosition(currentPos.x, currentPos.y, i);
+	//				if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
+	//					currentPos = nextPos;
+	//				else
+	//					break;
+	//			}
+	//		}
+	//		else {
+	//			for (var i = currentPos.z; i >= pos.z; i --)
+	//			{
+	//				var nextPos = new MapPosition(currentPos.x, currentPos.y, i);
+	//				if(!_entities.ContainsKey(nextPos) && GetEntity(nextPos) == null)
+	//					currentPos = nextPos;
+	//				else
+	//					break;
+	//			}
+	//		}
+
+	//	}
+	//	return currentPos;
+	//}
 
 	/// <summary>
 	///		Moves an entity in a given position and returns the distance traveled.
@@ -239,24 +265,24 @@ public class Map
 	/// <param name="entity">Is the entity that can be moved.</param>
 	/// <param name="pos">This is the position that we want to achieve.</param>
 	/// <returns>Returns the distance traveled or -1 if an error occurred.</returns>
-	public int MoveEntity(MapEntity entity, MapPosition pos) {
-		Debug.Log(System.String.Format("Le robot est à la position {0} et checher à aller à la position {1}.", entity.localPosition.ToString(), pos.ToString()));
-		if(pos.Equals(entity.localPosition)) return 0;
-		var nextPos = CanMoveEntity(entity, pos);
+	//public int MoveEntity(MapEntity entity, MapPosition pos) {
+	//	Debug.Log(System.String.Format("Le robot est à la position {0} et checher à aller à la position {1}.", entity.localPosition.ToString(), pos.ToString()));
+	//	if(pos.Equals(entity.localPosition)) return 0;
+	//	var nextPos = CanMoveEntity(entity, pos);
 
-		if(nextPos.Equals(entity.localPosition)) return 0;
+	//	if(nextPos.Equals(entity.localPosition)) return 0;
 
-		_entities.Add(nextPos, entity);
-		//_entities[entity.localPosition] = null;
-		_entities.Remove(entity.localPosition);
-		entity.localPosition = nextPos;
-		entity.transform.Translate(ToWorldPos(nextPos));
-		entity.Interact(EntityEvent.Move, entity);
+	//	_entities.Add(nextPos, entity);
+	//	//_entities[entity.localPosition] = null;
+	//	_entities.Remove(entity.localPosition);
+	//	entity.localPosition = nextPos;
+	//	entity.transform.Translate(ToWorldPos(nextPos));
+	//	entity.Interact(EntityEvent.Move, entity);
 
-		return Math.Abs(nextPos.x.Equals(entity.localPosition.x)
-			? nextPos.y.Equals(entity.localPosition.y)
-				? entity.localPosition.z - nextPos.z
-				: entity.localPosition.y - nextPos.y
-			: entity.localPosition.x - nextPos.x);
-	}
+	//	return Math.Abs(nextPos.x.Equals(entity.localPosition.x)
+	//		? nextPos.y.Equals(entity.localPosition.y)
+	//			? entity.localPosition.z - nextPos.z
+	//			: entity.localPosition.y - nextPos.y
+	//		: entity.localPosition.x - nextPos.x);
+	//}
 }
