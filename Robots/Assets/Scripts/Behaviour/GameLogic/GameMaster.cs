@@ -38,7 +38,7 @@ public class GameMaster : MonoBehaviour
 						_robotTotalCount++;
 					}
 
-					_robotGoalCount += count;
+					//_robotGoalCount += count;
 				}
 			}
 		}
@@ -76,8 +76,10 @@ public class GameMaster : MonoBehaviour
 		}
 	}
 
-	public bool isLose() {
-		return _robotTotalCount - _robotDeadCount >= _robotGoalCount - _robotExitCount
+	public bool isLose()
+	{
+		Debug.Log(_robotTotalCount + " - " + _robotExitCount + " - " + _robotDeadCount + " < " + _robotGoalCount);
+		return _robotTotalCount - _robotExitCount - _robotDeadCount < _robotGoalCount
 			|| (GameData.timeMaster.GetTurn() >= _maxTurns && _maxTurns != -1);
 	}
 
