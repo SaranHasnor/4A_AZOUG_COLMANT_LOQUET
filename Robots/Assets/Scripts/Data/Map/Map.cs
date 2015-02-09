@@ -204,6 +204,7 @@ public class Map
 		if (RemoveEntity(GetEntity(entLocalPos))) return -1;
 		_entities[nextPos] = entity;
 		entity.localPosition = nextPos;
+		Debug.Log(System.String.Format("Le robot est à la position {0} et checher à aller à la position {1}.",entity.localPosition.ToString(),nextPos.ToString()));
 		entity.transform.Translate(ToWorldPos(nextPos));
 		entity.Interact(EntityEvent.Move, entity);
 
