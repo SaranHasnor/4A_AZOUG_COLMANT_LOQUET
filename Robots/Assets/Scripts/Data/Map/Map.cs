@@ -144,13 +144,17 @@ public class Map
 
 	public bool MoveEntityAtPos(MapPosition entityPos, MapPosition targetPos)
 	{
-		if(_entities.ContainsKey(targetPos) || GetEntity(targetPos) != null) return false;
+		if (_entities.ContainsKey(targetPos) || GetEntity(targetPos) != null)
+		{
+			_entities[entityPos].Interact(EntityEvent.Collide, _entities[entityPos]);
+			return false;
+		}
 		var entity = GetEntity(entityPos);
 		entity.localPosition = targetPos;
 		entity.tr.position = ToWorldPos(targetPos);
 		_entities.Remove(entityPos);
 		_entities.Add(targetPos, entity);
-		entity.Interact(EntityEvent.Teleport, entity);
+		entity.Interact(EntityEvent.Move, entity);
 		return true;
 	}
 
@@ -162,14 +166,25 @@ public class Map
 	public int PushEntityAtPos(MapPosition entityPos, MapDirection direction, int distance)
 	{
 		var currentPos = entityPos;
-		int i;
-		for(i = 0 ; i < distance ; ++i)
+		int i = 0;
+		MapPosition obstacle = null;
+		while(IsValidPosition(currentPos))
 		{
-			if(_entities.ContainsKey((currentPos + direction))) break;
+			if(distance > 0 && i == distance)
+				break;
+			if (_entities.ContainsKey(currentPos + direction))
+			{
+				obstacle = currentPos + direction;
+				break;
+			}
 			currentPos += direction;
+			i++;
+			
 		}
 		if (i > 0)
 			MoveEntityAtPos(entityPos, currentPos);
+		if(obstacle != null)
+			_entities[currentPos].Interact(EntityEvent.Collide, _entities[obstacle]);
 		return i;
 	}
 
