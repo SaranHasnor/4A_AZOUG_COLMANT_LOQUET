@@ -145,10 +145,10 @@ public class Map
 	public bool MoveEntityAtPos(MapPosition entityPos, MapPosition targetPos)
 	{
 		if(_entities.ContainsKey(targetPos) || GetEntity(targetPos) != null) return false;
-		_entities.Remove(entityPos);
 		var entity = GetEntity(entityPos);
 		entity.localPosition = targetPos;
 		entity.tr.position = ToWorldPos(targetPos);
+		_entities.Remove(entityPos);
 		_entities.Add(targetPos, entity);
 		entity.Interact(EntityEvent.Teleport, entity);
 		return true;
