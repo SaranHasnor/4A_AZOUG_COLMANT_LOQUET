@@ -138,7 +138,7 @@ public class Map
 
 	public bool TeleportEntity(MapEntity me, MapPosition pos)
 	{
-		if(!_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
+		if(_entities.ContainsKey(pos) || GetEntity(pos) != null) return false;
 		RemoveEntity(me);
 		_entities[pos] = me;
 		me.localPosition = pos;
@@ -193,7 +193,8 @@ public class Map
 	/// <param name="entity">Is the entity that can be moved.</param>
 	/// <param name="pos">This is the position that we want to achieve.</param>
 	/// <returns>Returns the distance traveled or -1 if an error occurred.</returns>
-	public int MoveEntity(MapEntity entity, MapPosition pos) {
+	public int MoveEntity(MapEntity entity, MapPosition pos) 
+	{
 		var entLocalPos = ToLocalPos(entity.tr.position);
 		if (pos.Equals(entLocalPos)) return 0;
 
@@ -201,7 +202,6 @@ public class Map
 		if (nextPos.Equals(entLocalPos)) return 0;
 
 		if (RemoveEntity(GetEntity(entLocalPos))) return -1;
-
 		_entities[nextPos] = entity;
 		entity.localPosition = nextPos;
 		entity.transform.Translate(ToWorldPos(nextPos));
