@@ -116,19 +116,19 @@ public abstract class MapEntity : MonoBehaviour
 	/// </summary>
 	/// <param name="pos">Is the entity that can be moved.</param>
 	/// <returns>Returns a location on the map that this entity can achieve.</returns>
-	public MapPosition CanMove(MapPosition pos) {
-		return GameData.currentState.map.CanMoveEntity(this, pos);
-	}
+	//public MapPosition CanMove(MapPosition pos) {
+	//	return GameData.currentState.map.CanMoveEntity(this, pos);
+	//}
 
 	public bool Move(MapPosition pos)
 	{
 		// TODO : correction booleen
-		return GameData.currentState.map.MoveEntity(this, pos)>=0;
+		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
 	public bool Teleport(MapPosition pos)
 	{
-		return GameData.currentState.map.TeleportEntity(this, pos);
+		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
 	public void Destroy()

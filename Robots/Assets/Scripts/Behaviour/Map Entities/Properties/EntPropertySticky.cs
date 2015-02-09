@@ -32,15 +32,15 @@ public class EntPropertySticky : EntProperty {
 
 			var strong = propPusable.getStrongOfPush();
 
-			foreach (var neighbourSticky in neighboursSticky) {
-				// if pushable
-				var nextPos = neighbourSticky.CanMove(neighbourSticky.localPosition + direction * strong);
-				strong = direction.x == 0
-					? direction.y == 0
-						? nextPos.z + neighbourSticky.localPosition.z
-						: nextPos.y + neighbourSticky.localPosition.y
-					: nextPos.x + neighbourSticky.localPosition.x;
-			}
+			//foreach (var neighbourSticky in neighboursSticky) {
+			//	// if pushable
+			//	var nextPos = neighbourSticky.CanMove(neighbourSticky.localPosition + direction * strong);
+			//	strong = direction.x == 0
+			//		? direction.y == 0
+			//			? nextPos.z + neighbourSticky.localPosition.z
+			//			: nextPos.y + neighbourSticky.localPosition.y
+			//		: nextPos.x + neighbourSticky.localPosition.x;
+			//}
 
 			// TODO Amau: Push neighboursSticky in direction of strong
 		}
