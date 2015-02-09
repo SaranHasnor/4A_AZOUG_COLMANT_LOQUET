@@ -11,6 +11,8 @@ public class EntityActionMove : EntityTargetedAction
 
 	protected override EntityActionResult _Run()
 	{
-		return owner.Move(_targetPosition) ? EntityActionResult.Success : EntityActionResult.Failure;
+		MapDirection movement = MapDirection.DirectionToMove(owner.localPosition, _targetPosition);
+		
+		return owner.Move(owner.localPosition + movement) ? EntityActionResult.Success : EntityActionResult.Failure;
 	}
 }
