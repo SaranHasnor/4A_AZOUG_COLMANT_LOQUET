@@ -167,7 +167,6 @@ public class Map
 			}
 			currentPos += direction;
 			i++;
-			
 		}
 		if (i > 0)
 			MoveEntityAtPos(entityPos, currentPos);
@@ -176,11 +175,8 @@ public class Map
 			_entities[currentPos].Interact(EntityEvent.Collide, _entities[obstacle]);
 			_entities[obstacle].Interact(EntityEvent.Collide, _entities[currentPos]);
 		}
-			
 		return i;
 	}
-
-
 
 	/// <summary>
 	///		Allows to verify the possibility of moving an entity to a given position and
