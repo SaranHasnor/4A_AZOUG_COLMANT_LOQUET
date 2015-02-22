@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -98,4 +97,22 @@ public abstract class EntityAction
 	}
 
 	public abstract Dictionary<string, string> XmlActionAttibutes();
+
+	public XmlNode Serialize(XmlDocument doc)
+	{
+		var action = doc.CreateElement("action");
+		var attributes = XmlActionAttibutes();
+
+		var c = doc.CreateAttribute("class");
+		c.Value = ToString();
+		action.AppendChild(c);
+
+		foreach (var attribute in attributes) {
+			var a = doc.CreateAttribute(attribute.Key);
+			a.Value = attribute.Value;
+			action.AppendChild(a);
+		}
+
+		return action;
+	}
 }

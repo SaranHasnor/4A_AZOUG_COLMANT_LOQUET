@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Linq;
+using System.Xml;
+using UnityEngine;
 
 public delegate void EntInteraction(EntityEvent actionType, MapEntity entity);
 
@@ -9,27 +10,22 @@ public enum Team {
 	Player2
 }
 
-public abstract class MapEntity : MonoBehaviour
-{ // Describes an entity that has a physical presence on the map
+public abstract class MapEntity : MonoBehaviour { // Describes an entity that has a physical presence on the map
 
 	[SerializeField]
 	private GameObject _logic; // Entity containing the properties
 
 	[SerializeField]
 	private Transform _transform;
-	public Transform tr
-	{
-		get
-		{
+	public Transform tr {
+		get {
 			return _transform;
 		}
 	}
 
 	private EntProperty[] _properties;
-	public EntProperty[] properties
-	{
-		get
-		{
+	public EntProperty[] properties {
+		get {
 			return _properties;
 		}
 	}
@@ -38,38 +34,30 @@ public abstract class MapEntity : MonoBehaviour
 	public event EntInteraction OnEntityInteraction;
 
 	private string _id;
-	public string id
-	{
-		get
-		{
+	public string id {
+		get {
 			return _id;
 		}
 	}
 
 	private MapPosition _localPosition;
-	public MapPosition localPosition
-	{
-		get
-		{
+	public MapPosition localPosition {
+		get {
 			return _localPosition;
 		}
-		set
-		{
+		set {
 			_localPosition = value;
 		}
 	}
 
 	private Team _team;
-	public Team team
-	{
-		get
-		{
+	public Team team {
+		get {
 			return _team;
 		}
 	}
 
-	public static Team StringToTeam(string str)
-	{
+	public static Team StringToTeam(string str) {
 		if (str.Equals("1"))
 			return Team.Player1;
 		if (str.Equals("2"))
@@ -78,25 +66,20 @@ public abstract class MapEntity : MonoBehaviour
 		return Team.None;
 	}
 
-	private void _LoadProperties()
-	{
-		if (_properties != null)
-		{
-			foreach (var property in _properties)
-			{
+	private void _LoadProperties() {
+		if (_properties != null) {
+			foreach (var property in _properties) {
 				property.RemoveListener(this);
 			}
 		}
 
 		_properties = _logic.GetComponents<EntProperty>();
-		foreach (var property in _properties)
-		{
+		foreach (var property in _properties) {
 			property.AddListener(this);
 		}
 	}
 
-	public void InitializeMapEntity(string id, MapPosition position, Team team = Team.None)
-	{
+	public void InitializeMapEntity(string id, MapPosition position, Team team = Team.None) {
 		_LoadProperties();
 
 		_id = id;
@@ -104,35 +87,47 @@ public abstract class MapEntity : MonoBehaviour
 		_localPosition = position;
 	}
 
-	public void Interact(EntityEvent action, MapEntity entity)
-	{
-		if(OnEntityInteraction != null)
+	public void Interact(EntityEvent action, MapEntity entity) {
+		if (OnEntityInteraction != null)
 			OnEntityInteraction(action, entity);
 	}
 
-	/// <summary>
-	///		Allows to verify the possibility of moving this entity to a given position and
-	///		returns the last possibly ateignable possition.
-	/// </summary>
-	/// <param name="pos">Is the entity that can be moved.</param>
-	/// <returns>Returns a location on the map that this entity can achieve.</returns>
-	//public MapPosition CanMove(MapPosition pos) {
-	//	return GameData.currentState.map.CanMoveEntity(this, pos);
-	//}
-
-	public bool Move(MapPosition pos)
-	{
-		// TODO : correction booleen
+	public bool Move(MapPosition pos) {
 		return GameData.currentState.map.MoveEntity(this, pos);
 	}
 
-	public bool Push(MapDirection direction, int distance)
-	{
+	public bool Push(MapDirection direction, int distance) {
 		return GameData.currentState.map.PushEntity(this, direction, distance) > 0;
 	}
 
-	public void Destroy()
-	{
+	public void Destroy() {
 		GameData.currentState.map.RemoveEntity(GameData.currentState.map.GetEntity(tr.position));
+	}
+
+	public XmlNode Serialize(XmlDocument doc) {
+		var block = doc.CreateElement("block");
+
+		var id = doc.CreateAttribute("id");
+		id.Value = _id;
+		block.Attributes.Append(id);
+
+		var type = doc.CreateAttribute("type");
+		type.Value = _logic.ToString();
+		block.Attributes.Append(type);
+
+		var pos = doc.CreateAttribute("position");
+		pos.Value = _localPosition.ToString();
+		block.Attributes.Append(pos);
+
+		if (_team != Team.None) {
+			var team = doc.CreateAttribute("team");
+			team.Value = _team.ToString();
+			block.Attributes.Append(team);
+		}
+
+		foreach (var property in _logic.GetComponents<EntProperty>().Select(prop => prop.Serialize(doc)).Where(property => property != null))
+			block.AppendChild(property);
+
+		return block;
 	}
 }

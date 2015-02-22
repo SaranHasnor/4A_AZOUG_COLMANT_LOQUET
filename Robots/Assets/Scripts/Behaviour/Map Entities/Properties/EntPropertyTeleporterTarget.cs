@@ -1,5 +1,6 @@
 ﻿﻿using UnityEngine;
 using System.Collections.Generic;
+﻿using System.Xml;
 
 public class EntPropertyTeleporterTarget : EntProperty
 {
@@ -20,5 +21,19 @@ public class EntPropertyTeleporterTarget : EntProperty
 		{
 			_exitDirection = MapDirection.FromString(parameters["exitDirection"]);
 		}
+	}
+
+	public override XmlNode Serialize(XmlDocument doc) {
+		var property = doc.CreateElement("property");
+
+		var c = doc.CreateAttribute("class");
+		c.Value = ToString();
+		property.Attributes.Append(c);
+
+		var param = doc.CreateAttribute("params");
+		param.Value = "exitDirection=" + _exitDirection.ToString();
+		property.Attributes.Append(param);
+
+		return property;
 	}
 }

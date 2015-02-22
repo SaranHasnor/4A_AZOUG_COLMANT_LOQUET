@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Xml;
 
 public class EntPropertyTeleporter : EntProperty {
 	[SerializeField]
@@ -32,5 +33,19 @@ public class EntPropertyTeleporter : EntProperty {
 		{
 			_targetID = parameters["target"];
 		}
+	}
+
+	public override XmlNode Serialize(XmlDocument doc) {
+		var property = doc.CreateElement("property");
+
+		var c = doc.CreateAttribute("class");
+		c.Value = ToString();
+		property.Attributes.Append(c);
+
+		var param = doc.CreateAttribute("params");
+		param.Value = "target=" + _targetID;
+		property.Attributes.Append(param);
+
+		return property;
 	}
 }

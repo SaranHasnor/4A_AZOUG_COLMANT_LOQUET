@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Xml;
 
 public class EntPropertySpawner : EntProperty {
 
@@ -31,20 +32,31 @@ public class EntPropertySpawner : EntProperty {
 		}
 	}
 
-	public override void SetParameters(Dictionary<string, string> parameters)
-	{
-		if (parameters.ContainsKey("position"))
-		{
+	public override void SetParameters(Dictionary<string, string> parameters) {
+		if (parameters.ContainsKey("position")) {
 			_position = MapPosition.FromString(parameters["position"]);
 		}
 	}
 
-	public void EnqueueRobotSpawn(RobotScript robot)
-	{
-		this._spawnQueue.Enqueue(robot);
+	public void EnqueueRobotSpawn(RobotScript robot) {
+		_spawnQueue.Enqueue(robot);
 	}
 
 	public uint GetNbSpawn() {
 		return _numberSpawn;
+	}
+
+	public override XmlNode Serialize(XmlDocument doc) {
+		var property = doc.CreateElement("property");
+
+		var c = doc.CreateAttribute("class");
+		c.Value = ToString();
+		property.Attributes.Append(c);
+
+		var param = doc.CreateAttribute("params");
+		param.Value = "position="+_position.ToString();
+		property.Attributes.Append(param);
+
+		return property;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Xml;
 
 public enum EntityEvent : int {
 	// SU
@@ -32,10 +33,8 @@ public enum EntityEvent : int {
 /// </summary>
 public abstract class EntProperty : MonoBehaviour {
 	protected MapEntity _owner;
-	public MapEntity owner
-	{
-		get
-		{
+	public MapEntity owner {
+		get {
 			return _owner;
 		}
 	}
@@ -53,6 +52,10 @@ public abstract class EntProperty : MonoBehaviour {
 
 	public virtual void SetParameters(Dictionary<string, string> parameters) {
 		Debug.LogWarning("Property " + this.GetType() + " got unexpected parameters: " + parameters);
+	}
+
+	public virtual XmlNode Serialize(XmlDocument doc) {
+		return null;
 	}
 
 	public void AddListener(MapEntity actuator) {
