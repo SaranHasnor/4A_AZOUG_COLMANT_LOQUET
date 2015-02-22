@@ -112,10 +112,14 @@ public class GameState { // Represents a snapshot of the game at a given time
 		// <actions>
 		var nodeActions = doc.CreateElement("actions");
 		foreach (var action in _actions) {
+			var entity = action.Value.Serialize(doc);
+
 			var id = doc.CreateAttribute("id");
 			id.Value = action.Key;
-			element.Attributes.Append(width);
+			if (entity.Attributes != null)
+				entity.Attributes.Append(id);
 
+			nodeActions.AppendChild(entity);
 		}
 		nodeGameState.AppendChild(nodeActions);
 		// </actions>
