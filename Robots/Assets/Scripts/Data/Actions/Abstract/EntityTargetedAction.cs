@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public abstract class EntityTargetedAction : EntityAction
 { // Action of an entity on an empty cell
