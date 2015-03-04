@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Reflection;
 
 public class GUIRenderer : MonoBehaviour {
 
@@ -12,13 +13,11 @@ public class GUIRenderer : MonoBehaviour {
 
 	#region Action
 	[SerializeField]
-	private GameObject _ButtonMove;
-	[SerializeField]
-	private GameObject _ButtonPush;
-	[SerializeField]
 	private GameObject _ButtonWait;
 
 
+	[SerializeField]
+	private GameObject _ButtonMove;
 	[SerializeField]
 	private GameObject _ButtonMoveUp;
 	[SerializeField]
@@ -28,6 +27,10 @@ public class GUIRenderer : MonoBehaviour {
 	[SerializeField]
 	private GameObject _ButtonMoveRight;
 
+	private bool _isMoveDraw = false;
+
+	[SerializeField]
+	private GameObject _ButtonPush;
 	[SerializeField]
 	private GameObject _ButtonPushUp;
 	[SerializeField]
@@ -36,6 +39,8 @@ public class GUIRenderer : MonoBehaviour {
 	private GameObject _ButtonPushLeft;
 	[SerializeField]
 	private GameObject _ButtonPushRight;
+
+	private bool _isPushDraw = false;
 
 	[SerializeField]
 	private GameObject _ButtonQueueDelete;
@@ -68,25 +73,20 @@ public class GUIRenderer : MonoBehaviour {
 	}
 
 	void OnGUI() {
-
 		if (GameData.gameMaster.isVictory()) {
 			DrawVictory();
 		} else if (GameData.gameMaster.isLose()) {
 			DrawLose();
 		} else {
 			if (_selectedEntity != null) {
+				_ButtonMove.SetActive(true);
+				_ButtonPush.SetActive(true);
+				_ButtonWait.SetActive(true);
+
 				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.7f * Screen.height, Screen.width, 0.3f * Screen.height));
 				if (_selectedActionIndex != -1) {
 					DrawActionList(new Rect());
 				}
-			}
-			if (GUI.Button(
-				new Rect(Screen.width - 0.2f * Screen.width, 0.01f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Play/Pause")) {
-				GameData.timeMaster.ToggleRun();
-			}
-			if (GUI.Button(
-				new Rect(Screen.width - 0.2f * Screen.width, 0.21f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Rewind")) {
-
 			}
 		}
 		DrawTurn();
@@ -157,60 +157,112 @@ public class GUIRenderer : MonoBehaviour {
 	}
 
 	public void SelectEntity(MapEntity entity) {
+		EraseControllActionButton();
 		_selectedEntity = entity;
 	}
 
 
 	public void OnPlayPause() {
+		GameData.timeMaster.ToggleRun();
 	}
 
 	public void OnReplay() {
+		EraseAllActionButton();
+		_selectedEntity = null;
 	}
 
 
 	public void OnMove() {
+		EraseControllActionButton();
+		if (!_isMoveDraw) {
+			_ButtonMoveUp.SetActive(true);
+			_ButtonMoveDown.SetActive(true);
+			_ButtonMoveLeft.SetActive(true);
+			_ButtonMoveRight.SetActive(true);
+		}
 	}
 
 	public void OnPush() {
+		EraseControllActionButton();
+		if (!_isPushDraw) {
+			_ButtonPushUp.SetActive(true);
+			_ButtonPushDown.SetActive(true);
+			_ButtonPushLeft.SetActive(true);
+			_ButtonPushRight.SetActive(true);
+		}
 	}
 
 	public void OnWait() {
+		EraseControllActionButton();
 	}
 
-
 	public void OnMoveUp() {
+		EraseControllActionButton();
 	}
 
 	public void OnMoveDown() {
+		EraseControllActionButton();
 	}
 
 	public void OnMoveLeft() {
+		EraseControllActionButton();
 	}
 
 	public void OnMoveRight() {
+		EraseControllActionButton();
 	}
 
 
 	public void OnPushUp() {
+		EraseControllActionButton();
 	}
 
 	public void OnPushDown() {
+		EraseControllActionButton();
 	}
 
 	public void OnPushLeft() {
+		EraseControllActionButton();
 	}
 
 	public void OnPushRight() {
+		EraseControllActionButton();
 	}
 
 
 	public void OnQueueDelete() {
+		EraseControllActionButton();
 	}
 
 	public void OnQueueBefore() {
+		EraseControllActionButton();
 	}
 
 	public void OnQueueAfter() {
+		EraseControllActionButton();
 	}
 
+	private void EraseAllActionButton()
+	{
+		EraseControllActionButton();
+		_ButtonMove.SetActive(false);
+		_ButtonPush.SetActive(false);
+		_ButtonWait.SetActive(false);
+	}
+
+	private void EraseControllActionButton() {
+		_ButtonMoveUp.SetActive(false);
+		_ButtonMoveDown.SetActive(false);
+		_ButtonMoveLeft.SetActive(false);
+		_ButtonMoveRight.SetActive(false);
+
+		_ButtonPushUp.SetActive(false);
+		_ButtonPushDown.SetActive(false);
+		_ButtonPushLeft.SetActive(false);
+		_ButtonPushRight.SetActive(false);
+
+		_ButtonQueueBefore.SetActive(false);
+		_ButtonQueueAfter.SetActive(false);
+		_ButtonQueueDelete.SetActive(false);
+	}
 }
