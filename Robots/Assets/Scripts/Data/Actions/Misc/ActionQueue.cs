@@ -49,7 +49,7 @@ public class ActionQueue
 
 		if (time < queue.Count)
 		{
-			queue[time] = null;
+			queue.RemoveAt(time);
 
 			if (timeOverride < 0) this.cursor--;
 		}
