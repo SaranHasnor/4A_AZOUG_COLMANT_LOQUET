@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Reflection;
 
 public class GUIRenderer : MonoBehaviour {
 
@@ -156,7 +155,8 @@ public class GUIRenderer : MonoBehaviour {
 		}
 	}
 
-	public void SelectEntity(MapEntity entity) {
+	public void SelectEntity(MapEntity entity)
+	{
 		EraseControllActionButton();
 		_selectedEntity = entity;
 	}
@@ -180,6 +180,7 @@ public class GUIRenderer : MonoBehaviour {
 			_ButtonMoveLeft.SetActive(true);
 			_ButtonMoveRight.SetActive(true);
 		}
+		_isMoveDraw = !_isMoveDraw;
 	}
 
 	public void OnPush() {
@@ -190,43 +191,73 @@ public class GUIRenderer : MonoBehaviour {
 			_ButtonPushLeft.SetActive(true);
 			_ButtonPushRight.SetActive(true);
 		}
+		_isPushDraw = !_isPushDraw;
 	}
 
 	public void OnWait() {
 		EraseControllActionButton();
+		_selectedQueue.Insert(new EntityActionWait(_selectedEntity.id));
 	}
 
 	public void OnMoveUp() {
 		EraseControllActionButton();
+		_selectedQueue.Insert(new EntityActionMove(_selectedEntity.id,
+			new MapPosition(_selectedEntity.localPosition + MapDirection.forward)));
 	}
 
 	public void OnMoveDown() {
 		EraseControllActionButton();
+		_selectedQueue.Insert(new EntityActionMove(_selectedEntity.id,
+			new MapPosition(_selectedEntity.localPosition + MapDirection.back)));
 	}
 
 	public void OnMoveLeft() {
 		EraseControllActionButton();
+		_selectedQueue.Insert(new EntityActionMove(_selectedEntity.id,
+			new MapPosition(_selectedEntity.localPosition + MapDirection.left)));
 	}
 
 	public void OnMoveRight() {
 		EraseControllActionButton();
+		_selectedQueue.Insert(new EntityActionMove(_selectedEntity.id,
+			new MapPosition(_selectedEntity.localPosition + MapDirection.right)));
 	}
 
 
 	public void OnPushUp() {
 		EraseControllActionButton();
+
+		var entity = GameData.currentState.map.GetEntity(new MapPosition(_selectedEntity.localPosition + MapDirection.forward));
+		if (entity != null) {
+			_selectedQueue.Insert(new EntityActionPush(_selectedEntity.id, entity.id));
+		}
 	}
 
 	public void OnPushDown() {
 		EraseControllActionButton();
+
+		var entity = GameData.currentState.map.GetEntity(new MapPosition(_selectedEntity.localPosition + MapDirection.back));
+		if (entity != null) {
+			_selectedQueue.Insert(new EntityActionPush(_selectedEntity.id, entity.id));
+		}
 	}
 
 	public void OnPushLeft() {
 		EraseControllActionButton();
+
+		var entity = GameData.currentState.map.GetEntity(new MapPosition(_selectedEntity.localPosition + MapDirection.left));
+		if (entity != null) {
+			_selectedQueue.Insert(new EntityActionPush(_selectedEntity.id, entity.id));
+		}
 	}
 
 	public void OnPushRight() {
 		EraseControllActionButton();
+
+		var entity = GameData.currentState.map.GetEntity(new MapPosition(_selectedEntity.localPosition + MapDirection.right));
+		if (entity != null) {
+			_selectedQueue.Insert(new EntityActionPush(_selectedEntity.id, entity.id));
+		}
 	}
 
 

@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class EntityActionMove : EntityTargetedAction
+﻿public class EntityActionMove : EntityTargetedAction
 {
 	public EntityActionMove(string ownerID, MapPosition target)
 		: base(ownerID, target)

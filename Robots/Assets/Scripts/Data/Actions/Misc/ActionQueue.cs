@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -85,6 +84,11 @@ public class ActionQueue
 		this.cursor = Mathf.Clamp(relative ? cursor + time : time, 0, queue.Count);
 	}
 
+	public int GetCursor()
+	{
+		return this.cursor;
+	}
+
 	public EntityAction GetAction(int timeOverride = -1)
 	{
 		int time = (timeOverride < 0) ? this.cursor : timeOverride;
@@ -128,4 +132,7 @@ public class ActionQueue
 		return result;
 	}
 
+	public void Insert(EntityAction action) {
+		queue.Insert(cursor, action);
+	}
 }
