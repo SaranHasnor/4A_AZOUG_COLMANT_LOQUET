@@ -48,12 +48,15 @@ public class GUIRenderer : MonoBehaviour {
 	private GameObject _ButtonQueueBefore;
 	[SerializeField]
 	private GameObject _ButtonQueueAfter;
+
+	private bool _isQueueDraw = false;
+
 	#endregion Action
 
 	public Texture moveTexture;
 	public Texture pushTexture;
 	public Texture waitTexture;
-
+	
 	private MapEntity _selectedEntity;
 	private ActionQueue _selectedQueue {
 		get {
@@ -142,9 +145,13 @@ public class GUIRenderer : MonoBehaviour {
 		{
 			_selectedActionIndex = index;
 			EraseControllActionButton();
-			_ButtonQueueAfter.SetActive(true);
-			_ButtonQueueBefore.SetActive(true);
-			_ButtonQueueDelete.SetActive(true);
+			if(!_isQueueDraw)
+			{
+				_ButtonQueueAfter.SetActive(true);
+				_ButtonQueueBefore.SetActive(true);
+				_ButtonQueueDelete.SetActive(true);
+			}
+			_isQueueDraw = !_isQueueDraw;
 		}
 	}
 
@@ -289,10 +296,12 @@ public class GUIRenderer : MonoBehaviour {
 
 	public void OnQueueBefore() {
 		_selectedQueue.Swap(_selectedActionIndex, _selectedActionIndex - 1);
+		_selectedActionIndex -= 1;
 	}
 
 	public void OnQueueAfter() {
 		_selectedQueue.Swap(_selectedActionIndex, _selectedActionIndex + 1);
+		_selectedActionIndex += 1;
 	}
 
 	public void EraseAllActionButton() {
