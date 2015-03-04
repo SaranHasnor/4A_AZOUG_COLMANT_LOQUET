@@ -7,15 +7,11 @@ public class ActionQueue {
 	private int cursor;
 
 	public int length {
-		get {
-			return queue.Count;
-		}
+		get { return queue.Count; }
 	}
 
 	public List<EntityAction> actions {
-		get {
-			return new List<EntityAction>(queue);
-		}
+		get { return new List<EntityAction>(queue); }
 	}
 
 	public ActionQueue() {
@@ -26,7 +22,8 @@ public class ActionQueue {
 	public void SetAction(EntityAction action, int timeOverride = -1) {
 		int time = (timeOverride < 0) ? this.cursor : timeOverride;
 
-		while (queue.Count <= time) { // Set the new time frame by filling empty spaces with null actions
+		while (queue.Count <= time) {
+			// Set the new time frame by filling empty spaces with null actions
 			queue.Add(null);
 		}
 
@@ -40,14 +37,15 @@ public class ActionQueue {
 		int time = (timeOverride < 0) ? this.cursor : timeOverride;
 
 		if (time < queue.Count) {
-			queue[time] = null;
+			queue.RemoveAt(time);
 
 			if (timeOverride < 0)
 				this.cursor--;
 		}
 	}
 
-	public void MoveAction(int source, int target) { // Useful?
+	public void MoveAction(int source, int target) {
+		// Useful?
 
 	}
 
@@ -72,13 +70,18 @@ public class ActionQueue {
 		this.cursor = Mathf.Clamp(relative ? cursor + time : time, 0, queue.Count);
 	}
 
+	public int GetCursor() {
+		return this.cursor;
+	}
+
 	public EntityAction GetAction(int timeOverride = -1) {
 		int time = (timeOverride < 0) ? this.cursor : timeOverride;
 
 		return queue[time];
 	}
 
-	public XmlDocument ToXml() { // Serialize all the actions we're holding and put them together
+	public XmlDocument ToXml() {
+		// Serialize all the actions we're holding and put them together
 		XmlDocument doc = new XmlDocument();
 		XmlElement node = doc.CreateElement("queue");
 
@@ -116,5 +119,17 @@ public class ActionQueue {
 		}
 
 		return entity;
+	}
+
+	public void Insert(EntityAction action) {
+		queue.Insert(cursor, action);
+	}
+
+	public void Swap(int index1, int index2) {
+		if (index1 >= 0 && index1 < actions.Count && index2 >= 0 && index2 < actions.Count) {
+			var tmp = actions[index1];
+			actions[index1] = actions[index2];
+			actions[index2] = tmp;
+		}
 	}
 }
