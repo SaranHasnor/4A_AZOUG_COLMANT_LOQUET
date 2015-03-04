@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class GUIRenderer : MonoBehaviour {
@@ -49,6 +50,10 @@ public class GUIRenderer : MonoBehaviour {
 	private GameObject _ButtonQueueAfter;
 	#endregion Action
 
+	public Texture moveTexture;
+	public Texture pushTexture;
+	public Texture waitTexture;
+
 	private MapEntity _selectedEntity;
 
 	private ActionQueue _selectedQueue {
@@ -72,21 +77,25 @@ public class GUIRenderer : MonoBehaviour {
 	}
 
 	void OnGUI() {
+
 		if (GameData.gameMaster.isVictory()) {
 			DrawVictory();
 		} else if (GameData.gameMaster.isLose()) {
 			DrawLose();
 		} else {
 			if (_selectedEntity != null) {
-				_ButtonMove.SetActive(true);
-				_ButtonPush.SetActive(true);
-				_ButtonWait.SetActive(true);
-
-				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.7f * Screen.height, Screen.width, 0.3f * Screen.height));
+				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.8f * Screen.height, Screen.width, 0.2f * Screen.height));
 				if (_selectedActionIndex != -1) {
 					DrawActionList(new Rect());
 				}
 			}
+			//if (GUI.Button(
+			//	new Rect(Screen.width - 0.2f * Screen.width, 0.01f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Play/Pause")) {
+			//	GameData.timeMaster.ToggleRun();
+			//}
+			//if (GUI.Button(
+			//	new Rect(Screen.width - 0.2f * Screen.width, 0.21f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Rewind")) {
+			//}
 		}
 		DrawTurn();
 	}
@@ -113,19 +122,34 @@ public class GUIRenderer : MonoBehaviour {
 			DrawAction(action, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height - 20.0f), cursor);
 			cursor++;
 		}
-		DrawAction(null, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height - 20.0f), cursor);
+		//DrawAction(null, new Rect(cursor * itemWidth, 0.0f, itemWidth, rect.height - 20.0f), cursor);
 
 		GUI.EndScrollView(false);
 
 		GUI.EndGroup();
 	}
 
-	private void DrawAction(EntityAction action, Rect rect, int index) {
-		if (GUI.Button(rect, action != null ? action.GetType().ToString() : null)) {
-			//_selectedActionIndex = index;
-			if (action == null) { // Temporary
-				_selectedQueue.SetAction(new EntityActionMove(_selectedEntity.id, new MapPosition(0, 0, 0)));
+	private void DrawAction(EntityAction action, Rect rect, int index)
+	{
+		Texture buttonTexture = null;
+		if (action != null)
+		{
+			switch (action.GetType().ToString())
+			{
+				case "EntityActionMove":
+					buttonTexture = moveTexture;
+					break;
+				case "EntityActionPush":
+					buttonTexture = pushTexture;
+					break;
+				case "EntityActionWait":
+					buttonTexture = waitTexture;
+					break;
 			}
+		}
+		if(GUI.Button(rect, buttonTexture))
+		{
+			//TODO:
 		}
 	}
 
@@ -195,9 +219,9 @@ public class GUIRenderer : MonoBehaviour {
 	}
 
 	public void OnWait() {
-		EraseControllActionButton();
 		_selectedQueue.Insert(new EntityActionWait(_selectedEntity.id));
 	}
+
 
 	public void OnMoveUp() {
 		EraseControllActionButton();
@@ -262,19 +286,15 @@ public class GUIRenderer : MonoBehaviour {
 
 
 	public void OnQueueDelete() {
-		EraseControllActionButton();
 	}
 
 	public void OnQueueBefore() {
-		EraseControllActionButton();
 	}
 
 	public void OnQueueAfter() {
-		EraseControllActionButton();
 	}
 
-	private void EraseAllActionButton()
-	{
+	private void EraseAllActionButton() {
 		EraseControllActionButton();
 		_ButtonMove.SetActive(false);
 		_ButtonPush.SetActive(false);
