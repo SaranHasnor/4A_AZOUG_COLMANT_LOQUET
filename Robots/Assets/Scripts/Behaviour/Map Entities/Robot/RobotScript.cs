@@ -1,21 +1,16 @@
 ﻿using UnityEngine;
 using System.Xml;
 
-public class RobotScript : MapEntity
-{
-	public static RobotScript CreateFromXmlNode(XmlNode node)
-	{
+public class RobotScript : MapEntity {
+	public static RobotScript CreateFromXmlNode(XmlNode node) {
 		string id;
 		Team team;
 		MapPosition position;
 
-		try
-		{
+		try {
 			id = node.Attributes["id"].Value;
 			position = MapPosition.FromString(node.Attributes["position"].Value);
-		}
-		catch (System.Exception e)
-		{
+		} catch (System.Exception e) {
 			Debug.LogError("Mandatory parameter missing in Robot node");
 			throw e;
 		}
@@ -27,8 +22,12 @@ public class RobotScript : MapEntity
 		return script;
 	}
 
-	void OnMouseDown()
-	{ // Have the current player select us and update the UI
-		GameData.guiRenderer.SelectEntity(this);
+	void OnMouseDown() { // Have the current player select us and update the UI
+		var entity = GameData.guiRenderer.GetEntitySelected();
+		if (entity == this) {
+			GameData.guiRenderer.SelectEntity(null);
+			GameData.guiRenderer.EraseAllActionButton();
+		} else
+			GameData.guiRenderer.SelectEntity(this);
 	}
 }

@@ -84,18 +84,15 @@ public class GUIRenderer : MonoBehaviour {
 			DrawLose();
 		} else {
 			if (_selectedEntity != null) {
+				_ButtonMove.SetActive(true);
+				_ButtonPush.SetActive(true);
+				_ButtonWait.SetActive(true);
+
 				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.8f * Screen.height, Screen.width, 0.2f * Screen.height));
 				if (_selectedActionIndex != -1) {
 					DrawActionList(new Rect());
 				}
 			}
-			//if (GUI.Button(
-			//	new Rect(Screen.width - 0.2f * Screen.width, 0.01f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Play/Pause")) {
-			//	GameData.timeMaster.ToggleRun();
-			//}
-			//if (GUI.Button(
-			//	new Rect(Screen.width - 0.2f * Screen.width, 0.21f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Rewind")) {
-			//}
 		}
 		DrawTurn();
 	}
@@ -129,13 +126,10 @@ public class GUIRenderer : MonoBehaviour {
 		GUI.EndGroup();
 	}
 
-	private void DrawAction(EntityAction action, Rect rect, int index)
-	{
+	private void DrawAction(EntityAction action, Rect rect, int index) {
 		Texture buttonTexture = null;
-		if (action != null)
-		{
-			switch (action.GetType().ToString())
-			{
+		if (action != null) {
+			switch (action.GetType().ToString()) {
 				case "EntityActionMove":
 					buttonTexture = moveTexture;
 					break;
@@ -147,8 +141,7 @@ public class GUIRenderer : MonoBehaviour {
 					break;
 			}
 		}
-		if(GUI.Button(rect, buttonTexture))
-		{
+		if (GUI.Button(rect, buttonTexture)) {
 			//TODO:
 		}
 	}
@@ -179,10 +172,13 @@ public class GUIRenderer : MonoBehaviour {
 		}
 	}
 
-	public void SelectEntity(MapEntity entity)
-	{
+	public void SelectEntity(MapEntity entity) {
 		EraseControllActionButton();
 		_selectedEntity = entity;
+	}
+
+	public MapEntity GetEntitySelected() {
+		return _selectedEntity;
 	}
 
 
@@ -284,7 +280,6 @@ public class GUIRenderer : MonoBehaviour {
 		}
 	}
 
-
 	public void OnQueueDelete() {
 	}
 
@@ -294,7 +289,7 @@ public class GUIRenderer : MonoBehaviour {
 	public void OnQueueAfter() {
 	}
 
-	private void EraseAllActionButton() {
+	public void EraseAllActionButton() {
 		EraseControllActionButton();
 		_ButtonMove.SetActive(false);
 		_ButtonPush.SetActive(false);
