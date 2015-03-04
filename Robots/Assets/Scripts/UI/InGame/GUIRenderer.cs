@@ -1,9 +1,32 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
-public class GUIRenderer : MonoBehaviour
-{
+public class GUIRenderer : MonoBehaviour {
+
+	#region General
+	#endregion General
+
+	#region Action
+	[SerializeField] private GameObject _ButtonMove;
+	[SerializeField] private GameObject _ButtonPush;
+	[SerializeField] private GameObject _ButtonWait;
+
+
+	[SerializeField] private GameObject _ButtonMoveUp;
+	[SerializeField] private GameObject _ButtonMoveDown;
+	[SerializeField] private GameObject _ButtonMoveLeft;
+	[SerializeField] private GameObject _ButtonMoveRight;
+
+	[SerializeField] private GameObject _ButtonPushUp;
+	[SerializeField] private GameObject _ButtonPushDown;
+	[SerializeField] private GameObject _ButtonPushLeft;
+	[SerializeField] private GameObject _ButtonPushRight;
+
+	[SerializeField] private GameObject _ButtonQueueDelete;
+	[SerializeField] private GameObject _ButtonQueueLeft;
+	[SerializeField] private GameObject _ButtonQueueRight;
+	#endregion Action
+
 	private MapEntity _selectedEntity;
 
 	private ActionQueue _selectedQueue
