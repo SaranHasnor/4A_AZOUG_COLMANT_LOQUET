@@ -135,4 +135,15 @@ public class ActionQueue
 	public void Insert(EntityAction action) {
 		queue.Insert(cursor, action);
 	}
+
+	public void Swap(int index1, int index2)
+	{
+		if (index1 != 0 && index1 != actions.Count)
+		{
+			EntityAction tmp = actions[index1];
+			actions[index1] = actions[index2];
+			actions[index2] = tmp;
+		}
+
+	}
 }
