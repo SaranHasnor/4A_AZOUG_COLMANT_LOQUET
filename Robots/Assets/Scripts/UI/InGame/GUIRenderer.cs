@@ -55,7 +55,6 @@ public class GUIRenderer : MonoBehaviour {
 	public Texture waitTexture;
 
 	private MapEntity _selectedEntity;
-
 	private ActionQueue _selectedQueue {
 		get {
 			return (_selectedEntity != null) ? GameData.currentState.actions[_selectedEntity.id] : null;
@@ -85,9 +84,6 @@ public class GUIRenderer : MonoBehaviour {
 		} else {
 			if (_selectedEntity != null) {
 				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.8f * Screen.height, Screen.width, 0.2f * Screen.height));
-				if (_selectedActionIndex != -1) {
-					DrawActionList(new Rect());
-				}
 			}
 			//if (GUI.Button(
 			//	new Rect(Screen.width - 0.2f * Screen.width, 0.01f * Screen.height, 0.2f * Screen.width, 0.2f * Screen.height), "Play/Pause")) {
@@ -149,7 +145,11 @@ public class GUIRenderer : MonoBehaviour {
 		}
 		if(GUI.Button(rect, buttonTexture))
 		{
-			//TODO:
+			_selectedActionIndex = index;
+			EraseControllActionButton();
+			_ButtonQueueAfter.SetActive(true);
+			_ButtonQueueBefore.SetActive(true);
+			_ButtonQueueDelete.SetActive(true);
 		}
 	}
 
@@ -286,12 +286,16 @@ public class GUIRenderer : MonoBehaviour {
 
 
 	public void OnQueueDelete() {
+		_selectedQueue.RemoveAction(_selectedActionIndex);
+		EraseControllActionButton();
 	}
 
 	public void OnQueueBefore() {
+		_selectedQueue.Swap(_selectedActionIndex, _selectedActionIndex - 1);
 	}
 
 	public void OnQueueAfter() {
+		_selectedQueue.Swap(_selectedActionIndex, _selectedActionIndex + 1);
 	}
 
 	private void EraseAllActionButton() {
