@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class EntityActionWait : EntityStateChange
+﻿public class EntityActionWait : EntityStateChange
 {
 	public EntityActionWait(string ownerID)
 		: base(ownerID)

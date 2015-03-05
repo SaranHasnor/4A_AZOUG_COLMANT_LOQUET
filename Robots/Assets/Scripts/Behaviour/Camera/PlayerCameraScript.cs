@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PlayerCameraScript : MonoBehaviour
 { // Manages the position of the camera and the player's camera-related input

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class EntPropertyLife : EntProperty {
+﻿public class EntPropertyLife : EntProperty {
 	protected override void _Interact(EntityEvent actionType, MapEntity entity) {
 		if (actionType == EntityEvent.Damage) {
 			// TODO : Completer algo property Life

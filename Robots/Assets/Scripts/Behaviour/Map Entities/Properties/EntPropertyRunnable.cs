@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class EntPropertyRunnable : EntProperty
+﻿public class EntPropertyRunnable : EntProperty
 {
 	public ActionQueue actionQueue
 	{ // For convinience I guess (I don't really like making this public because it can be modified, but we don't filter access to GameData so it doesn't matter anyway)

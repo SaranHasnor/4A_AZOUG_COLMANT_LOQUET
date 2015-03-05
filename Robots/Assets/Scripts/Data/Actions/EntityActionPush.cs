@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class EntityActionPush : EntityInteraction
+﻿public class EntityActionPush : EntityInteraction
 {
 	public EntityActionPush(string ownerID, string targetID)
 		: base(ownerID, targetID)
