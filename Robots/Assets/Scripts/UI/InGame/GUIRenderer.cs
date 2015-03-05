@@ -90,7 +90,7 @@ public class GUIRenderer : MonoBehaviour {
 				_ButtonPush.SetActive(true);
 				_ButtonWait.SetActive(true);
 
-				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.8f * Screen.height, Screen.width, 0.2f * Screen.height));
+				DrawActionTimeLine(_selectedQueue.actions, new Rect(0.0f, 0.9f * Screen.height, Screen.width, 0.1f * Screen.height));
 			}
 		}
 		DrawTurn();
